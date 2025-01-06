@@ -150,7 +150,11 @@ function getColor(tema) {
 // Geojson ve Photogalery yükleme
 $(document).ready(function() {
     // Modal kapandığında scroll'u sıfırla
-    $('#noteModal').on('hidden.bs.modal', function () {
+    $('#noteModal')
+    .on('hidden.bs.modal', function () {
+        $('.modal-body').scrollTop(0);
+    })
+    .on('show.bs.modal', function () {
         $('.modal-body').scrollTop(0);
     });
 
