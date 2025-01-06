@@ -149,14 +149,11 @@ function getColor(tema) {
 
 // Geojson ve Photogalery yükleme
 $(document).ready(function() {
-    // Modal kapandığında scroll'u sıfırla
+    const resetModalScroll = () => $('.modal-body').scrollTop(0);
+
     $('#noteModal')
-    .on('hidden.bs.modal', function () {
-        $('.modal-body').scrollTop(0);
-    })
-    .on('show.bs.modal', function () {
-        $('.modal-body').scrollTop(0);
-    });
+        .on('hidden.bs.modal', resetModalScroll)
+        .on('show.bs.modal', resetModalScroll);
 
     fetch('assets/geojson/data.geojson')
         .then(response => response.json())
