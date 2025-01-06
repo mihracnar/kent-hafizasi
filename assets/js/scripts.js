@@ -69,7 +69,7 @@ const searchControl = new L.Control.Search({
     jsonpParam: 'json_callback',
     propertyName: 'display_name',
     propertyLoc: ['lat', 'lon'],
-    marker: L.circleMarker([0, 0], { radius: 30 }),
+    marker: false, // Built-in marker'ı devre dışı bırak
     autoCollapse: false,
     autoType: false,
     minLength: 2,
@@ -81,21 +81,44 @@ map.addControl(searchControl);
 
 let searchMarker; 
 
+// Mavi yuvarlak için özel bir pane oluştur
+map.createPane('searchMarkerPane');
+map.getPane('searchMarkerPane').style.pointerEvents = 'none'; // Tıklamaları engelle
+map.getPane('searchMarkerPane').style.zIndex = 200; // Daha düşük bir z-index ver
+
 searchControl.on('search:locationfound', function(e) {
     if (searchMarker) {
         map.removeLayer(searchMarker); 
     }
     lat = e.latlng.lat;
     lon = e.latlng.lng;
-    searchMarker = L.circleMarker(e.latlng, { radius: 30, zIndex: 100 }).addTo(map);
+    searchMarker = L.circleMarker(e.latlng, {
+        radius: 30,
+        pane: 'searchMarkerPane', // Özel pane kullan
+        fillColor: '#3388ff',
+        color: '#3388ff',
+        fillOpacity: 0.5
+    }).addTo(map);
 });
 
-// Arama sonucu temizlendiğinde marker'ı kaldır
-searchControl.on('search:collapse', function() {
+searchControl.on('search:cancel', function() {
+    console.log('Search cancelled');
     if (searchMarker) {
         map.removeLayer(searchMarker);
+        searchMarker = null;
     }
 });
+
+// Alternative approach using DOM events
+const searchInput = document.querySelector('.search-input');
+if (searchInput) {
+    searchInput.addEventListener('input', function(e) {
+        if (!e.target.value && searchMarker) {
+            map.removeLayer(searchMarker);
+            searchMarker = null;
+        }
+    });
+}
 
 searchControl.on('search:textentered', function(e) {
     let inputText = e.text.trim();
@@ -113,6 +136,7 @@ searchControl.on('search:textentered', function(e) {
         searchMarker = L.marker([lat, lon], { zIndex: 100 }).addTo(map);
     }
 });
+
 
 // Zoom butonları işlevselliği
 const zoomInButton = document.getElementById('zoom-in-button');
@@ -174,7 +198,7 @@ $(document).ready(function() {
                         weight: 1,
                         opacity: 0.8,
                         fillOpacity: 0.8,
-                        zIndex: 200 // GeoJSON noktaları için daha yüksek z-index
+                        pane: 'markerPane' // Varsayılan marker pane kullan
                     });
                 },
                 onEachFeature: function (feature, layer) {
