@@ -293,6 +293,47 @@ body, html, #map {
     border: 1.5px solid rgba(0,0,0,0.8);
 }
 
+.figure-thumb {
+    min-height: 15vh !important;
+    background-size: cover;
+    background-position: center center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Tüm kenarlarda karartma efekti için gradient overlay */
+.figure-thumb::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 20%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0.7) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 20%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+}
+
+/* Hover efekti */
+.figure-thumb:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.figure-thumb:hover::before {
+    background: 
+        linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,0.3) 80%, rgba(0,0,0,0.8) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,0.3) 80%, rgba(0,0,0,0.8) 100%);
+}
+
+/* Modal içindeki görsel için hover efektini devre dışı bırakma */
+#noteModal .figure-thumb:hover {
+    transform: none;
+    cursor: default;
+}
+
 
 @media (max-width: 768px) {
 
