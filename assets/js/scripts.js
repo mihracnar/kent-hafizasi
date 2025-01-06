@@ -109,6 +109,33 @@ searchControl.on('search:cancel', function() {
     }
 });
 
+
+// Koordinat araması için
+searchControl.on('search:textentered', function(e) {
+    let inputText = e.text.trim();
+    const coords = inputText.split(',');
+    
+    if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
+        handleLocation(parseFloat(coords[0]), parseFloat(coords[1]));
+    }
+});
+
+function handleLocation(lat, lon) {
+    if (searchMarker) {
+        map.removeLayer(searchMarker);
+    }
+    
+    map.setView([lat, lon], 13);
+    searchMarker = L.circleMarker([lat, lon], {
+        radius: 30,
+        color: '#3388ff',
+        weight: 2,
+        fillOpacity: 0.4,
+        fillColor: '#3388ff',
+        pane: 'markerPane'
+    }).addTo(map);
+}
+
 // Alternative approach using DOM events
 const searchInput = document.querySelector('.search-input');
 if (searchInput) {
