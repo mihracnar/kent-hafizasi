@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kent Hafızası</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-search@3.0.2/dist/leaflet-search.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol@0.72.0/dist/L.Control.Locate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
+    <img src="img/kent-hafizasi-logo.svg" alt="Kent Hafızası" class="logo">
+
+
+
+</head>
+<body>
+    <div id="map"></div>
+
+    <!-- Bootstrap Grid Menü (1x1) -->
+    <div id="map-menu-top">
+        <div class="row no-gutters"> 
+            <div class="col">
+                <button type="button" class="btn btn-light btn-circle" data-toggle="modal" data-target="#aboutModal">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Grid Menü (1x4) -->
+    <div id="map-menu-bottom">
+        <div class="row no-gutters">
+            <div class="col">
+                <button type="button" class="btn btn-light btn-circle" data-toggle="modal" data-target="#layersModal">
+                    <i class="fas fa-layer-group"></i>
+                </button>
+            </div>            
+            <div class="col">
+                <button type="button" class="btn btn-light btn-circle" id="locate-button">
+                    <i class="fas fa-location-arrow"></i>
+                </button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-light btn-circle" id="zoom-in-button">
+                  <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-light btn-circle" id="zoom-out-button">
+                  <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Katmanlar Modali -->
+    <div class="modal fade" id="layersModal" tabindex="-1" role="dialog" aria-labelledby="layersModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="layersModalLabel">Katmanlar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Kapat">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="layersModalBody">
+                    <!-- Katman seçenekleri buraya gelecek -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hakkımızda Modali -->
+    <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="aboutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document"> 
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="aboutModalLabel">Hakkımızda</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Kapat">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Bu uygulama, Leaflet, Bootstrap ve Font Awesome kullanılarak oluşturulmuştur.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Not Görüntüleme Modali -->
+    <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="noteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="noteModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <!-- Kapak Görseli -->
+                    <div class="figure-thumb bg-primary rounded-top" id="featured-image-place" 
+                        style="min-height: 40vh; background-size: cover; background-position: center center; display: block;">
+                    </div>
+                    
+                    <!-- Bilgi Tablosu -->
+                    <div class="px-3 py-2">
+                        <table class="table table-bordered" style="font-size: 0.85rem; line-height: 1.2;">
+                            <tbody>
+                                <tr>
+                                    <th style="font-size: 0.9rem;">Tema</th>
+                                    <td><span id="Tema"></span></td>
+                                </tr>
+                                <tr>
+                                    <th style="font-size: 0.9rem;">Alt Tema</th>
+                                    <td><span id="altTema"></span></td>
+                                </tr>
+                                <tr>
+                                    <th style="font-size: 0.9rem;">Mekanın Bugünkü Adı</th>
+                                    <td><span id="mekaninBugunkuAdi"></span></td>
+                                </tr>
+                                <tr>
+                                    <th style="font-size: 0.9rem;">İlçe</th>
+                                    <td><span id="ilce"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <p><span id="metin"></span></p>
+                        <p><strong>Kaynak: </strong> <span id="kaynak" style="font-size: 0.8rem;"></span></p>
+                    </div>
+                    
+                    <!-- Galeri Görselleri -->
+                    <div class="gallery-grid ke-gallery pt-3" id="mediaID">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="map-legend" class="card position-fixed" style="left: 15px; bottom: 20px; z-index: 1000; max-width: 200px; background-color: rgba(255, 255, 255, 0.9);">
+        <div class="card-body p-2">
+            <div class="legend-item d-flex align-items-center mb-1">
+                <span class="legend-color mr-2" style="background-color: #38a6ee;"></span>
+                <span class="legend-text">Gündelik Yaşam ve Kent Belleği</span>
+            </div>
+            <div class="legend-item d-flex align-items-center mb-1">
+                <span class="legend-color mr-2" style="background-color: #b5d176;"></span>
+                <span class="legend-text">Mimarlık ve Şehircilik</span>
+            </div>
+            <div class="legend-item d-flex align-items-center mb-1">
+                <span class="legend-color mr-2" style="background-color: #ea402c;"></span>
+                <span class="legend-text">Şahıs</span>
+            </div>
+            <div class="legend-item d-flex align-items-center">
+                <span class="legend-color mr-2" style="background-color: #8d4e0e;"></span>
+                <span class="legend-text">Tarihsel Anekdot</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-search@3.0.2/dist/leaflet-search.min.js"></script>
+    <script src="https://unpkg.com/leaflet.locatecontrol@0.72.0/dist/L.Control.Locate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script src="assets/js/scripts.js"></script>
+</body>
+</html>

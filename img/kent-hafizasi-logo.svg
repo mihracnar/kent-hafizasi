@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 250">
+  <!-- Background (transparent) -->
+  <rect width="300" height="250" fill="transparent"/>
+  
+  <!-- Organic white buffer around text and ruins -->
+  <path d="M20,70 Q50,50 70,90 Q90,70 130,80 Q160,60 190,90 Q220,70 250,100 Q230,130 200,130 Q180,160 150,140 Q120,160 100,130 Q70,140 50,120 Q30,110 20,70 Z" fill="white"/>
+  
+  <!-- Main text -->
+  <text x="150" y="90" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="48" font-weight="800" fill="black">KENT</text>
+  <text x="150" y="140" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="36" font-weight="normal" fill="black">HAFIZASI</text>
+  
+  <!-- Decorative ruins -->
+  <rect x="30" y="160" width="20" height="40" fill="black"/>
+  <rect x="70" y="170" width="30" height="30" fill="black"/>
+  <rect x="110" y="180" width="20" height="40" fill="black"/>
+  <rect x="170" y="160" width="25" height="50" fill="black"/>
+  <rect x="210" y="170" width="20" height="30" fill="black"/>
+  <rect x="250" y="160" width="30" height="40" fill="black"/>
+  
+</svg>

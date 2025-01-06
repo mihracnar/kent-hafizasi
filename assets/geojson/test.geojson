@@ -1,0 +1,30 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "Tema": "Gündelik Yaşam ve Kent Belleği",
+          "Alt_Tema": "Tiyatro, Tarihi Yapı Hikayesi, Fotoğraf Hikayesi",
+          "Mekan": "Gedikpaşa Tiyatrosu /Azak Sineması",
+          "Mekanin_Bugunku_Adi": "Azak İş Merkezi Tiyatro Caddesi No:23",
+          "Eski_Fotograf_Linki": [
+            "https://drive.google.com/file/d/1-2aLkKh6VJ_YEVyNSA5_NlihPAjsLq0c/view",
+            "https://drive.google.com/file/d/1Rlqe6lZOvdJUor4GVmnvCaeHEBj3ozqX/view?usp=drive_link",
+            "https://drive.google.com/file/d/17re9XJo2o7v6ZDfQ6_llO3xtlG1PSkgB/view?usp=drive_link",
+            "https://drive.google.com/file/d/1ARE6Z_9k0Ts4R_Y2TXgysQ_HDGawhVJq/view?usp=drive_link",
+            "https://drive.google.com/file/d/1cj9uUWcd9k9Qo-jswp6YmniiPuVpaAte/view?usp=drive_link",
+            "https://drive.google.com/file/d/1SAhbJnVLBkMq0V0ywPLwkNleGp4lecP9/view?usp=drive_link",
+            "https://drive.google.com/file/d/1b4OvwBXTbo83gTGZFsYEHsXN6nWXYKLN/view?usp=drive_link"
+          ],
+          "Metin": "İlk Türk tiyatrosu olarak kabul edilen Gedikpaşa Tiyatrosu Türk tiyatro tarihi açısından önemli anlara şahitlik etmiştir. 1859'da inşa edildiği düşünülen tiyatro 1868 ile 1880 arasında Güllü Agop tarafından işletildi. Bu dönemde Namık Kemal'in Vatan Yahut Silistre oyununun temsili sırasındaki (1873) Abdülmecit'e karşı protesto gösterileri sebebiyle Namık Kemal, Magosa'ya sürgün edildi, Güllü Agop ise kısa süreliğine tutuklandı. 1882'de Ahmet Fehim yönetimine geçince Ahmet Mithat Efendi ve Şemsettin Sami'nin piyesleriyle sahnesini açtı. 1884'te Ahmet Mithat Efendi'nin Çerkez Özdenleri piyesi Çerkez milliyetçiliğin propagandasını yaptığı gerekçesiyle yasaklandı. Ahmet Mithat Efendi sürgüne gönderildi. Tiyatro ise yıktırıldı. Cumhuriyet döneminde binanın yerine Azak Tiyatrosu yapıldı. Tiyatronun 1962-63 sezonunda Gönül Ülkü-Gazanfer Özcan Topluluğu, Orhan Erçin'in Aman İdare At komedisiyle perde açtı. Ulvi Uraz, Asuman Arsan ve Muzaffer Hepgüler toplulukları ve Muammer Karaca da Azak Tiyatrosu döneminde sahne aldılar. Tiyatro seyircisinin azalmasıyla 374 kişilik Azak Tiyatrosu, işletmecisi tarafından sinemaya çevrildi. Bugün bu yapı adası üzerinde çeşitli ticari yapılar, Azaklar Çarşısı ile büyük bir otel bulunmaktadır.",
+          "Kaynak": "Merve Arslan Çinko, Osmanlı Arşiv Belgeleri Işığında İstanbul / Gedikpaşa'da Bir Yapı Adasının 19. Yüzyıldan Cumhuriyet'e Değişiminin İrdelenmesi: \"Tiyatrodan Mektebe\", İzmir Akdeniz Akademisi Dergisi, İzmir, 2020",
+          "Ilce": "Fatih"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [28.965745389101464, 41.0079757705296]
+        }
+      }
+    ]
+  }
