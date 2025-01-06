@@ -322,10 +322,10 @@ body, html, #map {
 
     .logo {
         position: absolute;   /* Sabit pozisyon */
-        top: 3px;            /* Üstten mesafe */
-        left: 40%;           /* Soldan mesafe */
+        top: 0px;            /* Üstten mesafe */
+        left: 35%;           /* Soldan mesafe */
         width: auto;          /* Logonun genişliği */
-        height: 300px;         /* Yüksekliğin genişliğe göre otomatik ayarlanması */
+        height: 100px;         /* Yüksekliğin genişliğe göre otomatik ayarlanması */
         z-index: 1000;        /* Haritanın üstünde görünmesi için yüksek z-index değeri */
       }
 
