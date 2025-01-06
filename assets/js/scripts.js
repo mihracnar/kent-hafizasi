@@ -87,7 +87,14 @@ searchControl.on('search:locationfound', function(e) {
     }
     lat = e.latlng.lat;
     lon = e.latlng.lng;
-    searchMarker = L.circleMarker(e.latlng, { radius: 30 }).addTo(map);
+    searchMarker = L.circleMarker(e.latlng, { radius: 30, zIndex: 100 }).addTo(map);
+});
+
+// Arama sonucu temizlendiğinde marker'ı kaldır
+searchControl.on('search:collapse', function() {
+    if (searchMarker) {
+        map.removeLayer(searchMarker);
+    }
 });
 
 searchControl.on('search:textentered', function(e) {
@@ -103,7 +110,7 @@ searchControl.on('search:textentered', function(e) {
         if (searchMarker) {
             map.removeLayer(searchMarker);
         }
-        searchMarker = L.marker([lat, lon]).addTo(map);
+        searchMarker = L.marker([lat, lon], { zIndex: 100 }).addTo(map);
     }
 });
 
@@ -166,7 +173,8 @@ $(document).ready(function() {
                         color: '#ffffff', // Kenarlık rengi beyaz
                         weight: 1,
                         opacity: 0.8,
-                        fillOpacity: 0.8
+                        fillOpacity: 0.8,
+                        zIndex: 200 // GeoJSON noktaları için daha yüksek z-index
                     });
                 },
                 onEachFeature: function (feature, layer) {
