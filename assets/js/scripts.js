@@ -36,6 +36,7 @@ const layersControl = L.control.layers({
     "OpenStreetMap": osmLayer,
 }, {}, { collapsed: false }); 
 
+
 // Katman kontrolünü modal içine taşıma
 layersControl.addTo(map); 
 const layerControlElement = layersControl.getContainer();
@@ -186,10 +187,10 @@ function convertDriveLink(url) {
 
 function getColor(tema) {
     switch (tema) {
-      case 'Gündelik Yaşam ve Kent Belleği': return '#38a6ee';
-      case 'Mimarlık ve Şehircilik': return '#b5d176';
-      case 'Şahıs': return '#ea402c';
-      case 'Tarihsel Anekdot': return '#8d4e0e';
+      case 'Gündelik Yaşam ve Kent Belleği': return '#ECB159';
+      case 'Mimarlık ve Şehircilik': return '#8CB9BD';
+      case 'Şahıs': return '#9B4444';
+      case 'Tarihsel Anekdot': return '#754E1A';
       default: return '#8c564b'; // Varsayılan kahverengi
     }
   }
