@@ -198,169 +198,225 @@ function getColor(tema) {
 
 
 // Label Manager
+const LABEL_WIDTH = 120;
+const LABEL_HEIGHT = 20;
+const BUFFER_SIZE = 10;
 
-  const LABEL_WIDTH = 120;
-  const LABEL_HEIGHT = 20;
-  const BUFFER_SIZE = 10; // Etiketler için buffer boyutu
-  
-  let labelLayer = L.layerGroup();
-  let labelMarkers = new Map();
-  
-  const LabelManager = {
-      // Etiket çakışmalarını kontrol edip, sadece birini görünür yapar
-      checkLabelVisibility: function () {
-          if (!map.hasLayer(labelLayer)) return;
-  
-          const visibleLabels = new Set();
-          const bounds = map.getBounds(); // Harita penceresindeki alanı al
-  
-          labelMarkers.forEach((marker1, key1) => {
-              if (!bounds.contains(marker1.getLatLng())) return;  // Harita penceresinde olmayanları atla
-  
-              const pos1 = map.latLngToContainerPoint(marker1.getLatLng());
-              let isOverlapping = false;
-  
-              labelMarkers.forEach((marker2, key2) => {
-                  if (key1 === key2 || !bounds.contains(marker2.getLatLng())) return; // Aynı etiket veya harita penceresinde olmayan etiket
-  
-                  const pos2 = map.latLngToContainerPoint(marker2.getLatLng());
-                  if (this.isOverlappingWithBuffer(pos1, pos2)) {
-                      isOverlapping = true;
-                  }
-              });
-  
-              if (!isOverlapping) {
-                  visibleLabels.add(marker1);
-              }
-          });
-  
-          // Tüm etiketlerin görünürlüğünü ayarla
-          labelMarkers.forEach(marker => {
-              if (visibleLabels.has(marker)) {
-                  marker.setOpacity(1);
-              } else {
-                  marker.setOpacity(0);
-              }
-          });
-      },
-  
-      // Buffer alanı ile etiketlerin çakışıp çakışmadığını kontrol et
-      isOverlappingWithBuffer: function (pos1, pos2) {
-          const buffer1 = { 
-              x: pos1.x - BUFFER_SIZE, 
-              y: pos1.y - BUFFER_SIZE, 
-              width: LABEL_WIDTH + 2 * BUFFER_SIZE, 
-              height: LABEL_HEIGHT + 2 * BUFFER_SIZE 
-          };
-          const buffer2 = { 
-              x: pos2.x - BUFFER_SIZE, 
-              y: pos2.y - BUFFER_SIZE, 
-              width: LABEL_WIDTH + 2 * BUFFER_SIZE, 
-              height: LABEL_HEIGHT + 2 * BUFFER_SIZE 
-          };
-  
-          return !(
-              buffer1.x + buffer1.width < buffer2.x ||
-              buffer1.x > buffer2.x + buffer2.width ||
-              buffer1.y + buffer1.height < buffer2.y ||
-              buffer1.y > buffer2.y + buffer2.height
-          );
-      },
-  
-      // Etiket oluşturma
-      createLabel: function (feature, latlng) {
-          const label = L.divIcon({
-              className: 'map-label',
-              html: `<div class="label-content">${feature.properties.Mekan}</div>`,
-              iconSize: [LABEL_WIDTH, LABEL_HEIGHT],
-              iconAnchor: [LABEL_WIDTH / 2, -10]
-          });
-  
-          const labelMarker = L.marker(latlng, {
-              icon: label,
-              zIndexOffset: 1000
-          });
-  
-          labelMarkers.set(feature.properties.Mekan, labelMarker);
-          return labelMarker;
-      },
-  
-      // Etiket güncelleme
-      updateLabels: function () {
-          const zoom = map.getZoom();
-          const bounds = map.getBounds();  // Harita penceresindeki alan
-  
-          if (zoom >= 17) {
-              if (!map.hasLayer(labelLayer)) {
-                  labelLayer.addTo(map);
-              }
-  
-              labelMarkers.forEach((marker, key) => {
-                  const latlng = marker.getLatLng();
-                  if (!bounds.contains(latlng)) {
-                      marker.setOpacity(0);  // Harita dışında kalan etiketleri gizle
-                  } else {
-                      marker.setOpacity(1);  // Harita içinde olan etiketleri göster
-                  }
-              });
-  
-              this.checkLabelVisibility(); // Etiketlerin çakışmalarını kontrol et
-          } else {
-              if (map.hasLayer(labelLayer)) {
-                  map.removeLayer(labelLayer);
-              }
-          }
-      },
-  
-      // Etiketleri başlatma
-      initializeLabels: function (features) {
-          if (!features || features.length === 0) {
-              console.warn("No features available to initialize labels.");
-              return;
-          }
-  
-          this.clearLabels();
-  
-          const bounds = map.getBounds(); // Harita penceresindeki alanı al
-          features.forEach(feature => {
-              if (feature.geometry && feature.geometry.coordinates) {
-                  const coords = feature.geometry.coordinates;
-                  const latlng = L.latLng(coords[1], coords[0]);
-                  if (bounds.contains(latlng)) {  // Sadece görünür alandaki etiketleri yükle
-                      const labelMarker = this.createLabel(feature, latlng);
-                      labelMarker.feature = feature;
-                      labelLayer.addLayer(labelMarker);
-                  }
-              }
-          });
-  
-          this.updateLabels();
-          console.log('Total labels created:', labelMarkers.size);
-      },
-  
-      // Etiketleri temizleme
-      clearLabels: function () {
-          labelLayer.clearLayers();
-          labelMarkers.clear();
-      }
-  };
-  
-  // Harita olayları ile etiket güncellemeleri (Debounce uygulandı)
-  let debounceTimer;
-  map.on('zoomend', () => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => LabelManager.updateLabels(), 200);
-  });
-  map.on('moveend', () => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => LabelManager.updateLabels(), 200);
-  });  
+let labelLayer = L.layerGroup();
+let labelMarkers = new Map();
+let iconCache = new Map();
 
+// Shared click handler function for both markers and labels
+function handleFeatureClick(feature, latlng) {
+    map.flyTo(latlng, 17, {
+        duration: 1.5,
+        easeLinearity: 0.2
+    });
 
+    $('#noteModalLabel').text(feature.properties.Mekan || '');
+    
+    if (feature.properties.Eski_Fotograf_Linki && feature.properties.Eski_Fotograf_Linki.length > 0) {
+        const coverImageUrl = convertDriveLink(feature.properties.Eski_Fotograf_Linki[0]);
+        $('#featured-image-place').css({
+            'background-image': `url(${coverImageUrl})`,
+            'background-size': 'cover',
+            'background-position': 'center'
+        });
+    }
+    
+    $('#Tema').text(feature.properties.Tema || '');
+    $('#altTema').text(feature.properties.Alt_Tema || '');
+    $('#mekaninBugunkuAdi').text(feature.properties.Mekanin_Bugunku_Adi || '');
+    $('#ilce').text(feature.properties.Ilce || '');
+    $('#metin').text(feature.properties.Metin || '');
+    $('#kaynak').text(feature.properties.Kaynak || '');
+    
+    let galleryHTML = '';
+    
+    if (feature.properties.Eski_Fotograf_Linki && Array.isArray(feature.properties.Eski_Fotograf_Linki)) {
+        feature.properties.Eski_Fotograf_Linki.forEach((link, index) => {
+            const convertedUrl = convertDriveLink(link);
+            galleryHTML += `
+                <div class="ke-gallery-item">
+                    <a href="${convertedUrl}" 
+                       data-fancybox="gallery-${feature.properties.Mekan}"
+                       data-caption="Fotoğraf ${index + 1}">
+                        <img src="${convertedUrl}" 
+                             alt="Fotoğraf ${index + 1}" 
+                             class="img-fluid gallery-image"
+                             onerror="this.onerror=null; this.src='assets/images/placeholder.jpg';">
+                    </a>
+                </div>`;
+        });
+    }
+    
+    $('#mediaID').html(galleryHTML);
 
+    Fancybox.bind(`[data-fancybox="gallery-${feature.properties.Mekan}"]`, {
+        compact: false,
+        idle: false,
+        animated: true,
+        showClass: "fancybox-zoomIn",
+        hideClass: "fancybox-zoomOut",
+        dragToClose: false,
+        toolbar: {
+            display: [
+                "zoom",
+                "fullscreen",
+                "close",
+            ],
+        },
+        buttons: {
+            zoom: {
+                click: function (instance) {
+                    if (instance.isScaledDown()) {
+                        instance.zoomIn();
+                    } else {
+                        instance.zoomOut();
+                    }
+                },
+            },
+        },
+        caption: function (fancybox, carousel, slide) {
+            return slide.caption;
+        },
+    });
 
+    $('#noteModal').modal('show');
+}
 
-// Geojson ve Photogalery yükleme
+const LabelManager = {
+    checkLabelVisibility: function() {
+        if (!map.hasLayer(labelLayer)) return;
+
+        const visibleLabels = new Set();
+        const bounds = map.getBounds();
+        const visibleMarkers = [];
+
+        labelMarkers.forEach((marker, key) => {
+            if (bounds.contains(marker.getLatLng())) {
+                visibleMarkers.push(marker);
+            } else {
+                marker.setOpacity(0);
+            }
+        });
+
+        visibleMarkers.forEach((marker1, index) => {
+            const pos1 = map.latLngToContainerPoint(marker1.getLatLng());
+            let isOverlapping = false;
+
+            for (let i = 0; i < index; i++) {
+                const marker2 = visibleMarkers[i];
+                if (visibleLabels.has(marker2)) {
+                    const pos2 = map.latLngToContainerPoint(marker2.getLatLng());
+                    if (this.isOverlappingWithBuffer(pos1, pos2)) {
+                        isOverlapping = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!isOverlapping) {
+                visibleLabels.add(marker1);
+            }
+        });
+
+        requestAnimationFrame(() => {
+            visibleMarkers.forEach(marker => {
+                marker.setOpacity(visibleLabels.has(marker) ? 1 : 0);
+            });
+        });
+    },
+
+    isOverlappingWithBuffer: function(pos1, pos2) {
+        const dx = Math.abs(pos1.x - pos2.x);
+        const dy = Math.abs(pos1.y - pos2.y);
+        
+        return dx < (LABEL_WIDTH + 2 * BUFFER_SIZE) && 
+               dy < (LABEL_HEIGHT + 2 * BUFFER_SIZE);
+    },
+
+    createLabel: function(feature, latlng) {
+        const content = feature.properties.Mekan;
+        let label = iconCache.get(content);
+        
+        if (!label) {
+            label = L.divIcon({
+                className: 'map-label',
+                html: `<div class="label-content">${content}</div>`,
+                iconSize: [LABEL_WIDTH, LABEL_HEIGHT],
+                iconAnchor: [LABEL_WIDTH / 2, -10]
+            });
+            iconCache.set(content, label);
+        }
+
+        const labelMarker = L.marker(latlng, {
+            icon: label,
+            zIndexOffset: 1000
+        });
+
+        // Add click handler to label
+        labelMarker.on('click', function() {
+            handleFeatureClick(feature, latlng);
+        });
+
+        labelMarkers.set(content, labelMarker);
+        return labelMarker;
+    },
+
+    updateLabels: function() {
+        const zoom = map.getZoom();
+        
+        if (zoom >= 17) {
+            if (!map.hasLayer(labelLayer)) {
+                labelLayer.addTo(map);
+            }
+            this.checkLabelVisibility();
+        } else {
+            if (map.hasLayer(labelLayer)) {
+                map.removeLayer(labelLayer);
+            }
+        }
+    },
+
+    initializeLabels: function(features) {
+        if (!features || features.length === 0) {
+            console.warn("No features available to initialize labels.");
+            return;
+        }
+
+        this.clearLabels();
+
+        features.forEach(feature => {
+            if (feature.geometry && feature.geometry.coordinates) {
+                const coords = feature.geometry.coordinates;
+                const latlng = L.latLng(coords[1], coords[0]);
+                const labelMarker = this.createLabel(feature, latlng);
+                labelMarker.feature = feature;
+                labelLayer.addLayer(labelMarker);
+            }
+        });
+
+        this.updateLabels();
+    },
+
+    clearLabels: function() {
+        labelLayer.clearLayers();
+        labelMarkers.clear();
+    }
+};
+
+// Debounce ile optimize edilmiş event handler'lar
+let debounceTimer;
+const debouncedUpdate = () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => LabelManager.updateLabels(), 200);
+};
+
+map.on('zoomend', debouncedUpdate);
+map.on('moveend', debouncedUpdate);
+
+// Document Ready ve GeoJSON yükleme
 $(document).ready(function() {
     const resetModalScroll = () => $('.modal-body').scrollTop(0);
 
@@ -369,33 +425,6 @@ $(document).ready(function() {
     }).on('shown.bs.modal', function() {
         $(this).find('.modal-body').scrollTop(0);
     });
-
-    // Sadece bir kez zoom event listener'ı ekle
-    map.on('zoomend moveend', () => {
-        LabelManager.updateLabels();
-    });
-
-    // SVG filtresi ekle - glow efekti için
-    const svgFilter = `
-        <svg height="0" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
-                    <feColorMatrix in="blur" mode="matrix" 
-                        values="1 0 0 0 0
-                                0 1 0 0 0
-                                0 0 1 0 0
-                                0 0 0 0.6 0"
-                        result="glow"/>
-                    <feMerge>
-                        <feMergeNode in="glow"/>
-                        <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                </filter>
-            </defs>
-        </svg>
-    `;
-    document.body.insertAdjacentHTML('beforeend', svgFilter);
 
     fetch('assets/geojson/data.geojson')
         .then(response => response.json())
@@ -414,94 +443,13 @@ $(document).ready(function() {
                         opacity: 0.8,
                         fillOpacity: 0.8,
                         pane: 'markerPane',
-                        className: 'marker-with-glow' // Yeni CSS sınıfı
                     });
-
-                    // CSS stil ekle
-                    const style = document.createElement('style');
-                    document.head.appendChild(style);
 
                     return marker;
                 },
                 onEachFeature: function (feature, layer) {
                     layer.on('click', function () {
-                        const markerLatLng = layer.getLatLng();
-                        
-                        map.flyTo(markerLatLng, 17, {
-                            duration: 1.5,
-                            easeLinearity: 0.2
-                        });
-
-                        $('#noteModalLabel').text(feature.properties.Mekan || '');
-                        
-                        if (feature.properties.Eski_Fotograf_Linki && feature.properties.Eski_Fotograf_Linki.length > 0) {
-                            const coverImageUrl = convertDriveLink(feature.properties.Eski_Fotograf_Linki[0]);
-                            $('#featured-image-place').css({
-                                'background-image': `url(${coverImageUrl})`,
-                                'background-size': 'cover',
-                                'background-position': 'center'
-                            });
-                        }
-                        
-                        $('#Tema').text(feature.properties.Tema || '');
-                        $('#altTema').text(feature.properties.Alt_Tema || '');
-                        $('#mekaninBugunkuAdi').text(feature.properties.Mekanin_Bugunku_Adi || '');
-                        $('#ilce').text(feature.properties.Ilce || '');
-                        $('#metin').text(feature.properties.Metin || '');
-                        $('#kaynak').text(feature.properties.Kaynak || '');
-                        
-                        let galleryHTML = '';
-                        
-                        if (feature.properties.Eski_Fotograf_Linki && Array.isArray(feature.properties.Eski_Fotograf_Linki)) {
-                            feature.properties.Eski_Fotograf_Linki.forEach((link, index) => {
-                                const convertedUrl = convertDriveLink(link);
-                                galleryHTML += `
-                                    <div class="ke-gallery-item">
-                                        <a href="${convertedUrl}" 
-                                           data-fancybox="gallery-${feature.properties.Mekan}"
-                                           data-caption="Fotoğraf ${index + 1}">
-                                            <img src="${convertedUrl}" 
-                                                 alt="Fotoğraf ${index + 1}" 
-                                                 class="img-fluid gallery-image"
-                                                 onerror="this.onerror=null; this.src='assets/images/placeholder.jpg';">
-                                        </a>
-                                    </div>`;
-                            });
-                        }
-                        
-                        $('#mediaID').html(galleryHTML);
-
-                        Fancybox.bind(`[data-fancybox="gallery-${feature.properties.Mekan}"]`, {
-                            compact: false,
-                            idle: false,
-                            animated: true,
-                            showClass: "fancybox-zoomIn",
-                            hideClass: "fancybox-zoomOut",
-                            dragToClose: false,
-                            toolbar: {
-                                display: [
-                                    "zoom",
-                                    "fullscreen",
-                                    "close",
-                                ],
-                            },
-                            buttons: {
-                                zoom: {
-                                    click: function (instance) {
-                                        if (instance.isScaledDown()) {
-                                            instance.zoomIn();
-                                        } else {
-                                            instance.zoomOut();
-                                        }
-                                    },
-                                },
-                            },
-                            caption: function (fancybox, carousel, slide) {
-                                return slide.caption;
-                            },
-                        });
-
-                        $('#noteModal').modal('show');
+                        handleFeatureClick(feature, layer.getLatLng());
                     });
                 }
             }).addTo(map);
