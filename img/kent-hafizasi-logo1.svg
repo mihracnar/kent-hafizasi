@@ -25,8 +25,8 @@
 
     <!-- Daha Canlı Gradient -->
     <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1a1f20"/>
-      <stop offset="100%" style="stop-color:#4C585B"/>
+      <stop offset="0%" style="stop-color:#0D0D0D"/>
+      <stop offset="100%" style="stop-color:#0D0D0D"/>
     </linearGradient>
   </defs>
 

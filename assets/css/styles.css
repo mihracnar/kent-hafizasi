@@ -22,7 +22,7 @@ body, html, #map {
     float: left;
     width: 30px;
     height: 30px;
-    background-color: #EEEEEE; /* Arka plan rengi */
+    background-color: #F2F2F2; /* Arka plan rengi */
     border-radius: 4px;
     position: relative;
 }
@@ -32,7 +32,7 @@ body, html, #map {
     position: absolute;
     left: 30px;
     top: 0;
-    background: #EEEEEE;
+    background: #F2F2F2;
     padding: 8px;
     border: 1px solid #000;
     border-radius: 5px;
@@ -52,7 +52,7 @@ body, html, #map {
 
 
 .leaflet-control-location:hover {
-    background-color: #eee;
+    background-color: #F2F2F2;
 }
 
 .leaflet-control-search {
@@ -93,10 +93,10 @@ body, html, #map {
   }
 
   .leaflet-control-search.search-exp {
-    background: padding-box #4C585B;
+    background: padding-box #405F73;
     border-width: 0px;
     border-style: solid;
-    border-color: #FAF7F0;
+    border-color: #F2F2F2;
     border-image: initial;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Dış kutuya gölge */
     border-radius: 5px; /* Dış kutunun köşeleri yuvarlatıldı */
@@ -131,15 +131,15 @@ body, html, #map {
     padding: 0;
     margin-right: 5px; /* Sağdaki butona boşluk */
     margin-bottom: 5px; /* Alttaki butona boşluk */
-    color: #D8D2C2;
+    color: #F2F2F2;
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5); /* Gölge efekti */
 }
 
 .btn-light {
-    color: #EEEEEE;
-    background-color: #4C585B;
+    color: #F2F2F2;
+    background-color: #405F73;
     border: 0px;
-    border-color: #D8D2C2;
+    border-color: #F2F2F2;
 }
 
 .modal-title {
@@ -169,8 +169,8 @@ body, html, #map {
 }
 
 #noteModal .modal-header {
-    border-bottom: 1px solid #dee2e6;
-    background-color: #f8f9fa;
+    border-bottom: 1px solid #F2F2F2;
+    background-color: #F2F2F2;
     border-radius: 12px 12px 0 0;
     padding: 1rem 1.5rem;
 }
@@ -185,7 +185,7 @@ body, html, #map {
     font-size: 1rem;
     line-height: 1.6;
     color: #444;
-    background-color: #fff;
+    background-color: #F2F2F2
     border-radius: 8px;
     word-wrap: break-word;  
     overflow-wrap: break-word;
@@ -194,9 +194,9 @@ body, html, #map {
 }
 
 #noteModal .modal-footer {
-    border-top: 1px solid #dee2e6;
+    border-top: 1px solid #F2F2F2;
     padding: 1rem 1.5rem;
-    background-color: #f8f9fa;
+    background-color: #F2F2F2;
     border-radius: 0 0 12px 12px;
 }
 
@@ -253,7 +253,7 @@ body, html, #map {
 .leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control {
     box-shadow: none;
     width: 250px;  /* Genişlik ayarı */
-    background-color: #ffffff; /* Arka plan rengi */
+    background-color: #F2F2F2; /* Arka plan rengi */
     padding: none;  /* İç boşluk */
     border-radius: 5px; /* Yuvarlatılmış köşeler */
     font-size: large;
@@ -318,7 +318,7 @@ body, html, #map {
 }
 
 .fancybox__toolbar {
-    --fg: #fff;
+    --fg: #F2F2F2;
     --bg: rgba(24, 24, 27, 0.8);
 }
 
@@ -337,10 +337,10 @@ body, html, #map {
     max-width: 200px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Dış kutuya gölge */
     border-radius: 10px; /* Dış kutunun köşeleri yuvarlatıldı */
-    background-color: #4C585B!important;
+    background-color: #405F73!important;
     padding: 10px; /* İçerik boşluğu */
     margin: 0; /* Dışarıda boşluk bırakılmadı */
-    border: 0px solid #ECDFCC; /* Dış kutuya sınır */
+    border: 0px solid #F2F2F2; /* Dış kutuya sınır */
 }
 
 .legend-item {
@@ -355,7 +355,7 @@ body, html, #map {
     width: 14px;  /* Yuvarlağın genişliği */
     height: 14px; /* Yuvarlağın yüksekliği */
     border-radius: 50%; /* Tam yuvarlak */
-    background-color: #EEEEEE; /* Renk için ayar */
+    background-color: #F2F2F2; /* Renk için ayar */
 }
 
 .legend-text {
@@ -375,7 +375,7 @@ body, html, #map {
 
 .card-body {
     flex: 1 1 auto;
-    background: #EEEEEE;
+    background: #F2F2F2;
     border: 0px solid #000000; /* Dış kutuya sınır */
     border-radius: 5px; /* Dış kutunun köşeleri yuvarlatıldı */
     padding: 1.25rem;
@@ -443,7 +443,7 @@ body, html, #map {
     font-family: 'Open Sans', sans-serif;
     font-weight: 800;
     font-size: 14px;
-    color: rgba(76, 88, 91, 0.95);
+    color: rgba(13, 13, 13, 0.95);
     text-align: center;
     background: transparent;
     padding: 0;
@@ -485,8 +485,35 @@ body, html, #map {
     filter: url(#shadow);
 }
 
-.marker-with-glow {
-    filter: url(#glow);
+
+/* Cluster Ayarları */
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+    background-color: rgba(64, 95, 115, 0.6);
+}
+
+.marker-cluster-small div,
+.marker-cluster-medium div,
+.marker-cluster-large div {
+    background-color: rgba(64, 95, 115, 0.9);
+    font-family: 'Open Sans', sans-serif;
+}
+
+.marker-cluster div {
+    background-color: #517EA6 !important;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.marker-cluster {
+    background-color: rgba(64, 95, 115, 0.6) !important;
+}
+
+.marker-cluster > div {
+    background-color: rgba(64, 95, 115, 0.9) !important;
+    color: white;
+    font-family: 'Open Sans', sans-serif !important;
+    font-weight: 700 !important;
 }
 
 

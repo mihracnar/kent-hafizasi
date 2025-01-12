@@ -426,14 +426,38 @@ $(document).ready(function() {
         $(this).find('.modal-body').scrollTop(0);
     });
 
+    // MarkerClusterGroup oluştur
+    const markers = L.markerClusterGroup({
+        disableClusteringAtZoom: 17,
+        spiderfyOnMaxZoom: true,
+        showCoverageOnHover: true,
+        zoomToBoundsOnClick: true,
+        maxClusterRadius: 50,
+        // Cluster icon oluşturma fonksiyonunu özelleştir
+        iconCreateFunction: function(cluster) {
+            const childCount = cluster.getChildCount();
+            let size = 'large';
+            
+            if (childCount < 10) {
+                size = 'small';
+            } else if (childCount < 100) {
+                size = 'medium';
+            }
+            
+            return new L.DivIcon({
+                html: '<div><span>' + childCount + '</span></div>',
+                className: 'marker-cluster marker-cluster-' + size,
+                iconSize: new L.Point(40, 40)
+            });
+        }
+    });
+
     fetch('assets/geojson/data.geojson')
         .then(response => response.json())
         .then(data => {
-            // Label'ları başlat
             LabelManager.initializeLabels(data.features);
             
-            // GeoJSON layer'ı oluştur
-            L.geoJSON(data, {
+            const geoJsonLayer = L.geoJSON(data, {
                 pointToLayer: function (feature, latlng) {
                     const marker = L.circleMarker(latlng, {
                         radius: 6.5,
@@ -452,7 +476,10 @@ $(document).ready(function() {
                         handleFeatureClick(feature, layer.getLatLng());
                     });
                 }
-            }).addTo(map);
+            });
+
+            markers.addLayer(geoJsonLayer);
+            map.addLayer(markers);
         })
         .catch(error => {
             console.error('GeoJSON yüklenirken hata oluştu:', error);
