@@ -66,6 +66,8 @@ locateButton.addEventListener('click', function() {
   locateControl.start();
 });
 
+
+
 // Search Control
 const searchControl = new L.Control.Search({
     url: 'https://nominatim.openstreetmap.org/search?&countrycodes=TR&format=json&q={s}',
@@ -81,10 +83,7 @@ const searchControl = new L.Control.Search({
 });
 
 map.addControl(searchControl);
-
 let searchMarker; 
-
-// Mavi yuvarlak için özel bir pane oluştur
 map.createPane('searchMarkerPane');
 map.getPane('searchMarkerPane').style.pointerEvents = 'none'; // Tıklamaları engelle
 map.getPane('searchMarkerPane').style.zIndex = 200; // Daha düşük bir z-index ver
@@ -112,12 +111,10 @@ searchControl.on('search:cancel', function() {
     }
 });
 
-
 function handleLocation(lat, lon) {
     if (searchMarker) {
         map.removeLayer(searchMarker);
     }
-    
     map.setView([lat, lon], 13);
     searchMarker = L.circleMarker([lat, lon], {
         radius: 30,
@@ -129,7 +126,6 @@ function handleLocation(lat, lon) {
     }).addTo(map);
 }
 
-// Alternative approach using DOM events
 const searchInput = document.querySelector('.search-input');
 if (searchInput) {
     searchInput.addEventListener('input', function(e) {
@@ -171,6 +167,7 @@ zoomOutButton.addEventListener('click', function() {
 });
 
 
+// Drive Linkini Dönüştürme
 function convertDriveLink(url) {
     // Drive ID'sini çıkar
     const fileIdMatch = url.match(/\/file\/d\/([^/]+)/);
@@ -184,7 +181,7 @@ function convertDriveLink(url) {
 }
 
 
-
+// Tema Renkleri
 function getColor(tema) {
     switch (tema) {
       case 'Gündelik Yaşam ve Kent Belleği': return '#ECB159';
@@ -196,7 +193,6 @@ function getColor(tema) {
   }
 
 
-
 // Label Manager
 const LABEL_WIDTH = 120;
 const LABEL_HEIGHT = 20;
@@ -206,7 +202,7 @@ let labelLayer = L.layerGroup();
 let labelMarkers = new Map();
 let iconCache = new Map();
 
-// Shared click handler function for both markers and labels
+
 function handleFeatureClick(feature, latlng) {
     map.flyTo(latlng, 17, {
         duration: 1.5,
@@ -259,6 +255,8 @@ function handleFeatureClick(feature, latlng) {
         showClass: "fancybox-zoomIn",
         hideClass: "fancybox-zoomOut",
         dragToClose: false,
+        showClass: "fancybox-fadeIn", // Giriş animasyonu
+        hideClass: "fancybox-fadeOut", // Çıkış animasyonu    
         toolbar: {
             display: [
                 "zoom",
