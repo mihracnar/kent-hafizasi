@@ -185,12 +185,11 @@ body, html, #map {
     font-size: 1rem;
     line-height: 1.6;
     color: #444;
-    background-color: #F2F2F2
+    background-color: #F2F2F2;  /* Noktalı virgül eklendi */
     border-radius: 8px;
     word-wrap: break-word;  
     overflow-wrap: break-word;
     font-family: 'Open Sans', sans-serif;
-
 }
 
 #noteModal .modal-footer {
