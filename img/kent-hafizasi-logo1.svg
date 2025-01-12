@@ -34,12 +34,27 @@
   <g transform="translate(50, 20)">
     <!-- Büyütülmüş Geometrik Sembol -->
     <g transform="translate(125, 0)" filter="url(#powerfulGlow)">
+      <!-- Dış Buffer -->
+      <rect x="0" y="0" width="50" height="50" 
+            fill="none" 
+            stroke="#EEEEEE" 
+            stroke-width="8" 
+            transform="rotate(45, 25, 25)"/>
+      <!-- Ana Çizgi -->
       <rect x="0" y="0" width="50" height="50" 
             fill="none" 
             stroke="url(#textGradient)" 
             stroke-width="4" 
             transform="rotate(45, 25, 25)"/>
       
+      <!-- Dış Buffer (Dash Çizgi) -->
+      <rect x="12" y="12" width="50" height="50" 
+            fill="none" 
+            stroke="#EEEEEE" 
+            stroke-width="8" 
+            transform="rotate(45, 37, 37)"
+            stroke-dasharray="4,4"/>
+      <!-- Dash Çizgi -->
       <rect x="12" y="12" width="50" height="50" 
             fill="none" 
             stroke="url(#textGradient)" 
@@ -50,6 +65,17 @@
     
     <!-- Büyütülmüş ve Kalınlaştırılmış Logo Yazısı -->
     <g filter="url(#strongShadow)">
+      <!-- Tampon Beyaz Çizgi -->
+      <text x="150" y="110" 
+            text-anchor="middle" 
+            font-family="'Open Sans', sans-serif" 
+            font-size="38" 
+            letter-spacing="2"
+            font-weight="900" 
+            stroke="#EEEEEE" 
+            stroke-width="6" 
+            fill="none">İSTANBUL</text>
+      <!-- Ana Yazı -->
       <text x="150" y="110" 
             text-anchor="middle" 
             font-family="'Open Sans', sans-serif" 
@@ -58,6 +84,17 @@
             font-weight="900" 
             fill="url(#textGradient)">İSTANBUL</text>
       
+      <!-- Tampon Beyaz Çizgi -->
+      <text x="150" y="150" 
+            text-anchor="middle" 
+            font-family="'Open Sans', sans-serif" 
+            font-size="32" 
+            letter-spacing="6"
+            font-weight="700" 
+            stroke="#EEEEEE" 
+            stroke-width="6" 
+            fill="none">HAFIZASI</text>
+      <!-- Ana Yazı -->
       <text x="150" y="150" 
             text-anchor="middle" 
             font-family="'Open Sans', sans-serif" 
