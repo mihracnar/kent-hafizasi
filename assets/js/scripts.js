@@ -485,3 +485,205 @@ $(document).ready(function() {
 });
 
 
+// Albüm
+
+document.addEventListener('DOMContentLoaded', function() {
+    let allGalleryItems = [];
+    let selectedTheme = null;
+    let selectedSubthemes = new Set();
+    
+    // GeoJSON'dan verileri çek
+    fetch('assets/geojson/data.geojson')
+        .then(response => response.json())
+        .then(data => {
+            // Tüm alt temaları topla
+            const allSubthemes = new Set();
+            data.features.forEach(feature => {
+                if (feature.properties.Alt_Tema) {
+                    feature.properties.Alt_Tema.split(',')
+                        .map(theme => theme.trim())
+                        .forEach(theme => allSubthemes.add(theme));
+                }
+            });
+
+            // Alt tema slider'ını doldur
+            const subthemeSlider = document.getElementById('subthemeSlider');
+            Array.from(allSubthemes).sort().forEach(subtheme => {
+                const tag = document.createElement('span');
+                tag.className = 'subtheme-tag';
+                tag.dataset.subtheme = subtheme;
+                tag.textContent = subtheme;
+                tag.onclick = () => toggleSubtheme(tag);
+                subthemeSlider.appendChild(tag);
+            });
+
+            // Fotoğraf verilerini hazırla
+            allGalleryItems = data.features
+                .filter(feature => feature.properties.Eski_Fotograf_Linki && 
+                                 Array.isArray(feature.properties.Eski_Fotograf_Linki) && 
+                                 feature.properties.Eski_Fotograf_Linki.length > 0)
+                .flatMap(feature => feature.properties.Eski_Fotograf_Linki.map(link => ({
+                    src: convertDriveLink(link),
+                    tema: feature.properties.Tema,
+                    altTema: feature.properties.Alt_Tema ? 
+                            feature.properties.Alt_Tema.split(',').map(t => t.trim()) : [],
+                    caption: feature.properties.Mekan || '',
+                    metin: feature.properties.Metin || ''
+                })));
+
+            renderGallery();
+            initializeSliderControls();
+        });
+
+    // Alt tema toggle fonksiyonu (yalnızca bir tane seçilebilir)
+    function toggleSubtheme(element) {
+        // Önce tüm alt temaları devre dışı bırak
+        document.querySelectorAll('.subtheme-tag').forEach(tag => tag.classList.remove('active'));
+        selectedSubthemes.clear();
+
+        // Yeni seçimi aktif hale getir
+        element.classList.add('active');
+        selectedSubthemes.add(element.dataset.subtheme);
+
+        renderGallery();
+    }
+
+    // Slider kontrol butonları
+    function initializeSliderControls() {
+        const slider = document.querySelector('.subtheme-slider');
+        const leftBtn = document.querySelector('.slider-control.left');
+        const rightBtn = document.querySelector('.slider-control.right');
+
+        leftBtn.onclick = () => {
+            slider.scrollBy({ left: -200, behavior: 'smooth' });
+        };
+
+        rightBtn.onclick = () => {
+            slider.scrollBy({ left: 200, behavior: 'smooth' });
+        };
+    }
+
+    // Ana tema filtre click handler
+    document.querySelectorAll('.filter-tag').forEach(tag => {
+        tag.addEventListener('click', function() {
+            document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            selectedTheme = this.dataset.tema;
+            renderGallery();
+        });
+    });
+
+    // Galeri render fonksiyonu
+    function renderGallery() {
+        let filteredItems = allGalleryItems;
+
+        // Ana tema filtresi
+        if (selectedTheme) {
+            filteredItems = filteredItems.filter(item => item.tema === selectedTheme);
+        }
+
+        // Alt tema filtresi
+        if (selectedSubthemes.size > 0) {
+            filteredItems = filteredItems.filter(item => 
+                item.altTema.some(tema => selectedSubthemes.has(tema))
+            );
+        }
+
+        const galleryGrid = document.getElementById('albumMediaID');
+        galleryGrid.innerHTML = filteredItems.map(item => `
+            <div class="ke-gallery-item">
+                <a href="${item.src}" 
+                   data-fancybox="album-gallery"
+                   data-caption="${item.caption}">
+                    <img src="${item.src}" 
+                         alt="${item.caption}"
+                         class="img-fluid gallery-image"
+                         onerror="this.onerror=null; this.src='assets/images/placeholder.jpg';">
+                </a>
+            </div>
+        `).join('');
+
+        initializeFancybox();
+    }
+
+    function updateSubthemes() {
+        const subthemeSlider = document.getElementById('subthemeSlider');
+        subthemeSlider.innerHTML = ''; // Mevcut alt tema seçeneklerini temizle
+    
+        // Alt tema seçimini sıfırla
+        selectedSubthemes.clear();
+        document.querySelectorAll('.subtheme-tag').forEach(tag => tag.classList.remove('active'));
+    
+        if (!selectedTheme) return; // Ana tema seçilmediyse işlem yapma
+    
+        // Seçilen ana tema ile ilişkili alt temaları bul
+        const relatedSubthemes = new Set();
+        allGalleryItems.forEach(item => {
+            if (item.tema === selectedTheme) {
+                item.altTema.forEach(subtheme => relatedSubthemes.add(subtheme));
+            }
+        });
+    
+        // İlgili alt temaları slider'a ekle
+        Array.from(relatedSubthemes).sort().forEach(subtheme => {
+            const tag = document.createElement('span');
+            tag.className = 'subtheme-tag';
+            tag.dataset.subtheme = subtheme;
+            tag.textContent = subtheme;
+            tag.onclick = () => toggleSubtheme(tag);
+            subthemeSlider.appendChild(tag);
+        });
+    }
+    
+
+        // Ana tema filtre click handler (alt temaları günceller)
+        document.querySelectorAll('.filter-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                selectedTheme = this.dataset.tema;
+        
+                updateSubthemes(); // Alt temaları güncelle ve seçimleri sıfırla
+                renderGallery();   // Galeriyi yeniden render et
+            });
+        });
+        
+
+
+    function initializeFancybox() {
+        Fancybox.bind('[data-fancybox="album-gallery"]', {
+            compact: false,
+            idle: false,
+            animated: true,
+            showClass: "fancybox-zoomIn",
+            hideClass: "fancybox-zoomOut",
+            dragToClose: false,
+            toolbar: {
+                display: [
+                    "zoom",
+                    "fullscreen",
+                    "close",
+                ],
+            },
+            buttons: {
+                zoom: {
+                    click: function (instance) {
+                        if (instance.isScaledDown()) {
+                            instance.zoomIn();
+                        } else {
+                            instance.zoomOut();
+                        }
+                    },
+                },
+            },
+            caption: function (fancybox, carousel, slide) {
+                return slide.caption;
+            },
+        });
+    }
+
+    // Modal scroll reset
+    $('#albumModal').on('show.bs.modal', function() {
+        $(this).find('.modal-body').scrollTop(0);
+    });
+});

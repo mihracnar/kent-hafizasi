@@ -20,9 +20,19 @@
     
     <div id="map"></div>
 
-    <!-- Bootstrap Grid Menü (1x1) -->
+    <!-- Bootstrap Grid Menü (3x1) -->
     <div id="map-menu-top">
         <div class="row no-gutters"> 
+            <div class="col">
+                <button type="button" class="btn btn-light btn-circle" data-toggle="modal" data-target="#filterModal">
+                    <i class="fas fa-filter"></i>
+                </button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-light btn-circle" data-toggle="modal" data-target="#albumModal">
+                    <i class="fas fa-camera"></i>
+                </button>
+            </div>
             <div class="col">
                 <button type="button" class="btn btn-light btn-circle" data-toggle="modal" data-target="#aboutModal">
                     <i class="fas fa-info-circle"></i>
@@ -144,6 +154,52 @@
             </div>
         </div>
     </div>
+   
+    
+    <!-- Albüm Modali -->
+    <div class="modal fade" id="albumModal" tabindex="-1" role="dialog" aria-labelledby="albumModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header flex-column">
+                    <div class="w-100 d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="modal-title" id="albumModalLabel">İstanbul Hafıza Fotoğrafları</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <!-- Ana Temalar -->
+                    <div class="filter-tags text-center w-100 mb-2">
+                        <span class="filter-tag active" data-tema="Gündelik Yaşam ve Kent Belleği">
+                            Gündelik Yaşam ve Kent Belleği
+                        </span>
+                        <span class="filter-tag" data-tema="Mimarlık ve Şehircilik">
+                            Mimarlık ve Şehircilik
+                        </span>
+                        <span class="filter-tag" data-tema="Şahıs">
+                            Şahıs
+                        </span>
+                        <span class="filter-tag" data-tema="Tarihsel Anekdot">
+                            Tarihsel Anekdot
+                        </span>
+                    </div>
+                    <!-- Alt Tema Slider -->
+                    <div class="position-relative w-100">
+                        <button class="slider-control left">&lt;</button>
+                        <button class="slider-control right">&gt;</button>
+                        <div class="subtheme-slider" id="subthemeSlider">
+                            <!-- Alt temalar dinamik olarak eklenecek -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="ke-gallery" id="albumMediaID"></div>
+                </div>
+            <div class="modal-footer">
+            </div>
+            </div>
+        </div>
+    </div>
+
     
     <!-- Lejant -->
     <div id="map-legend" class="card position-fixed">

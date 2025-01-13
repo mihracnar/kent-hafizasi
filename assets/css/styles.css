@@ -153,7 +153,7 @@ body, html, #map {
 
 /* Sadece marker notu modalı için stil tanımları */
 #noteModal .modal-dialog {
-    opacity: 0.95;
+    opacity: 1;
     width: 35vw;
     max-width: 40vw;
     margin: 1.75rem auto;
@@ -336,7 +336,7 @@ body, html, #map {
     max-width: 200px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Dış kutuya gölge */
     border-radius: 10px; /* Dış kutunun köşeleri yuvarlatıldı */
-    background-color: #405F73!important;
+    background-color: #405F73 !important;
     padding: 10px; /* İçerik boşluğu */
     margin: 0; /* Dışarıda boşluk bırakılmadı */
     border: 0px solid #F2F2F2; /* Dış kutuya sınır */
@@ -516,6 +516,198 @@ body, html, #map {
 }
 
 
+/* Albüm */
+
+.filter-tag {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 0 8px 16px 0;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.6;
+    color: white;
+}
+
+.filter-tag.active {
+    opacity: 1;
+    font-weight: 500;
+}
+
+.filter-tag:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.ke-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    padding: 12px;
+}
+
+.ke-gallery-item {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 6px;
+    transition: transform 0.3s ease;
+}
+
+.ke-gallery-item:hover {
+    transform: scale(1.05);
+}
+
+.ke-gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Tag Colors - Exact matches from getColor function */
+.filter-tag[data-tema="Gündelik Yaşam ve Kent Belleği"] { background-color: #ECB159; }
+.filter-tag[data-tema="Mimarlık ve Şehircilik"] { background-color: #8CB9BD; }
+.filter-tag[data-tema="Şahıs"] { background-color: #9B4444; }
+.filter-tag[data-tema="Tarihsel Anekdot"] { background-color: #754E1A; }
+
+
+.filter-tag {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 0 8px 16px 0;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.6;
+    color: white;
+}
+
+.filter-tag.active {
+    opacity: 1;
+    font-weight: 800;
+    color:#0d0d0d;
+}
+
+.filter-tag:hover {
+    transform: translateY(-2px);
+    opacity: 0.7;
+}
+#albumModal .modal-dialog {
+    width: 65vw;
+    max-width: 65vw;
+    margin: 0;
+    position: fixed;
+    top: 110px !important;
+    right: 25px;
+    transform: none !important;
+}
+
+#albumModal {
+    background: none;
+}
+
+#albumModal .modal-body {
+    padding: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+#albumModal .modal-footer {
+    border-top: 1px solid #F2F2F2;
+    padding: 1rem 1.5rem;
+    background-color: #F2F2F2;
+    border-radius: 0 0 12px 12px;
+}
+
+#albumModal .btn-close {
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+#albumModal .btn-close:hover {
+    opacity: 1;
+}
+
+#albumModal.fade .modal-dialog {
+    transform: translate(0, -50px);
+    transition: transform 0.3s ease-out;
+}
+
+#albumModal .modal-content {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+#albumModal .modal-header {
+    border-bottom: 1px solid #F2F2F2;
+    background-color: #F2F2F2;
+    border-radius: 12px 12px 0 0;
+    padding: 1rem 1.5rem;
+}
+
+
+/* Alt tema slider stili */
+.subtheme-slider {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px 0;
+    scrollbar-width: thin;
+    position: relative;
+}
+
+.subtheme-slider::-webkit-scrollbar {
+    height: 6px;
+}
+
+.subtheme-slider::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.subtheme-slider::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.subtheme-tag {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 0 6px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f0f0f0;
+    font-size: 0.9em;
+    border: 1px solid #ddd;
+}
+
+.subtheme-tag.active {
+    background: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+
+.slider-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+.slider-control.left { left: 0; }
+.slider-control.right { right: 0; }
+
+
 
 @media (max-width: 768px) {
 
@@ -567,6 +759,19 @@ body, html, #map {
         padding: 1rem;
         
 }
+
+    #albumModal .modal-dialog {
+        opacity: 0.85;
+        width: 90vw;
+        max-width: 90vw;
+        top: 80px;
+    }
+
+    #albumModal .modal-body {
+        max-height: 80vw;
+        padding: 1rem;
+        
+    }
 
     .card-columns-wide {
         column-count: 1;
