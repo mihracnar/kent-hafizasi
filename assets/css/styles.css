@@ -764,7 +764,8 @@ body, html, #map {
         opacity: 0.95;
         width: 90vw;
         max-width: 90vw;
-        top: 95px !important;
+        left:5vw;
+        margin-bottom: 20px !important;
     }
 
     #albumModal .modal-body {
