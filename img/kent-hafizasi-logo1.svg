@@ -37,7 +37,7 @@
       <!-- Ana Çizgi -->
       <rect x="0" y="0" width="50" height="50" 
             fill="none" 
-            stroke="#405F73" 
+            stroke="#0D0D0D" 
             stroke-width="4" 
             transform="rotate(45, 25, 25)"/>
       
@@ -51,7 +51,7 @@
       <!-- Dash Çizgi -->
       <rect x="12" y="12" width="50" height="50" 
             fill="none" 
-            stroke="#405F73" 
+            stroke="#0D0D0D" 
             stroke-width="4" 
             transform="rotate(45, 37, 37)"
             stroke-dasharray="4,4"/>
@@ -76,7 +76,7 @@
             font-size="38" 
             letter-spacing="2"
             font-weight="900" 
-            fill="#405F73">İSTANBUL</text>
+            fill="#0D0D0D">İSTANBUL</text>
       
       <!-- Tampon Beyaz Çizgi -->
       <text x="150" y="150" 
@@ -95,7 +95,7 @@
             font-size="32" 
             letter-spacing="6"
             font-weight="700" 
-            fill="#405F73">HAFIZASI</text>
+            fill="#0D0D0D">HAFIZASI</text>
     </g>
   </g>
 </svg>

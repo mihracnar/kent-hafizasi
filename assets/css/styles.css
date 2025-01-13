@@ -489,13 +489,13 @@ body, html, #map {
 .marker-cluster-small,
 .marker-cluster-medium,
 .marker-cluster-large {
-    background-color: rgba(64, 95, 115, 0.6);
+    background-color: rgba(64, 95, 115, 0.15);
 }
 
 .marker-cluster-small div,
 .marker-cluster-medium div,
 .marker-cluster-large div {
-    background-color: rgba(64, 95, 115, 0.9);
+    background-color: rgba(64, 95, 115, 0.5);
     font-family: 'Open Sans', sans-serif;
 }
 
@@ -505,11 +505,11 @@ body, html, #map {
 }
 
 .marker-cluster {
-    background-color: rgba(64, 95, 115, 0.6) !important;
+    background-color: rgba(64, 95, 115, 0.15) !important;
 }
 
 .marker-cluster > div {
-    background-color: rgba(64, 95, 115, 0.9) !important;
+    background-color: rgba(64, 95, 115, 0.5) !important;
     color: white;
     font-family: 'Open Sans', sans-serif !important;
     font-weight: 700 !important;
@@ -749,7 +749,7 @@ body, html, #map {
         opacity: 0.85;
         width: 90vw;
         max-width: 90vw;
-        top: 80px;
+        top: 20px;
         left:auto;
         position: relative; 
 }
@@ -761,14 +761,14 @@ body, html, #map {
 }
 
     #albumModal .modal-dialog {
-        opacity: 0.85;
+        opacity: 0.95;
         width: 90vw;
         max-width: 90vw;
-        top: 80px;
+        top: 95px !important;
     }
 
     #albumModal .modal-body {
-        max-height: 80vw;
+        max-height: 85vw;
         padding: 1rem;
         
     }
@@ -801,5 +801,44 @@ body, html, #map {
         border: none;
         margin-bottom: 1rem;
 }
+
+    .modal-header .w-100 {
+        padding-bottom: 5px; /* Başlık ve temalar arasındaki boşluğu azalt */
+    }
+
+    .filter-tags {
+        padding: 0; /* Temalar arasındaki boşluğu azalt */
+        margin-bottom: 5px; /* Temalar ve alt temalar arasındaki boşluğu azalt */
+    }
+
+    .filter-tag {
+        font-size: 14px; /* Yazı büyüklüğünü küçült */
+        margin: 2px 4px; /* Temalar arasındaki boşluğu azalt */
+        padding: 5px 10px; /* Temaların içerik alanını sıkıştır */
+        display: inline-block;
+        border-radius: 15px; /* Yuvarlatılmış köşeler */
+    }
+
+    .filter-tag.active {
+        font-weight: bold;
+    }
+
+   .subtheme-slider {
+        margin-top: 3px !important; /* Alt temalar ile temalar arasındaki boşluğu daha da azalt */
+        padding: 0; /* Alt tema slider'ındaki padding'i kaldır */
+        display: flex; /* Slider içeriğini yatayda hizala */
+        gap: 2px !important; /* Alt temalar arasındaki boşluğu daha da azalt */
+        overflow: hidden; /* Kaydırma çubuğunu gizle */
+        font-size: 12px; /* Ok işaretlerinin boyutunu küçült */
+    }
+
+    .subtheme-slider .filter-tag {
+        margin: 0; /* Alt temalar arasındaki boşluğu daha da azalt */
+        padding: 2px 4px !important; /* Alt temalar arasındaki iç boşluğu azalt */
+    }
+
+    .slider-control {
+        font-size: 12px; /* Ok işaretlerinin boyutunu küçült */
+    }
 
 }
