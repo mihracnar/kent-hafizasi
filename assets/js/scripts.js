@@ -589,22 +589,26 @@ document.addEventListener('DOMContentLoaded', function() {
             );
         }
 
-        const galleryGrid = document.getElementById('albumMediaID');
-        galleryGrid.innerHTML = filteredItems.map(item => `
-            <div class="ke-gallery-item">
-                <a href="${item.src}" 
-                   data-fancybox="album-gallery"
-                   data-caption="${item.caption}">
-                    <img src="${item.src}" 
-                         alt="${item.caption}"
-                         class="img-fluid gallery-image"
-                         onerror="this.onerror=null; this.src='assets/images/placeholder.jpg';">
-                </a>
-            </div>
-        `).join('');
+     const galleryGrid = document.getElementById('albumMediaID');
+    galleryGrid.innerHTML = filteredItems.map(item => `
+        <div class="ke-gallery-item">
+            <a href="${item.src}" 
+               data-fancybox="album-gallery"
+               data-caption="${item.metin || 'No description available'}" 
+               data-label="${item.caption || 'Unknown location'}">
+                <div class="gallery-overlay">
+                    <p class="gallery-label">${item.caption || 'Unknown location'}</p>
+                </div>
+                <img src="${item.src}" 
+                     alt="${item.caption || 'Image not available'}" 
+                     class="img-fluid gallery-image"
+                     onerror="this.onerror=null; this.src='assets/images/placeholder.jpg';">
+            </a>
+        </div>
+    `).join('');
 
-        initializeFancybox();
-    }
+    initializeFancybox();
+}
 
     function updateSubthemes() {
         const subthemeSlider = document.getElementById('subthemeSlider');

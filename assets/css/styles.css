@@ -321,7 +321,7 @@ body, html, #map {
     --bg: rgba(24, 24, 27, 0.8);
 }
 
-.fancybox__caption {
+#noteModal .fancybox__caption {
     font-size: 16px;
     padding: 12px;
     text-align: center;
@@ -546,21 +546,52 @@ body, html, #map {
     padding: 12px;
 }
 
-.ke-gallery-item {
+#albumModal .ke-gallery-item {
     aspect-ratio: 1;
     overflow: hidden;
     border-radius: 6px;
     transition: transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-.ke-gallery-item:hover {
+#albumModal .ke-gallery-item:hover .gallery-image {
     transform: scale(1.05);
+    opacity: 0.7;
+}
+
+#albumModal .gallery-image {
+    transition: transform 0.3s, opacity 0.3s;
 }
 
 .ke-gallery-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+#albumModal .ke-gallery-caption {
+    display: block; /* Alt açıklamaları göster */
+    font-size: 14px; /* Gerekiyorsa yazı boyutunu ayarlayın */
+    color: #a2ff00; /* Görünürlük için renk ekleyin */
+    margin-top: 10px; /* Üst boşluk */
+}
+
+#albumModal .gallery-overlay {
+    position: absolute;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6); /* Arka plan karartması */
+    width: 100%;
+    padding: 10px;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    opacity: 1; /* Sürekli görünmesi için */
+    transition: none; /* Efekt kaldırıldı */
+}
+
+#albumModal .ke-gallery-item:hover .gallery-overlay {
+    opacity: 1;
 }
 
 /* Tag Colors - Exact matches from getColor function */
