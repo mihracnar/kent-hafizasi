@@ -563,6 +563,21 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
+    function enableTouchScroll(slider) {
+        let startX;
+    
+        slider.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+    
+        slider.addEventListener('touchmove', (e) => {
+            const diff = startX - e.touches[0].clientX;
+            slider.scrollBy({ left: diff, behavior: 'smooth' });
+        });
+    }
+    
+    enableTouchScroll(document.querySelector('.subtheme-slider'));
+
     // Ana tema filtre click handler
     document.querySelectorAll('.filter-tag').forEach(tag => {
         tag.addEventListener('click', function() {
@@ -577,38 +592,37 @@ document.addEventListener('DOMContentLoaded', function() {
     function renderGallery() {
         let filteredItems = allGalleryItems;
 
-        // Ana tema filtresi
         if (selectedTheme) {
             filteredItems = filteredItems.filter(item => item.tema === selectedTheme);
         }
 
-        // Alt tema filtresi
         if (selectedSubthemes.size > 0) {
             filteredItems = filteredItems.filter(item => 
                 item.altTema.some(tema => selectedSubthemes.has(tema))
             );
         }
 
-     const galleryGrid = document.getElementById('albumMediaID');
-    galleryGrid.innerHTML = filteredItems.map(item => `
-        <div class="ke-gallery-item">
-            <a href="${item.src}" 
-               data-fancybox="album-gallery"
-               data-caption="${item.metin || 'No description available'}" 
-               data-label="${item.caption || 'Unknown location'}">
-                <div class="gallery-overlay">
-                    <p class="gallery-label">${item.caption || 'Unknown location'}</p>
-                </div>
-                <img src="${item.src}" 
-                     alt="${item.caption || 'Image not available'}" 
-                     class="img-fluid gallery-image"
-                     onerror="this.onerror=null; this.src='assets/images/placeholder.jpg';">
-            </a>
-        </div>
-    `).join('');
+        const galleryGrid = document.getElementById('albumMediaID');
+        galleryGrid.innerHTML = filteredItems.map(item => `
+            <div class="ke-gallery-item">
+                <a href="${item.src}" 
+                   data-fancybox="album-gallery"
+                   data-caption="${item.caption}"
+                   data-description="${item.metin || ''}"
+                   class="gallery-link">
+                    <div class="gallery-overlay">
+                        <p class="gallery-label">${item.caption || 'Konum belirtilmemiş'}</p>
+                    </div>
+                    <img src="${item.src}" 
+                         alt="${item.caption || 'Görsel mevcut değil'}" 
+                         class="img-fluid gallery-image"
+                         onerror="this.onerror=null; this.src='assets/images/placeholder.jpg';">
+                </a>
+            </div>
+        `).join('');
 
-    initializeFancybox();
-}
+        initializeFancybox();
+    }
 
     function updateSubthemes() {
         const subthemeSlider = document.getElementById('subthemeSlider');
@@ -654,37 +668,50 @@ document.addEventListener('DOMContentLoaded', function() {
         
 
 
-    function initializeFancybox() {
-        Fancybox.bind('[data-fancybox="album-gallery"]', {
-            compact: false,
-            idle: false,
-            animated: true,
-            showClass: "fancybox-zoomIn",
-            hideClass: "fancybox-zoomOut",
-            dragToClose: false,
-            toolbar: {
-                display: [
-                    "zoom",
-                    "fullscreen",
-                    "close",
-                ],
-            },
-            buttons: {
-                zoom: {
-                    click: function (instance) {
-                        if (instance.isScaledDown()) {
-                            instance.zoomIn();
-                        } else {
-                            instance.zoomOut();
-                        }
+        function initializeFancybox() {
+            Fancybox.bind('[data-fancybox="album-gallery"]', {
+                compact: false,
+                idle: false,
+                animated: true,
+                showClass: "fancybox-zoomIn",
+                hideClass: "fancybox-zoomOut",
+                dragToClose: false,
+                toolbar: {
+                    display: [
+                        "zoom",
+                        "fullscreen",
+                        "close",
+                    ],
+                },
+                buttons: {
+                    zoom: {
+                        click: function (instance) {
+                            if (instance.isScaledDown()) {
+                                instance.zoomIn();
+                            } else {
+                                instance.zoomOut();
+                            }
+                        },
                     },
                 },
-            },
-            caption: function (fancybox, carousel, slide) {
-                return slide.caption;
-            },
-        });
-    }
+                caption: function (fancybox, slide) {
+                    const caption = slide.triggerEl?.dataset?.caption || '';
+                    const description = slide.triggerEl?.dataset?.description || '';
+                    
+                    let captionHtml = '<div class="fancybox-caption-wrap">';
+                    if (caption) {
+                        captionHtml += `<h4 class="fancybox-caption-title">${caption}</h4>`;
+                    }
+                    if (description) {
+                        captionHtml += `<p class="fancybox-caption-text">${description}</p>`;
+                    }
+                    captionHtml += '</div>';
+                    
+                    return captionHtml || '';
+                },
+                
+            });
+        }
 
     // Modal scroll reset
     $('#albumModal').on('show.bs.modal', function() {
