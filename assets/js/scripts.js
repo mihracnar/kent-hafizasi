@@ -204,11 +204,14 @@ let iconCache = new Map();
 
 
 function handleFeatureClick(feature, latlng) {
-    map.flyTo(latlng, 17, {
+    const currentZoom = map.getZoom(); // Mevcut zoom seviyesini al
+    const targetZoom = currentZoom > 17 ? currentZoom : 17; // Hedef zoom seviyesini belirle
+
+    map.flyTo(latlng, targetZoom, {
         duration: 1.5,
         easeLinearity: 0.2
     });
-
+    
     $('#noteModalLabel').text(feature.properties.Mekan || '');
     
     if (feature.properties.Eski_Fotograf_Linki && feature.properties.Eski_Fotograf_Linki.length > 0) {
