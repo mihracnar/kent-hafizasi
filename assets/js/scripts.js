@@ -66,48 +66,143 @@ locateButton.addEventListener('click', function() {
     locateControl.start();
 });
 
+
+
+
 // Search Control Configuration
-const searchControl = new L.Control.Search({
-    url: 'https://nominatim.openstreetmap.org/search?&countrycodes=TR&format=json&q={s}',
-    jsonpParam: 'json_callback',
-    propertyName: 'display_name',
-    propertyLoc: ['lat', 'lon'],
-    marker: false,
-    autoCollapse: false,
-    autoType: false,
-    minLength: 2,
-    collapsed: false,
-    textPlaceholder: 'Konum ya da koordinat ara'
+function initializeSearch() {
+    const searchControl = new L.Control.Search({
+        sourceData: function(text, callResponse) {
+            // First search in local data
+            const localResults = searchLocalData(text);
+            
+            if (localResults.length > 0) {
+                callResponse(localResults);
+            } else {
+                // If no local results, search using Nominatim
+                searchNominatim(text, callResponse);
+            }
+        },
+        propertyName: 'name',
+        propertyLoc: ['lat', 'lon'],
+        marker: false,
+        autoCollapse: false,
+        autoType: false,
+        minLength: 2,
+        collapsed: false,
+        textPlaceholder: 'Konum ya da koordinat ara',
+        firstTipSubmit: true,
+        caseSensitive: false
+    });
+
+    map.addControl(searchControl);
+
+    // Create search marker pane
+    map.createPane('searchMarkerPane');
+    map.getPane('searchMarkerPane').style.pointerEvents = 'none';
+    map.getPane('searchMarkerPane').style.zIndex = 200;
+
+    let searchMarker = null;
+
+    // Search result handlers
+    searchControl.on('search:locationfound', function(e) {
+        if (searchMarker) {
+            map.removeLayer(searchMarker);
+        }
+
+        const lat = e.latlng.lat;
+        const lon = e.latlng.lng;
+
+        // Check if this is a local data result
+        if (e.layer && e.layer.feature) {
+            handleFeatureClick(e.layer.feature, e.latlng);
+        } else {
+            // This is a Nominatim result
+            searchMarker = L.circleMarker(e.latlng, {
+                radius: 30,
+                pane: 'searchMarkerPane',
+                fillColor: '#3388ff',
+                color: '#3388ff',
+                fillOpacity: 0.5
+            }).addTo(map);
+        }
+
+        map.flyTo(e.latlng, 17);
+    });
+
+    searchControl.on('search:cancel', function() {
+        if (searchMarker) {
+            map.removeLayer(searchMarker);
+            searchMarker = null;
+        }
+    });
+}
+
+// Search in local GeoJSON data
+function searchLocalData(text) {
+    const results = [];
+    const searchText = text.toLowerCase();
+
+    allFeatures.forEach(feature => {
+        const properties = feature.properties;
+        const searchFields = [
+            properties.Mekan,
+            properties.Mekanin_Bugunku_Adi,
+            properties.Ilce,
+            properties.Alt_Tema,
+            properties.Tema
+        ];
+
+        // Check if search text matches any field
+        const matches = searchFields.some(field => 
+            field && field.toLowerCase().includes(searchText)
+        );
+
+        if (matches) {
+            results.push({
+                name: properties.Mekan,
+                lat: feature.geometry.coordinates[1],
+                lon: feature.geometry.coordinates[0],
+                feature: feature
+            });
+        }
+    });
+
+    return results;
+}
+
+// Search using Nominatim
+function searchNominatim(text, callResponse) {
+    const params = {
+        q: text,
+        format: 'json',
+        countrycodes: 'TR'
+    };
+
+    fetch('https://nominatim.openstreetmap.org/search?' + new URLSearchParams(params))
+        .then(response => response.json())
+        .then(data => {
+            const results = data.map(item => ({
+                name: item.display_name,
+                lat: parseFloat(item.lat),
+                lon: parseFloat(item.lon)
+            }));
+            callResponse(results);
+        })
+        .catch(error => {
+            console.error('Nominatim search error:', error);
+            callResponse([]);
+        });
+}
+
+// Initialize search when document is ready
+$(document).ready(function() {
+    initializeSearch();
 });
 
-map.addControl(searchControl);
-let searchMarker;
-map.createPane('searchMarkerPane');
-map.getPane('searchMarkerPane').style.pointerEvents = 'none';
-map.getPane('searchMarkerPane').style.zIndex = 200;
 
-// Search Control Event Handlers
-searchControl.on('search:locationfound', function(e) {
-    if (searchMarker) {
-        map.removeLayer(searchMarker);
-    }
-    const lat = e.latlng.lat;
-    const lon = e.latlng.lng;
-    searchMarker = L.circleMarker(e.latlng, {
-        radius: 30,
-        pane: 'searchMarkerPane',
-        fillColor: '#3388ff',
-        color: '#3388ff',
-        fillOpacity: 0.5
-    }).addTo(map);
-});
 
-searchControl.on('search:cancel', function() {
-    if (searchMarker) {
-        map.removeLayer(searchMarker);
-        searchMarker = null;
-    }
-});
+
 
 // Label Manager Configuration
 const LABEL_WIDTH = 120;
@@ -235,6 +330,9 @@ const LabelManager = {
         labelMarkers.clear();
     }
 };
+
+
+
 
 // Filter System
 let markers = null;
