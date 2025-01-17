@@ -866,35 +866,51 @@ body, html, #map {
         opacity: 0.85;
         width: 90vw;
         max-width: 90vw;
-        top: 20px;
+        top: 5px;
         left:auto;
         position: relative; 
 }
 
     #noteModal .modal-body {
-        max-height: 80vw;
+        max-height: 95vw;
         padding: 1rem;
         
 }
 
     #albumModal .modal-dialog {
         opacity: 0.95;
-        max-height: 80vw;
+        max-height: 90vh; /* Görüntüleme alanına göre maksimum yüksekliği ayarlayın */
         width: 90vw;
         max-width: 90vw;
-        left:5vw;
-        margin-bottom: 20px !important;
+        left: 5vw;
+        margin: auto; /* Modalı dikeyde de ortalar */
+        overflow-y: auto !important; /* Fazlalıklar için dikey kaydırma ekleyin */
+        padding: 0rem;
+        bottom: 5vw;
     }
 
     #albumModal .modal-body {
-        max-height: 85vw;
-        padding: 1rem;
-        
+        max-height: calc(90vh - 3.5rem); /* Modal başlığı ve ayak kısmı için yer bırakın */
+        overflow-y: auto !important; /* Fazlalıklar için dikey kaydırma ekleyin */
+        padding: 0rem;
+    }
+
+    #albumModal .modal-title {
+        margin-bottom: 0;
+        line-height: 1;
+    }
+
+    .fancybox-caption-text {
+        color: #fff;
+        margin: 0;
+        font-size: 16px;
+        width: 50vw;
+        display: none;
     }
 
     .card-columns-wide {
         column-count: 1;
-}
+    }
 
     .figure {
         margin-bottom: 1rem;
@@ -922,7 +938,7 @@ body, html, #map {
 }
 
     .modal-header .w-100 {
-        padding-bottom: 5px; /* Başlık ve temalar arasındaki boşluğu azalt */
+        padding-bottom: 0px; /* Başlık ve temalar arasındaki boşluğu azalt */
     }
 
     .filter-tags {
@@ -953,7 +969,7 @@ body, html, #map {
 
     .subtheme-slider .filter-tag {
         margin: 0; /* Alt temalar arasındaki boşluğu daha da azalt */
-        padding: 2px 4px !important; /* Alt temalar arasındaki iç boşluğu azalt */
+        padding: 1px 2px !important; /* Alt temalar arasındaki iç boşluğu azalt */
     }
 
     .slider-control {
