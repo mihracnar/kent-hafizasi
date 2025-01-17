@@ -228,6 +228,56 @@
     </div>
     
 
+    <!-- Filter Modal Structure -->
+    <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filterModalLabel">Filtreleme</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Ana Tema Seçimi -->
+                    <div class="mb-4">
+                        <h6 class="font-weight-bold mb-3">Ana Tema</h6>
+                        <div class="theme-filters">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="tema1" value="Gündelik Yaşam ve Kent Belleği">
+                                <label class="custom-control-label" for="tema1">Gündelik Yaşam ve Kent Belleği</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="tema2" value="Mimarlık ve Şehircilik">
+                                <label class="custom-control-label" for="tema2">Mimarlık ve Şehircilik</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="tema3" value="Şahıs">
+                                <label class="custom-control-label" for="tema3">Şahıs</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="tema4" value="Tarihsel Anekdot">
+                                <label class="custom-control-label" for="tema4">Tarihsel Anekdot</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Alt Tema Seçimi -->
+                    <div>
+                        <h6 class="font-weight-bold mb-3">Alt Tema</h6>
+                        <div id="subThemeContainer" class="subtheme-filters">
+                            <!-- Alt temalar dinamik olarak eklenecek -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="resetFilters()">Filtreleri Sıfırla</button>
+                    <button type="button" class="btn btn-primary" onclick="applyFilters()">Uygula</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-search@3.0.2/dist/leaflet-search.min.js"></script>
     <script src="https://unpkg.com/leaflet.locatecontrol@0.72.0/dist/L.Control.Locate.min.js"></script>

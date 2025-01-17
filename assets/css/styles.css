@@ -93,7 +93,7 @@ body, html, #map {
   }
 
   .leaflet-control-search.search-exp {
-    background: padding-box #405F73;
+    background: padding-box rgba(108, 117, 125, 0.9);
     border-width: 0px;
     border-style: solid;
     border-color: #F2F2F2;
@@ -137,7 +137,7 @@ body, html, #map {
 
 .btn-light {
     color: #F2F2F2;
-    background-color: #405F73;
+    background-color: rgba(108, 117, 125, 0.9);
     border: 0px;
     border-color: #F2F2F2;
 }
@@ -336,7 +336,7 @@ body, html, #map {
     max-width: 200px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Dış kutuya gölge */
     border-radius: 10px; /* Dış kutunun köşeleri yuvarlatıldı */
-    background-color: #405F73 !important;
+    background-color: rgba(108, 117, 125, 0.9) !important;
     padding: 10px; /* İçerik boşluğu */
     margin: 0; /* Dışarıda boşluk bırakılmadı */
     border: 0px solid #F2F2F2; /* Dış kutuya sınır */
@@ -765,6 +765,63 @@ body, html, #map {
     font-size: 16px;
     width: 50vw; /* Sabit genişlik */
     display: block; /* Her zaman yeni satıra geçer */
+}
+
+/* Filter Modal Styles */
+.theme-filters, .subtheme-filters {
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+.custom-control {
+    margin-bottom: 8px;
+    padding-left: 2rem;
+}
+
+.custom-control-label {
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #007bff;
+    background-color: #007bff;
+}
+
+.filter-modal .modal-body {
+    padding: 1.5rem;
+}
+
+.filter-section-title {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Scrollbar styles for filter containers */
+.theme-filters::-webkit-scrollbar,
+.subtheme-filters::-webkit-scrollbar {
+    width: 8px;
+}
+
+.theme-filters::-webkit-scrollbar-track,
+.subtheme-filters::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.theme-filters::-webkit-scrollbar-thumb,
+.subtheme-filters::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.theme-filters::-webkit-scrollbar-thumb:hover,
+.subtheme-filters::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 
