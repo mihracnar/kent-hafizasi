@@ -1,4 +1,4 @@
-const map = L.map('map').setView([41.0082, 28.9784], 13);
+const map = L.map('map').setView([41.0082, 28.9784], 11);
 
 const cartoLightLayer = L.tileLayer('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
     attribution: '© <a href="https://carto.com/">Carto</a>',
@@ -36,6 +36,15 @@ const layersControl = L.control.layers({
 layersControl.addTo(map);
 const layerControlElement = layersControl.getContainer();
 document.getElementById('layersModalBody').appendChild(layerControlElement);
+
+// Add click event listener to the logo
+document.querySelector('.logo').addEventListener('click', function() {
+    // Fly to initial position with animation
+    map.flyTo([41.0082, 28.9784], 11, {
+        animate: true,
+        duration: 1// Duration of animation in seconds
+    });
+});
 
 // Location Control
 const locateControl = L.control.locate({
