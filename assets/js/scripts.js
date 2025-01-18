@@ -92,7 +92,23 @@ function initializeSearch() {
         collapsed: false,
         textPlaceholder: 'Konum ya da koordinat ara',
         firstTipSubmit: true,
-        caseSensitive: false
+        caseSensitive: false,
+        // Aşağıdaki ayarları ekleyin
+        initial: false,
+        zoom: 17,
+        formatData: function(rawjson) {
+            console.log('Format data:', rawjson);
+            return rawjson;
+        },
+        filterData: function(text, records) {
+            console.log('Filter data:', records);
+            return records;
+        },
+        // Sonuç gösterimini özelleştirme
+        buildTip: function(text, val) {
+            const title = val.name || 'İsimsiz Mekan';
+            return '<div class="search-tip">' + title + '</div>';
+        }
     });
 
     map.addControl(searchControl);
@@ -138,13 +154,16 @@ function initializeSearch() {
     });
 }
 
+
 // Search in local GeoJSON data
 function searchLocalData(text) {
     const results = [];
-    const searchText = text.toLowerCase();
-
+    const searchText = text.toLowerCase().trim();
+    
     allFeatures.forEach(feature => {
         const properties = feature.properties;
+        if (!properties) return;
+
         const searchFields = [
             properties.Mekan,
             properties.Mekanin_Bugunku_Adi,
@@ -153,21 +172,23 @@ function searchLocalData(text) {
             properties.Tema
         ];
 
-        // Check if search text matches any field
-        const matches = searchFields.some(field => 
-            field && field.toLowerCase().includes(searchText)
-        );
+        const matches = searchFields.some(field => {
+            if (!field) return false;
+            return String(field).toLowerCase().includes(searchText);
+        });
 
-        if (matches) {
+        if (matches && feature.geometry?.coordinates?.length >= 2) {
             results.push({
-                name: properties.Mekan,
+                name: properties.Mekan || 'İsimsiz Mekan',
                 lat: feature.geometry.coordinates[1],
                 lon: feature.geometry.coordinates[0],
-                feature: feature
+                feature: feature,
+                // Ek bilgileri de ekleyelim
+                properties: properties
             });
         }
     });
-
+    
     return results;
 }
 
