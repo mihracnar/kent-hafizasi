@@ -141,39 +141,45 @@
                     </button>
                 </div>
                 <div class="modal-body p-0">
-                    <!-- Kapak Görseli -->
-                    <div class="figure-thumb bg-primary rounded-top" id="featured-image-place" 
-                        style="min-height: 40vh; background-size: cover; background-position: center center; display: block;">
-                    </div>
-                    
-                    <!-- Bilgi Tablosu -->
-                    <div class="px-3 py-2">
-                        <table class="table table-bordered" style="font-size: 0.85rem; line-height: 1.2;">
-                            <tbody>
-                                <tr>
-                                    <th style="font-size: 0.9rem;">Tema</th>
-                                    <td><span id="Tema"></span></td>
-                                </tr>
-                                <tr>
-                                    <th style="font-size: 0.9rem;">Alt Tema</th>
-                                    <td><span id="altTema"></span></td>
-                                </tr>
-                                <tr>
-                                    <th style="font-size: 0.9rem;">Mekanın Bugünkü Adı</th>
-                                    <td><span id="mekaninBugunkuAdi"></span></td>
-                                </tr>
-                                <tr>
-                                    <th style="font-size: 0.9rem;">İlçe</th>
-                                    <td><span id="ilce"></span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <p><span id="metin"></span></p>
-                        <p><strong>Kaynak: </strong> <span id="kaynak" style="font-size: 0.8rem;"></span></p>
-                    </div>
-                    
                     <!-- Galeri Görselleri -->
                     <div class="gallery-grid ke-gallery pt-3" id="mediaID">
+                    </div>                    
+                    <!-- Bilgi Tablosu -->
+                    <div class="px-3 py-2">
+                        <div class="info-table mb-4">
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr>
+                                        <th class="w-25">Tema</th>
+                                        <td><span id="Tema" class="text-secondary"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="w-25">Alt Tema</th>
+                                        <td><span id="altTema" class="text-secondary"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="w-25">Mekanın Bugünkü Adı</th>
+                                        <td><span id="mekaninBugunkuAdi" class="text-secondary"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="w-25">İlçe</th>
+                                        <td><span id="ilce" class="text-secondary"></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="content-text">
+                            <!-- Ana Metin -->
+                            <div class="main-text">
+                                <p id="metin" class="description"></p>
+                            </div>
+                            
+                            <!-- Kaynak Bilgisi -->
+                            <div class="source-info">
+                                <div class="source-label">Kaynak:</div>
+                                <div id="kaynak" class="source-content"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

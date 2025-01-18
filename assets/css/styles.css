@@ -5,8 +5,6 @@ body, html, #map {
     font-family: 'Open Sans', sans-serif;
 }
 
-
-
 .leaflet-control-location {
     background: none;
     border: none;
@@ -49,7 +47,6 @@ body, html, #map {
     background-size: contain;
     transform: translate(-50%, -50%);
 }
-
 
 .leaflet-control-location:hover {
     background-color: #F2F2F2;
@@ -104,7 +101,7 @@ body, html, #map {
 
 /* Leaflet zoom kontrolünü gizle */
 .leaflet-control-zoom {
-  display: none;
+    display: none;
 }        
 
 /* Menü stil */
@@ -149,6 +146,8 @@ body, html, #map {
     text-align: center; /* Başlık hizalaması */
     font-family: 'Open Sans', sans-serif;
   }
+
+
 
 
 /* Sadece marker notu modalı için stil tanımları */
@@ -220,7 +219,6 @@ body, html, #map {
     background-color: #5a6268;
 }
 
-/* Sadece marker modalı için açılış animasyonu */
 #noteModal.fade .modal-dialog {
     transform: translate(0, -50px);
     transition: transform 0.3s ease-out;
@@ -229,6 +227,93 @@ body, html, #map {
 #noteModal.show .modal-dialog {
     transform: none;
 }
+
+/* Tablo Kapsayıcı */
+#noteModal .info-table {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+}
+
+/* Tablo Ana Stilleri */
+#noteModal .info-table .table {
+    margin-bottom: 0;
+}
+
+/* Tablo Başlık (th) Stilleri */
+#noteModal .info-table .table th {
+    border-top: none;
+    font-weight: 600;
+    color: #344767;
+    font-size: 0.875rem;
+    padding: 16px 12px;
+    vertical-align: middle;
+    width: 25%;
+}
+
+/* Tablo Hücre (td) Stilleri */
+#noteModal .info-table .table td {
+    border-top: 1px solid rgba(0,0,0,0.05);
+    padding: 16px 12px;
+    vertical-align: middle;
+}
+
+/* Metin Rengi */
+#noteModal .info-table .text-secondary {
+    color: #67748e !important;
+    font-size: 0.875rem;
+}
+
+/* Hover Efekti */
+#noteModal .info-table .table-hover tbody tr:hover {
+    background-color: rgba(0,0,0,0.02);
+    transition: background-color 0.2s ease;
+}
+
+/* Metin Kapsayıcı */
+#noteModal .content-text {
+    padding: 24px;
+    background: #fff;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+/* Ana Metin Stili */
+#noteModal .main-text {
+    margin-bottom: 24px;
+}
+
+#noteModal .description {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #334155;
+    text-align: justify;
+    margin: 0;
+}
+
+/* Kaynak Bilgisi Stili */
+#noteModal .source-info {
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+#noteModal .source-label {
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+#noteModal .source-content {
+    font-size: 0.875rem;
+    color: #64748b;
+    line-height: 1.6;
+}
+
 
 
 /* Katmanlar modalı için özel stiller */
@@ -276,56 +361,46 @@ body, html, #map {
   }
   
 
-
-
 /* Galeri düzenlemesi */
-.gallery-grid {
+#noteModal .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 10px;
-    padding: 10px;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    grid-auto-rows: 200px; /* Sabit satır yüksekliği */
+    padding: 20px;
+    width: 100%;
+    min-height: 200px;
+    align-content: space-between;
 }
 
-.gallery-grid img {
+/* Grid item container */
+#noteModal .ke-gallery-item {
+    position: relative;
     width: 100%;
-    height: auto;
-    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Link stilleri */
+#noteModal .ke-gallery-item a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Görüntü stilleri */
+#noteModal .ke-gallery-item img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
 }
 
-.gallery-grid img:hover {
+#noteModal .ke-gallery-item img:hover {
     transform: scale(1.05);
 }
 
-.ke-gallery-item .ke-gallery-caption {
-    display: none; /* Alt açıklamaları kaldırdık */
-}
 
-#kaynak {
-    word-wrap: break-word;
-    white-space: normal;
-}
-
-
-/* Fancybox özelleştirmeleri */
-.fancybox__container {
-    --fancybox-bg: rgba(24, 24, 27, 0.98);
-}
-
-.fancybox__toolbar {
-    --fg: #F2F2F2;
-    --bg: rgba(24, 24, 27, 0.8);
-}
-
-#noteModal .fancybox__caption {
-    font-size: 16px;
-    padding: 12px;
-    text-align: center;
-}
 
 
 /* Lejant Ayarları */
@@ -518,7 +593,7 @@ body, html, #map {
 
 /* Albüm */
 
-.filter-tag {
+#albumModal .filter-tag {
     display: inline-block;
     padding: 8px 16px;
     margin: 0 8px 16px 0;
@@ -529,17 +604,17 @@ body, html, #map {
     color: white;
 }
 
-.filter-tag.active {
+#albumModal .filter-tag.active {
     opacity: 1;
     font-weight: 500;
 }
 
-.filter-tag:hover {
+#albumModal .filter-tag:hover {
     transform: translateY(-2px);
     opacity: 0.9;
 }
 
-.ke-gallery {
+#albumModal .ke-gallery {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 12px;
@@ -592,14 +667,17 @@ body, html, #map {
     opacity: 1;
 }
 
+
+
+
 /* Tag Colors - Exact matches from getColor function */
-.filter-tag[data-tema="Gündelik Yaşam ve Kent Belleği"] { background-color: #ECB159; }
-.filter-tag[data-tema="Mimarlık ve Şehircilik"] { background-color: #8CB9BD; }
-.filter-tag[data-tema="Şahıs"] { background-color: #9B4444; }
-.filter-tag[data-tema="Tarihsel Anekdot"] { background-color: #754E1A; }
+#albumModal .filter-tag[data-tema="Gündelik Yaşam ve Kent Belleği"] { background-color: #ECB159; }
+#albumModal .filter-tag[data-tema="Mimarlık ve Şehircilik"] { background-color: #8CB9BD; }
+#albumModal .filter-tag[data-tema="Şahıs"] { background-color: #9B4444; }
+#albumModal .filter-tag[data-tema="Tarihsel Anekdot"] { background-color: #754E1A; }
 
 
-.filter-tag {
+#albumModal .filter-tag {
     display: inline-block;
     padding: 8px 16px;
     margin: 0 8px 16px 0;
@@ -610,13 +688,13 @@ body, html, #map {
     color: white;
 }
 
-.filter-tag.active {
+#albumModal .filter-tag.active {
     opacity: 1;
     font-weight: 800;
     color:#0d0d0d;
 }
 
-.filter-tag:hover {
+#albumModal .filter-tag:hover {
     transform: translateY(-2px);
     opacity: 0.7;
 }
@@ -676,7 +754,7 @@ body, html, #map {
 
 
 /* Alt tema slider stili */
-.subtheme-slider {
+#albumModal .subtheme-slider {
     width: 100%;
     overflow-x: auto;
     white-space: nowrap;
@@ -688,21 +766,21 @@ body, html, #map {
 
 }
 
-.subtheme-slider::-webkit-scrollbar {
+#albumModal .subtheme-slider::-webkit-scrollbar {
     display: none; /* Kaydırma çubuğunu gizle */
 }
 
-.subtheme-slider::-webkit-scrollbar-track {
+#albumModal .subtheme-slider::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 3px;
 }
 
-.subtheme-slider::-webkit-scrollbar-thumb {
+#albumModal .subtheme-slider::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 3px;
 }
 
-.subtheme-tag {
+#albumModal .subtheme-tag {
     display: inline-block;
     padding: 6px 12px;
     margin: 0 6px;
@@ -714,14 +792,14 @@ body, html, #map {
     border: 1px solid #ddd;
 }
 
-.subtheme-tag.active {
+#albumModal .subtheme-tag.active {
     background: #007bff;
     color: white;
     border-color: #0056b3;
 }
 
 
-.slider-control {
+#albumModal .slider-control {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -740,7 +818,7 @@ body, html, #map {
 .slider-control.right { right: 0; }
 
 .fancybox__caption {
-    background: rgba(64, 95, 115, 0.5);
+    background: rgba(64, 95, 115, 0.0);
     padding: 5px;
     text-align: center;
 }
@@ -753,17 +831,17 @@ body, html, #map {
 .fancybox-caption-title {
     color: #fff;
     margin-bottom: 8px;
-    font-size: 18px;
-    font-weight: 700;
-    width: 50vw; /* Sabit genişlik */
+    font-size: 22px;
+    font-weight: 600;
     display: block; /* Her zaman yeni satıra geçer */
 }
 
 .fancybox-caption-text {
     color: #fff;
     margin: 0;
-    font-size: 16px;
-    width: 50vw; /* Sabit genişlik */
+    font-size: 18px;
+    max-width: 90vw; /* Sabit genişlik */
+    max-height: 20vw;
     display: block; /* Her zaman yeni satıra geçer */
 }
 
@@ -825,7 +903,6 @@ body, html, #map {
 }
 
 
-
 @media (max-width: 768px) {
 
     #map-menu-top {
@@ -877,6 +954,9 @@ body, html, #map {
         
 }
 
+
+
+
     #albumModal .modal-dialog {
         opacity: 0.95;
         max-height: 90vh; /* Görüntüleme alanına göre maksimum yüksekliği ayarlayın */
@@ -906,6 +986,14 @@ body, html, #map {
         font-size: 16px;
         width: 50vw;
         display: none;
+    }
+
+    .fancybox-caption-title {
+        color: #fff;
+        margin-bottom: 8px;
+        font-size: 18px;
+        font-weight: 200;
+        display: block;
     }
 
     .card-columns-wide {
@@ -975,5 +1063,24 @@ body, html, #map {
     .slider-control {
         font-size: 12px; /* Ok işaretlerinin boyutunu küçült */
     }
+
+
+    .info-table {
+        padding: 15px;
+    }
+        
+    .info-table .table th,
+    .info-table .table td {
+        padding: 12px 8px;
+    }
+     
+    .content-text {
+        padding: 16px;
+    }
+        
+    .description {
+        font-size: 0.9375rem;
+        line-height: 1.7;
+    }    
 
 }
