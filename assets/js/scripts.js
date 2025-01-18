@@ -313,7 +313,7 @@ const LabelManager = {
     updateLabels: function() {
         const zoom = map.getZoom();
         
-        if (zoom >= 17) {
+        if (zoom >= 16) {
             if (!map.hasLayer(labelLayer)) {
                 labelLayer.addTo(map);
             }
