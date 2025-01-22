@@ -903,7 +903,7 @@ body, html, #map {
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
 
     #map-menu-top {
         top: 10px;
@@ -930,11 +930,11 @@ body, html, #map {
     }
 
     .logo {
-        position: absolute;   /* Sabit pozisyon */
+        position: fixed;  /* Sabit pozisyon */
         top: 0px;            /* Üstten mesafe */
-        left: 25%;           /* Soldan mesafe */
+        left: 30%;           /* Soldan mesafe */
         width: auto;          /* Logonun genişliği */
-        height: 100px;         /* Yüksekliğin genişliğe göre otomatik ayarlanması */
+        height: 85px;         /* Yüksekliğin genişliğe göre otomatik ayarlanması */
         z-index: 1000;        /* Haritanın üstünde görünmesi için yüksek z-index değeri */
       }
 
