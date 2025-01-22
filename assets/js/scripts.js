@@ -67,7 +67,17 @@ locateButton.addEventListener('click', function() {
 });
 
 
+// Zoom butonları işlevselliği
+const zoomInButton = document.getElementById('zoom-in-button');
+const zoomOutButton = document.getElementById('zoom-out-button');
 
+zoomInButton.addEventListener('click', function() {
+  map.zoomIn();
+});
+
+zoomOutButton.addEventListener('click', function() {
+  map.zoomOut();
+});
 
 // Search Control Configuration
 function initializeSearch() {
