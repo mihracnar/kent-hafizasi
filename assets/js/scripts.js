@@ -371,6 +371,7 @@ let selectedThemes = new Set();
 let selectedSubThemes = new Set();
 let allFeatures = [];
 let geoJsonLayer = null;
+let selectedDistricts = new Set();
 
 function getColor(tema) {
     switch (tema) {
@@ -532,10 +533,18 @@ function initializeMarkers(data) {
     LabelManager.initializeLabels(allFeatures);
 }
 
+
+// Modal açılış eventi için listener ekleyelim
+$('#filterModal').on('show.bs.modal', function () {
+    updateDistrictOptions();
+});
+
 function setupFilterModal() {
-    // Clear existing subtheme container
+    // Clear existing containers
     const subThemeContainer = document.getElementById('subThemeContainer');
+    const districtContainer = document.getElementById('districtContainer');
     subThemeContainer.innerHTML = '';
+    districtContainer.innerHTML = '';
     
     // Setup theme checkboxes event listeners
     document.querySelectorAll('.theme-filters .custom-control-input').forEach(checkbox => {
@@ -546,6 +555,7 @@ function setupFilterModal() {
                 selectedThemes.delete(this.value);
             }
             updateSubThemeOptions();
+            updateDistrictOptions();
         });
     });
 }
@@ -594,11 +604,59 @@ function updateSubThemeOptions() {
     });
 }
 
+function updateDistrictOptions() {
+    const districtContainer = document.getElementById('districtContainer');
+    
+    // Get all districts from allFeatures, regardless of other filters
+    const allDistricts = new Set();
+    allFeatures.forEach(feature => {
+        if (feature.properties.Ilce) {
+            allDistricts.add(feature.properties.Ilce.trim());
+        }
+    });
+
+    // Create select element
+    const select = document.createElement('select');
+    select.className = 'form-control';
+    select.id = 'districtSelect';
+
+    // Add default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Tüm İlçeler';
+    select.appendChild(defaultOption);
+
+    // Add all district options, sorted alphabetically
+    Array.from(allDistricts).sort().forEach(district => {
+        const option = document.createElement('option');
+        option.value = district;
+        option.textContent = district;
+        if (selectedDistricts.has(district)) {
+            option.selected = true;
+        }
+        select.appendChild(option);
+    });
+
+    // Clear and append new select element
+    districtContainer.innerHTML = '';
+    districtContainer.appendChild(select);
+
+    // Add change event listener
+    select.addEventListener('change', function() {
+        selectedDistricts.clear();
+        if (this.value) {
+            selectedDistricts.add(this.value);
+        }
+    });
+}
+
 function applyFilters() {
     const filteredFeatures = allFeatures.filter(feature => {
+        // Handle theme filtering
         const themeMatch = selectedThemes.size === 0 || 
                           selectedThemes.has(feature.properties.Tema);
         
+        // Handle subtheme filtering
         let subThemeMatch = true;
         if (selectedSubThemes.size > 0 && feature.properties.Alt_Tema) {
             const featureSubThemes = feature.properties.Alt_Tema.split(',')
@@ -606,7 +664,18 @@ function applyFilters() {
             subThemeMatch = featureSubThemes.some(t => selectedSubThemes.has(t));
         }
         
-        return themeMatch && subThemeMatch;
+        // Handle district filtering independently
+        const districtMatch = selectedDistricts.size === 0 || 
+                            (feature.properties.Ilce && 
+                             selectedDistricts.has(feature.properties.Ilce.trim()));
+        
+        // Apply filters: district filter is independent of theme/subtheme filters
+        return districtMatch && (
+            // If no themes/subthemes selected, or if they match
+            (selectedThemes.size === 0 && selectedSubThemes.size === 0) ||
+            // If themes/subthemes are selected, both must match
+            (themeMatch && subThemeMatch)
+        );
     });
 
     // Update markers
@@ -637,17 +706,64 @@ function applyFilters() {
     
     // Update labels with filtered features
     LabelManager.initializeLabels(filteredFeatures);
+
+    // If no filters are selected, return to initial view
+    if (selectedThemes.size === 0 && selectedSubThemes.size === 0 && selectedDistricts.size === 0) {
+        map.flyTo([41.0082, 28.9784], 11, {
+            duration: 1.5,
+            easeLinearity: 0.5
+        });
+    }
+    // Otherwise, fly to bounds of filtered features
+    else if (filteredFeatures.length > 0) {
+        // Get valid coordinates from filtered features
+        const validCoordinates = filteredFeatures
+            .filter(feature => 
+                feature && 
+                feature.geometry && 
+                feature.geometry.coordinates && 
+                Array.isArray(feature.geometry.coordinates) && 
+                feature.geometry.coordinates.length >= 2
+            )
+            .map(feature => {
+                const coords = feature.geometry.coordinates;
+                return [coords[1], coords[0]];
+            });
+
+        if (validCoordinates.length > 0) {
+            const bounds = L.latLngBounds(validCoordinates);
+            const paddedBounds = bounds.pad(0.1);
+            map.flyToBounds(paddedBounds, {
+                padding: [50, 50],
+                duration: 1.5,
+                easeLinearity: 0.5
+            });
+        } else {
+            // If no valid coordinates found, return to initial view
+            map.flyTo([41.0082, 28.9784], 11, {
+                duration: 1.5,
+                easeLinearity: 0.5
+            });
+        }
+    }
     
     $('#filterModal').modal('hide');
 }
-
+    
 function resetFilters() {
     selectedThemes.clear();
     selectedSubThemes.clear();
+    selectedDistricts.clear();
 
-    // Reset all checkboxes
+    // Reset theme and subtheme checkboxes
     document.querySelectorAll('.theme-filters input[type="checkbox"], .subtheme-filters input[type="checkbox"]')
         .forEach(checkbox => checkbox.checked = false);
+
+    // Reset district dropdown
+    const districtSelect = document.getElementById('districtSelect');
+    if (districtSelect) {
+        districtSelect.value = '';
+    }
 
     // Clear subtheme container
     const subThemeContainer = document.getElementById('subThemeContainer');
@@ -659,6 +775,12 @@ function resetFilters() {
         markers.addLayer(geoJsonLayer);
         LabelManager.initializeLabels(allFeatures);
     }
+
+    // Return to initial view
+    map.flyTo([41.0082, 28.9784], 11, {
+        duration: 1.5,
+        easeLinearity: 0.5
+    });
 }
 
 // Map event listeners for label management
