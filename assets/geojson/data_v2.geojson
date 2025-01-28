@@ -2085,7 +2085,7 @@
   { "type": "Feature", "properties": { "Tema": "Şahıs", "Alt_Tema": "Hattat", "Mekan": "Hattat Nuri Korman Evi", "Mekanin_Bugunku_Adi": "Şair Nedim Caddesi No:13-15", "Eski_Fotograf_Linki": [
               "https://drive.google.com/file/d/1xyQLEv0e27f3yWw8Y36CKnLcbrba9Umg/view?usp=drive_link"
             ],
-            "Metin": "Hattat Nuri Korman, 1951 yılındaki vefatına dek burada yaşadı.", "Kaynak": "https://www.ketebe.org/en/artist/nuri-korman-695 \n\nhttps://www.fikriyat.com/yazarlar/ugur-derman/2021/05/14/msiksinas-ve-hattat-haci-nri-korman", "Ilce": "Şişli" }, "geometry": { "type": "Point", "coordinates": [ 29.0023681, 41.0427824 ] } },
+            "Metin": "Hattat Nuri Korman, 1951 yılındaki vefatına dek burada yaşadı.", "Kaynak": "https://www.ketebe.org/en/artist/nuri-korman-695 \n\nhttps://www.fikriyat.com/yazarlar/ugur-derman/2021/05/14/msiksinas-ve-hattat-haci-nri-korman", "Ilce": "Beşiktaş" }, "geometry": { "type": "Point", "coordinates": [ 29.0023681, 41.0427824 ] } },
   { "type": "Feature", "properties": { "Tema": "Gündelik Yaşam ve Kent Belleği", "Alt_Tema": "Oyuncu, Sinema", "Mekan": "Lazın Köşkü", "Mekanin_Bugunku_Adi": "Lazın Köşkü\n\nŞemsi Efendi Sokak No:9", "Eski_Fotograf_Linki": [
               "https://drive.google.com/file/d/1UpwkTaDr9q9fIfP4e4RcZoUPrc7DE0FR/view?usp=sharing ",
               "https://drive.google.com/file/d/1JaarGH4P_fkKkkiu332zZ66ib79nvs_R/view?usp=sharing ",
