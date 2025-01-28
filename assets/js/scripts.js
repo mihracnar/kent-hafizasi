@@ -473,6 +473,7 @@ function handleFeatureClick(feature, latlng) {
     $('#noteModal').modal('show');
 }
 
+
 function initializeFilters() {
     fetch('assets/geojson/data_v2.geojson')
         .then(response => response.json())
@@ -540,7 +541,6 @@ $('#filterModal').on('show.bs.modal', function () {
 });
 
 function setupFilterModal() {
-    // Clear existing containers
     const subThemeContainer = document.getElementById('subThemeContainer');
     const districtContainer = document.getElementById('districtContainer');
     subThemeContainer.innerHTML = '';
@@ -555,59 +555,15 @@ function setupFilterModal() {
                 selectedThemes.delete(this.value);
             }
             updateSubThemeOptions();
-            updateDistrictOptions();
         });
     });
 }
 
-function updateSubThemeOptions() {
-    const subThemeContainer = document.getElementById('subThemeContainer');
-    subThemeContainer.innerHTML = '';
-    selectedSubThemes.clear();
-
-    if (selectedThemes.size === 0) {
-        return;
-    }
-
-    // Get all subthemes for selected themes
-    const relevantSubThemes = new Set();
-    allFeatures.forEach(feature => {
-        if (selectedThemes.has(feature.properties.Tema) && feature.properties.Alt_Tema) {
-            feature.properties.Alt_Tema.split(',')
-                .map(theme => theme.trim())
-                .filter(theme => theme)
-                .forEach(theme => relevantSubThemes.add(theme));
-        }
-    });
-
-    // Create checkboxes for relevant subthemes
-    Array.from(relevantSubThemes).sort().forEach((subTheme, index) => {
-        const div = document.createElement('div');
-        div.className = 'custom-control custom-checkbox';
-        div.innerHTML = `
-            <input type="checkbox" class="custom-control-input subtheme-checkbox" 
-                   id="subTheme_${index}" value="${subTheme}">
-            <label class="custom-control-label" for="subTheme_${index}">${subTheme}</label>
-        `;
-        subThemeContainer.appendChild(div);
-    });
-
-    // Setup subtheme checkboxes event listeners
-    document.querySelectorAll('.subtheme-filters .custom-control-input').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            if (this.checked) {
-                selectedSubThemes.add(this.value);
-            } else {
-                selectedSubThemes.delete(this.value);
-            }
-        });
-    });
-}
 
 function updateDistrictOptions() {
     const districtContainer = document.getElementById('districtContainer');
     
-    // Get all districts from allFeatures, regardless of other filters
+    // Get all districts from allFeatures
     const allDistricts = new Set();
     allFeatures.forEach(feature => {
         if (feature.properties.Ilce) {
@@ -646,7 +602,89 @@ function updateDistrictOptions() {
         selectedDistricts.clear();
         if (this.value) {
             selectedDistricts.add(this.value);
+            // When district changes, update available themes
+            updateThemeOptions();
+        } else {
+            // Reset theme checkboxes when no district is selected
+            document.querySelectorAll('.theme-filters .custom-control-input').forEach(checkbox => {
+                checkbox.checked = false;
+                checkbox.disabled = false;
+            });
+            selectedThemes.clear();
         }
+        // Clear subthemes when district changes
+        selectedSubThemes.clear();
+        updateSubThemeOptions();
+    });
+}
+
+function updateThemeOptions() {
+    const selectedDistrict = Array.from(selectedDistricts)[0];
+    
+    // Get available themes for selected district
+    const availableThemes = new Set();
+    allFeatures.forEach(feature => {
+        if (!selectedDistrict || feature.properties.Ilce === selectedDistrict) {
+            availableThemes.add(feature.properties.Tema);
+        }
+    });
+
+    // Update theme checkboxes
+    document.querySelectorAll('.theme-filters .custom-control-input').forEach(checkbox => {
+        const themeAvailable = availableThemes.has(checkbox.value);
+        checkbox.disabled = !themeAvailable;
+        if (!themeAvailable) {
+            checkbox.checked = false;
+            selectedThemes.delete(checkbox.value);
+        }
+    });
+}
+
+function updateSubThemeOptions() {
+    const subThemeContainer = document.getElementById('subThemeContainer');
+    subThemeContainer.innerHTML = '';
+    selectedSubThemes.clear();
+
+    if (selectedThemes.size === 0) {
+        return;
+    }
+
+    const selectedDistrict = Array.from(selectedDistricts)[0];
+
+    // Get all subthemes for selected themes and district
+    const relevantSubThemes = new Set();
+    allFeatures.forEach(feature => {
+        if ((!selectedDistrict || feature.properties.Ilce === selectedDistrict) && 
+            selectedThemes.has(feature.properties.Tema) && 
+            feature.properties.Alt_Tema) {
+            feature.properties.Alt_Tema.split(',')
+                .map(theme => theme.trim())
+                .filter(theme => theme)
+                .forEach(theme => relevantSubThemes.add(theme));
+        }
+    });
+
+    // Create checkboxes for relevant subthemes
+    Array.from(relevantSubThemes).sort().forEach((subTheme, index) => {
+        const div = document.createElement('div');
+        div.className = 'custom-control custom-checkbox';
+        div.innerHTML = `
+            <input type="checkbox" class="custom-control-input subtheme-checkbox" 
+                   id="subTheme_${index}" value="${subTheme}">
+            <label class="custom-control-label" for="subTheme_${index}">${subTheme}</label>
+        `;
+        subThemeContainer.appendChild(div);
+    });
+
+    // Setup subtheme checkboxes event listeners
+    document.querySelectorAll('.subtheme-filters .custom-control-input').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                selectedSubThemes.add(this.value);
+            } else {
+                selectedSubThemes.delete(this.value);
+            }
+        });
     });
 }
 
@@ -755,9 +793,12 @@ function resetFilters() {
     selectedSubThemes.clear();
     selectedDistricts.clear();
 
-    // Reset theme and subtheme checkboxes
-    document.querySelectorAll('.theme-filters input[type="checkbox"], .subtheme-filters input[type="checkbox"]')
-        .forEach(checkbox => checkbox.checked = false);
+    // Reset all checkboxes and enable them
+    document.querySelectorAll('.theme-filters input[type="checkbox"]')
+        .forEach(checkbox => {
+            checkbox.checked = false;
+            checkbox.disabled = false;
+        });
 
     // Reset district dropdown
     const districtSelect = document.getElementById('districtSelect');
@@ -782,6 +823,9 @@ function resetFilters() {
         easeLinearity: 0.5
     });
 }
+
+
+
 
 // Map event listeners for label management
 let debounceTimer;
