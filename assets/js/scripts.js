@@ -1,175 +1,551 @@
-const map = L.map('map').setView([41.0082, 28.9784], 11);
+// =====================================================================
+//  Kent Hafızası — MapLibre GL JS sürümü
+//  Not: MapLibre'nin zoom seviyeleri Leaflet'tekinden 1 düşüktür
+//  (aynı görüntü için Leaflet 11 = MapLibre 10). Aşağıdaki değerler buna göre.
+// =====================================================================
 
-const cartoLightLayer = L.tileLayer('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://carto.com/">Carto</a>',
-    maxZoom: 22
-}).addTo(map);
+const BASLANGIC_MERKEZ = [28.9784, 41.0082]; // [boylam, enlem]
+const BASLANGIC_ZOOM = 10;   // Leaflet'te 11
+const DETAY_ZOOM = 16;       // Leaflet'te 17 (nokta/arama sonucuna gidiş)
+const ETIKET_ZOOM = 15;      // Leaflet'te 16 (etiketlerin göründüğü seviye)
+const KUME_MAKS_ZOOM = 15;   // Leaflet'te disableClusteringAtZoom: 17
 
-const googleMapsSatelliteLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-    attribution: '© <a href="https://maps.google.com/maps/about/terms/copyright/">Google Maps</a>',
-    maxZoom: 22
+// Not: Kamera hareketlerinde "essential: true" kullanılıyor. Aksi hâlde Windows'ta
+// "Animasyon efektleri" kapalıysa MapLibre uçuş animasyonlarını atlayıp doğrudan atlar.
+
+const GLYPHS = 'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf';
+const FONT_KALIN = ['Noto Sans Bold'];
+
+// ---------------------------------------------------------------------
+// Altlıklar
+// ---------------------------------------------------------------------
+function rasterStil(tiles, attribution, maxzoom) {
+    return {
+        version: 8,
+        glyphs: GLYPHS,
+        sources: {
+            altlik: { type: 'raster', tiles: tiles, tileSize: 256, maxzoom: maxzoom, attribution: attribution }
+        },
+        layers: [{ id: 'altlik', type: 'raster', source: 'altlik' }]
+    };
+}
+
+const GOOGLE_ATR = '© <a href="https://maps.google.com/maps/about/terms/copyright/" target="_blank">Google Maps</a>';
+
+const ALTLIKLAR = [
+    { id: 'positron', ad: 'Positron (Açık)', stil: 'https://tiles.openfreemap.org/styles/positron' },
+    { id: 'google-uydu', ad: 'Google Maps (Uydu)', stil: rasterStil(['https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'], GOOGLE_ATR, 20) },
+    { id: 'google-hibrit', ad: 'Google Maps (Uydu Hibrit)', stil: rasterStil(['https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}'], GOOGLE_ATR, 20) },
+    { id: 'google-harita', ad: 'Google Maps (Harita)', stil: rasterStil(['https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'], GOOGLE_ATR, 20) },
+    { id: 'osm', ad: 'OpenStreetMap', stil: rasterStil(['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors', 19) }
+];
+
+// ---------------------------------------------------------------------
+// Harita
+// ---------------------------------------------------------------------
+const map = new maplibregl.Map({
+    container: 'map',
+    center: BASLANGIC_MERKEZ,
+    zoom: BASLANGIC_ZOOM,
+    maxZoom: 21,
+    // Leaflet'teki gibi döndürme/eğme kapalı
+    dragRotate: false,
+    pitchWithRotate: false,
+    touchPitch: false,
+    attributionControl: { compact: false }
 });
+map.touchZoomRotate.disableRotation();
+map.keyboard.disableRotation();
 
-const googleMapsLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-    attribution: '© <a href="https://maps.google.com/maps/about/terms/copyright/">Google Maps</a>',
-    maxZoom: 22
-});
+// ---------------------------------------------------------------------
+// Veri durumu
+// ---------------------------------------------------------------------
+let allFeatures = [];      // Tüm kayıtlar (orijinal GeoJSON özellikleri)
+let gosterilenler = [];    // Filtreden sonra haritada gösterilenler
+let aramaNoktasi = null;   // Nominatim sonucu için vurgulanan nokta [boylam, enlem]
+let selectedThemes = new Set();
+let selectedSubThemes = new Set();
+let selectedDistricts = new Set();
 
-const googleMapsSatelliteHybridLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
-    attribution: '© <a href="https://maps.google.com/maps/about/terms/copyright/">Google Maps</a>',
-    maxZoom: 22
-});
+function bosFC() {
+    return { type: 'FeatureCollection', features: [] };
+}
 
-const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 22
-});
+function gecerliKoordinat(feature) {
+    return feature && feature.geometry && Array.isArray(feature.geometry.coordinates) &&
+        feature.geometry.coordinates.length >= 2;
+}
 
-const layersControl = L.control.layers({
-    "Carto Light": cartoLightLayer,
-    "Google Maps (Uydu)": googleMapsSatelliteLayer,
-    "Google Maps (Uydu Hibrit)": googleMapsSatelliteHybridLayer,
-    "Google Maps (Harita)": googleMapsLayer,
-    "OpenStreetMap": osmLayer,
-}, {}, { collapsed: false });
+function noktaKoleksiyonu(features) {
+    return { type: 'FeatureCollection', features: features.filter(gecerliKoordinat) };
+}
 
-layersControl.addTo(map);
-const layerControlElement = layersControl.getContainer();
-document.getElementById('layersModalBody').appendChild(layerControlElement);
+function aramaKoleksiyonu() {
+    if (!aramaNoktasi) return bosFC();
+    return {
+        type: 'FeatureCollection',
+        features: [{ type: 'Feature', properties: {}, geometry: { type: 'Point', coordinates: aramaNoktasi } }]
+    };
+}
 
-// Add click event listener to the logo
-document.querySelector('.logo').addEventListener('click', function() {
-    // Fly to initial position with animation
-    map.flyTo([41.0082, 28.9784], 11, {
-        animate: true,
-        duration: 1// Duration of animation in seconds
-    });
-});
+// Tema renkleri (lejanttaki renklerle aynı)
+const TEMA_RENGI = ['match', ['get', 'Tema'],
+    'Gündelik Yaşam ve Kent Belleği', '#ECB159',
+    'Mimarlık ve Şehircilik', '#8CB9BD',
+    'Şahıs', '#9B4444',
+    'Tarihsel Anekdot', '#754E1A',
+    '#8c564b'
+];
 
-// Location Control
-const locateControl = L.control.locate({
-    position: 'topright',
-    flyTo: true,
-    showPopup: false,
-    strings: {
-        title: "Konumuma Git"
-    },
-    icon: 'fa fa-location-arrow',
-    setView: true,
-    showMarker: true
-}).addTo(map);
+// ---------------------------------------------------------------------
+// Veri kaynakları ve katmanları (her altlık değişiminde yeniden eklenir)
+// ---------------------------------------------------------------------
+function veriKaynaklari() {
+    const noktalar = noktaKoleksiyonu(gosterilenler);
+    return {
+        'mekanlar': {
+            type: 'geojson',
+            data: noktalar,
+            cluster: true,
+            clusterMaxZoom: KUME_MAKS_ZOOM,
+            clusterRadius: 50
+        },
+        // Etiketler kümelemeden bağımsız (Leaflet'teki ayrı etiket katmanı gibi)
+        'mekan-etiketleri': { type: 'geojson', data: noktalar },
+        'kume-kapsama': { type: 'geojson', data: bosFC() },
+        'arama-sonucu': { type: 'geojson', data: aramaKoleksiyonu() }
+    };
+}
 
-locateControl.getContainer().style.display = 'none';
-
-const locateButton = document.getElementById('locate-button');
-locateButton.addEventListener('click', function() {
-    locateControl.start();
-});
-
-
-// Zoom butonları işlevselliği
-const zoomInButton = document.getElementById('zoom-in-button');
-const zoomOutButton = document.getElementById('zoom-out-button');
-
-zoomInButton.addEventListener('click', function() {
-  map.zoomIn();
-});
-
-zoomOutButton.addEventListener('click', function() {
-  map.zoomOut();
-});
-
-// Search Control Configuration
-function initializeSearch() {
-    const searchControl = new L.Control.Search({
-        sourceData: function(text, callResponse) {
-            // First search in local data
-            const localResults = searchLocalData(text);
-            
-            if (localResults.length > 0) {
-                callResponse(localResults);
-            } else {
-                // If no local results, search using Nominatim
-                searchNominatim(text, callResponse);
+function veriKatmanlari() {
+    return [
+        // Kümenin üzerine gelince kapsadığı alan (showCoverageOnHover)
+        {
+            id: 'kume-kapsama-dolgu', type: 'fill', source: 'kume-kapsama',
+            paint: { 'fill-color': '#3388ff', 'fill-opacity': 0.2 }
+        },
+        {
+            id: 'kume-kapsama-cizgi', type: 'line', source: 'kume-kapsama',
+            paint: { 'line-color': '#3388ff', 'line-width': 3 }
+        },
+        // Nominatim arama sonucu
+        {
+            id: 'arama-sonucu', type: 'circle', source: 'arama-sonucu',
+            paint: {
+                'circle-radius': 30,
+                'circle-color': '#3388ff',
+                'circle-opacity': 0.5,
+                'circle-stroke-color': '#3388ff',
+                'circle-stroke-width': 3
             }
         },
-        propertyName: 'name',
-        propertyLoc: ['lat', 'lon'],
-        marker: false,
-        autoCollapse: false,
-        autoType: false,
-        minLength: 2,
-        collapsed: false,
-        textPlaceholder: 'Konum ya da koordinat ara',
-        firstTipSubmit: true,
-        caseSensitive: false,
-        // Aşağıdaki ayarları ekleyin
-        initial: false,
-        zoom: 17,
-        formatData: function(rawjson) {
-            console.log('Format data:', rawjson);
-            return rawjson;
+        // Tekil noktalar
+        {
+            id: 'nokta', type: 'circle', source: 'mekanlar',
+            filter: ['!', ['has', 'point_count']],
+            paint: {
+                'circle-radius': 6.5,
+                'circle-color': TEMA_RENGI,
+                'circle-opacity': 0.8,
+                'circle-stroke-color': '#ffffff',
+                'circle-stroke-width': 1.5,
+                'circle-stroke-opacity': 0.8
+            }
         },
-        filterData: function(text, records) {
-            console.log('Filter data:', records);
-            return records;
+        // Kümeler: dış halka + iç daire + sayı
+        {
+            id: 'kume-halka', type: 'circle', source: 'mekanlar',
+            filter: ['has', 'point_count'],
+            paint: { 'circle-radius': 20, 'circle-color': 'rgba(64, 95, 115, 0.15)' }
         },
-        // Sonuç gösterimini özelleştirme
-        buildTip: function(text, val) {
-            const title = val.name || 'İsimsiz Mekan';
-            return '<div class="search-tip">' + title + '</div>';
+        {
+            id: 'kume', type: 'circle', source: 'mekanlar',
+            filter: ['has', 'point_count'],
+            paint: { 'circle-radius': 15, 'circle-color': 'rgba(64, 95, 115, 0.5)' }
+        },
+        {
+            id: 'kume-sayi', type: 'symbol', source: 'mekanlar',
+            filter: ['has', 'point_count'],
+            layout: {
+                'text-field': ['get', 'point_count_abbreviated'],
+                'text-font': FONT_KALIN,
+                'text-size': 12,
+                'text-allow-overlap': true,
+                'text-ignore-placement': true
+            },
+            paint: { 'text-color': '#ffffff' }
+        },
+        // Mekan adları (çakışanlar otomatik gizlenir)
+        {
+            id: 'etiket', type: 'symbol', source: 'mekan-etiketleri',
+            minzoom: ETIKET_ZOOM,
+            layout: {
+                'text-field': ['coalesce', ['get', 'Mekan'], ''],
+                'text-font': FONT_KALIN,
+                'text-size': 14,
+                'text-anchor': 'top',
+                'text-offset': [0, 0.8],
+                'text-max-width': 9,
+                'text-padding': 6
+            },
+            paint: {
+                'text-color': 'rgba(13, 13, 13, 0.95)',
+                'text-halo-color': 'rgba(255, 255, 255, 0.85)',
+                'text-halo-width': 2
+            }
         }
-    });
+    ];
+}
 
-    map.addControl(searchControl);
+function kaynaklariGuncelle() {
+    const noktalar = noktaKoleksiyonu(gosterilenler);
+    const mekanlar = map.getSource('mekanlar');
+    const etiketler = map.getSource('mekan-etiketleri');
+    if (mekanlar) mekanlar.setData(noktalar);
+    if (etiketler) etiketler.setData(noktalar);
+}
 
-    // Create search marker pane
-    map.createPane('searchMarkerPane');
-    map.getPane('searchMarkerPane').style.pointerEvents = 'none';
-    map.getPane('searchMarkerPane').style.zIndex = 200;
+function aramaNoktasiniGuncelle() {
+    const kaynak = map.getSource('arama-sonucu');
+    if (kaynak) kaynak.setData(aramaKoleksiyonu());
+}
 
-    let searchMarker = null;
-
-    // Search result handlers
-    searchControl.on('search:locationfound', function(e) {
-        if (searchMarker) {
-            map.removeLayer(searchMarker);
-        }
-
-        const lat = e.latlng.lat;
-        const lon = e.latlng.lng;
-
-        // Check if this is a local data result
-        if (e.layer && e.layer.feature) {
-            handleFeatureClick(e.layer.feature, e.latlng);
-        } else {
-            // This is a Nominatim result
-            searchMarker = L.circleMarker(e.latlng, {
-                radius: 30,
-                pane: 'searchMarkerPane',
-                fillColor: '#3388ff',
-                color: '#3388ff',
-                fillOpacity: 0.5
-            }).addTo(map);
-        }
-
-        map.flyTo(e.latlng, 17);
-    });
-
-    searchControl.on('search:cancel', function() {
-        if (searchMarker) {
-            map.removeLayer(searchMarker);
-            searchMarker = null;
-        }
+// Altlık değiştir: yeni stilin üzerine veri katmanlarını ekler
+let aktifAltlik = null;
+function altligiDegistir(altlikId) {
+    const altlik = ALTLIKLAR.find(a => a.id === altlikId) || ALTLIKLAR[0];
+    aktifAltlik = altlik.id;
+    map.setStyle(altlik.stil, {
+        diff: false,
+        transformStyle: (onceki, yeni) => ({
+            ...yeni,
+            glyphs: yeni.glyphs || GLYPHS,
+            sources: { ...yeni.sources, ...veriKaynaklari() },
+            layers: [...yeni.layers, ...veriKatmanlari()]
+        })
     });
 }
 
+altligiDegistir('positron');
 
-// Search in local GeoJSON data
+// Katmanlar modalındaki seçim listesi
+(function katmanMenusunuKur() {
+    const kutu = document.createElement('div');
+    kutu.className = 'basemap-control';
+    ALTLIKLAR.forEach(altlik => {
+        const label = document.createElement('label');
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'altlik';
+        input.value = altlik.id;
+        input.checked = altlik.id === aktifAltlik;
+        input.addEventListener('change', function() {
+            if (this.checked) altligiDegistir(this.value);
+        });
+        const span = document.createElement('span');
+        span.textContent = ' ' + altlik.ad;
+        label.appendChild(input);
+        label.appendChild(span);
+        kutu.appendChild(label);
+    });
+    document.getElementById('layersModalBody').appendChild(kutu);
+})();
+
+// ---------------------------------------------------------------------
+// Harita etkileşimleri
+// ---------------------------------------------------------------------
+['nokta', 'kume', 'etiket'].forEach(katman => {
+    map.on('mouseenter', katman, () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', katman, () => { map.getCanvas().style.cursor = ''; });
+});
+
+function orijinalOzellik(mapFeature) {
+    const i = mapFeature.properties._i;
+    return allFeatures[i];
+}
+
+map.on('click', 'nokta', (e) => {
+    const feature = orijinalOzellik(e.features[0]);
+    if (feature) handleFeatureClick(feature, feature.geometry.coordinates);
+});
+
+map.on('click', 'etiket', (e) => {
+    // Nokta ya da kümeyle üst üste gelirse onlar öncelikli
+    if (map.queryRenderedFeatures(e.point, { layers: ['nokta', 'kume'] }).length) return;
+    const feature = orijinalOzellik(e.features[0]);
+    if (feature) handleFeatureClick(feature, feature.geometry.coordinates);
+});
+
+// Kümeye tıklayınca açıldığı zoom seviyesine yaklaş
+map.on('click', 'kume', async (e) => {
+    const kume = e.features[0];
+    const kaynak = map.getSource('mekanlar');
+    try {
+        const zoom = await kaynak.getClusterExpansionZoom(kume.properties.cluster_id);
+        map.easeTo({ center: kume.geometry.coordinates, zoom: zoom, essential: true });
+    } catch (err) {
+        console.error('Küme açılamadı:', err);
+    }
+});
+
+// Kümenin kapsadığı alanı göster (dışbükey zarf)
+function disbukeyZarf(noktalar) {
+    const p = noktalar.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+    if (p.length < 3) return p;
+    const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+    const alt = [];
+    for (const n of p) {
+        while (alt.length >= 2 && cross(alt[alt.length - 2], alt[alt.length - 1], n) <= 0) alt.pop();
+        alt.push(n);
+    }
+    const ust = [];
+    for (let i = p.length - 1; i >= 0; i--) {
+        const n = p[i];
+        while (ust.length >= 2 && cross(ust[ust.length - 2], ust[ust.length - 1], n) <= 0) ust.pop();
+        ust.push(n);
+    }
+    ust.pop();
+    alt.pop();
+    return alt.concat(ust);
+}
+
+let uzerindekiKume = null;
+function kapsamayiTemizle() {
+    uzerindekiKume = null;
+    const kaynak = map.getSource('kume-kapsama');
+    if (kaynak) kaynak.setData(bosFC());
+}
+
+map.on('mousemove', 'kume', async (e) => {
+    const kume = e.features[0];
+    const id = kume.properties.cluster_id;
+    if (id === uzerindekiKume) return;
+    uzerindekiKume = id;
+    try {
+        const yapraklar = await map.getSource('mekanlar').getClusterLeaves(id, Infinity, 0);
+        if (uzerindekiKume !== id) return;
+        const zarf = disbukeyZarf(yapraklar.map(f => f.geometry.coordinates));
+        let geometri;
+        if (zarf.length >= 3) {
+            geometri = { type: 'Polygon', coordinates: [zarf.concat([zarf[0]])] };
+        } else {
+            geometri = { type: 'LineString', coordinates: zarf };
+        }
+        map.getSource('kume-kapsama').setData({
+            type: 'FeatureCollection',
+            features: [{ type: 'Feature', properties: {}, geometry: geometri }]
+        });
+    } catch (err) {
+        console.error('Küme kapsamı alınamadı:', err);
+    }
+});
+map.on('mouseleave', 'kume', kapsamayiTemizle);
+map.on('zoomstart', kapsamayiTemizle);
+
+// Logoya tıklayınca başlangıç görünümüne dön
+document.querySelector('.logo').addEventListener('click', function() {
+    map.flyTo({ center: BASLANGIC_MERKEZ, zoom: BASLANGIC_ZOOM, duration: 1000, essential: true });
+});
+
+// Konum (gizli MapLibre kontrolü, sağ alttaki butonla tetiklenir)
+const geolocateControl = new maplibregl.GeolocateControl({
+    positionOptions: { enableHighAccuracy: true },
+    trackUserLocation: false,
+    showUserLocation: true,
+    showAccuracyCircle: true,
+    fitBoundsOptions: { maxZoom: DETAY_ZOOM, essential: true }
+});
+map.addControl(geolocateControl, 'top-left');
+geolocateControl.on('error', function(err) {
+    alert('Konumunuz alınamadı' + (err && err.message ? ': ' + err.message : '.'));
+});
+
+document.getElementById('locate-button').addEventListener('click', function() {
+    geolocateControl.trigger();
+});
+
+// Zoom butonları
+document.getElementById('zoom-in-button').addEventListener('click', function() {
+    map.zoomIn({ essential: true });
+});
+document.getElementById('zoom-out-button').addEventListener('click', function() {
+    map.zoomOut({ essential: true });
+});
+
+// ---------------------------------------------------------------------
+// Arama: önce yerel veride, sonuç yoksa Nominatim'de
+// ---------------------------------------------------------------------
+function initializeSearch() {
+    const kutu = document.getElementById('search-control');
+    const input = document.getElementById('searchInput');
+    const liste = document.getElementById('searchTooltip');
+    const iptal = document.getElementById('searchCancel');
+    const buton = document.getElementById('searchButton');
+
+    let sonuclar = [];
+    let seciliIndeks = -1;
+    let zamanlayici = null;
+    let sorguNo = 0;
+
+    function listeyiGizle() {
+        liste.innerHTML = '';
+        liste.style.display = 'none';
+        sonuclar = [];
+        seciliIndeks = -1;
+    }
+
+    function iptalGorunurlugu() {
+        iptal.style.display = input.value.length > 0 ? 'flex' : 'none';
+    }
+
+    function listeyiGoster(kayitlar) {
+        sonuclar = kayitlar;
+        seciliIndeks = -1;
+        liste.innerHTML = '';
+        if (kayitlar.length === 0) {
+            liste.style.display = 'none';
+            return;
+        }
+        kayitlar.forEach((kayit, i) => {
+            const li = document.createElement('li');
+            li.className = 'search-tip';
+            li.textContent = kayit.name || 'İsimsiz Mekan';
+            li.addEventListener('mousedown', function(ev) {
+                ev.preventDefault();
+                sonucuSec(i);
+            });
+            liste.appendChild(li);
+        });
+        liste.style.display = 'block';
+    }
+
+    function seciliyiIsaretle() {
+        [...liste.children].forEach((li, i) => {
+            li.classList.toggle('search-tip-select', i === seciliIndeks);
+            if (i === seciliIndeks) li.scrollIntoView({ block: 'nearest' });
+        });
+    }
+
+    function sonucuSec(i) {
+        const kayit = sonuclar[i];
+        if (!kayit) return;
+        input.value = kayit.name || '';
+        iptalGorunurlugu();
+        listeyiGizle();
+
+        if (kayit.feature) {
+            // Yerel veri: notu aç
+            aramaNoktasi = null;
+            aramaNoktasiniGuncelle();
+            handleFeatureClick(kayit.feature, [kayit.lon, kayit.lat]);
+        } else {
+            // Nominatim / koordinat: noktayı vurgula
+            aramaNoktasi = [kayit.lon, kayit.lat];
+            aramaNoktasiniGuncelle();
+            map.flyTo({ center: aramaNoktasi, zoom: DETAY_ZOOM, essential: true });
+        }
+    }
+
+    function ara(metin) {
+        const no = ++sorguNo;
+        const koordinat = koordinatCoz(metin);
+        if (koordinat) {
+            listeyiGoster([koordinat]);
+            return;
+        }
+        const yerel = searchLocalData(metin);
+        if (yerel.length > 0) {
+            listeyiGoster(yerel);
+            return;
+        }
+        kutu.classList.add('search-load');
+        searchNominatim(metin, function(kayitlar) {
+            if (no !== sorguNo) return; // daha yeni bir arama başladı
+            kutu.classList.remove('search-load');
+            listeyiGoster(kayitlar);
+        });
+    }
+
+    input.addEventListener('input', function() {
+        iptalGorunurlugu();
+        clearTimeout(zamanlayici);
+        const metin = input.value.trim();
+        if (metin.length < 2) {
+            sorguNo++;
+            kutu.classList.remove('search-load');
+            listeyiGizle();
+            return;
+        }
+        zamanlayici = setTimeout(() => ara(metin), 300);
+    });
+
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowDown' && sonuclar.length) {
+            e.preventDefault();
+            seciliIndeks = Math.min(seciliIndeks + 1, sonuclar.length - 1);
+            seciliyiIsaretle();
+        } else if (e.key === 'ArrowUp' && sonuclar.length) {
+            e.preventDefault();
+            seciliIndeks = Math.max(seciliIndeks - 1, 0);
+            seciliyiIsaretle();
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            gonder();
+        } else if (e.key === 'Escape') {
+            listeyiGizle();
+        }
+    });
+
+    // Enter / büyüteç: seçili ya da ilk sonuca git
+    function gonder() {
+        if (sonuclar.length) {
+            sonucuSec(seciliIndeks >= 0 ? seciliIndeks : 0);
+        } else if (input.value.trim().length >= 2) {
+            clearTimeout(zamanlayici);
+            ara(input.value.trim());
+        }
+    }
+
+    buton.addEventListener('click', function() {
+        input.focus();
+        gonder();
+    });
+
+    iptal.addEventListener('click', function(e) {
+        e.preventDefault();
+        input.value = '';
+        sorguNo++;
+        kutu.classList.remove('search-load');
+        iptalGorunurlugu();
+        listeyiGizle();
+        aramaNoktasi = null;
+        aramaNoktasiniGuncelle();
+        input.focus();
+    });
+
+    input.addEventListener('blur', function() {
+        setTimeout(listeyiGizle, 150);
+    });
+
+    iptalGorunurlugu();
+    listeyiGizle();
+}
+
+// "41.0336, 28.9770" gibi girilen koordinatı tanı (enlem, boylam)
+function koordinatCoz(metin) {
+    const m = metin.match(/^\s*(-?\d+(?:[.]\d+)?)\s*[,; ]\s*(-?\d+(?:[.]\d+)?)\s*$/);
+    if (!m) return null;
+    const lat = parseFloat(m[1]);
+    const lon = parseFloat(m[2]);
+    if (Math.abs(lat) > 90 || Math.abs(lon) > 180) return null;
+    return { name: lat + ', ' + lon, lat: lat, lon: lon };
+}
+
+// Yerel GeoJSON verisinde arama
 function searchLocalData(text) {
     const results = [];
     const searchText = text.toLowerCase().trim();
-    
+
     allFeatures.forEach(feature => {
         const properties = feature.properties;
         if (!properties) return;
@@ -193,16 +569,15 @@ function searchLocalData(text) {
                 lat: feature.geometry.coordinates[1],
                 lon: feature.geometry.coordinates[0],
                 feature: feature,
-                // Ek bilgileri de ekleyelim
                 properties: properties
             });
         }
     });
-    
+
     return results;
 }
 
-// Search using Nominatim
+// Nominatim ile arama
 function searchNominatim(text, callResponse) {
     const params = {
         q: text,
@@ -226,163 +601,13 @@ function searchNominatim(text, callResponse) {
         });
 }
 
-// Initialize search when document is ready
 $(document).ready(function() {
     initializeSearch();
 });
 
-
-
-
-
-// Label Manager Configuration
-const LABEL_WIDTH = 120;
-const LABEL_HEIGHT = 20;
-const BUFFER_SIZE = 10;
-
-let labelLayer = L.layerGroup();
-let labelMarkers = new Map();
-let iconCache = new Map();
-
-const LabelManager = {
-    checkLabelVisibility: function() {
-        if (!map.hasLayer(labelLayer)) return;
-
-        const visibleLabels = new Set();
-        const bounds = map.getBounds();
-        const visibleMarkers = [];
-
-        labelMarkers.forEach((marker, key) => {
-            if (bounds.contains(marker.getLatLng())) {
-                visibleMarkers.push(marker);
-            } else {
-                marker.setOpacity(0);
-            }
-        });
-
-        visibleMarkers.forEach((marker1, index) => {
-            const pos1 = map.latLngToContainerPoint(marker1.getLatLng());
-            let isOverlapping = false;
-
-            for (let i = 0; i < index; i++) {
-                const marker2 = visibleMarkers[i];
-                if (visibleLabels.has(marker2)) {
-                    const pos2 = map.latLngToContainerPoint(marker2.getLatLng());
-                    if (this.isOverlappingWithBuffer(pos1, pos2)) {
-                        isOverlapping = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!isOverlapping) {
-                visibleLabels.add(marker1);
-            }
-        });
-
-        requestAnimationFrame(() => {
-            visibleMarkers.forEach(marker => {
-                marker.setOpacity(visibleLabels.has(marker) ? 1 : 0);
-            });
-        });
-    },
-
-    isOverlappingWithBuffer: function(pos1, pos2) {
-        const dx = Math.abs(pos1.x - pos2.x);
-        const dy = Math.abs(pos1.y - pos2.y);
-        return dx < (LABEL_WIDTH + 2 * BUFFER_SIZE) && dy < (LABEL_HEIGHT + 2 * BUFFER_SIZE);
-    },
-
-    createLabel: function(feature, latlng) {
-        const content = feature.properties.Mekan;
-        let label = iconCache.get(content);
-        
-        if (!label) {
-            label = L.divIcon({
-                className: 'map-label',
-                html: `<div class="label-content">${content}</div>`,
-                iconSize: [LABEL_WIDTH, LABEL_HEIGHT],
-                iconAnchor: [LABEL_WIDTH / 2, -10]
-            });
-            iconCache.set(content, label);
-        }
-
-        const labelMarker = L.marker(latlng, {
-            icon: label,
-            zIndexOffset: 1000
-        });
-
-        labelMarker.on('click', function() {
-            handleFeatureClick(feature, latlng);
-        });
-
-        labelMarkers.set(content, labelMarker);
-        return labelMarker;
-    },
-
-    updateLabels: function() {
-        const zoom = map.getZoom();
-        
-        if (zoom >= 16) {
-            if (!map.hasLayer(labelLayer)) {
-                labelLayer.addTo(map);
-            }
-            this.checkLabelVisibility();
-        } else {
-            if (map.hasLayer(labelLayer)) {
-                map.removeLayer(labelLayer);
-            }
-        }
-    },
-
-    initializeLabels: function(features) {
-        if (!features || features.length === 0) {
-            console.warn("No features available to initialize labels.");
-            return;
-        }
-
-        this.clearLabels();
-
-        features.forEach(feature => {
-            if (feature.geometry && feature.geometry.coordinates) {
-                const coords = feature.geometry.coordinates;
-                const latlng = L.latLng(coords[1], coords[0]);
-                const labelMarker = this.createLabel(feature, latlng);
-                labelMarker.feature = feature;
-                labelLayer.addLayer(labelMarker);
-            }
-        });
-
-        this.updateLabels();
-    },
-
-    clearLabels: function() {
-        labelLayer.clearLayers();
-        labelMarkers.clear();
-    }
-};
-
-
-
-
-// Filter System
-let markers = null;
-let selectedThemes = new Set();
-let selectedSubThemes = new Set();
-let allFeatures = [];
-let geoJsonLayer = null;
-let selectedDistricts = new Set();
-
-function getColor(tema) {
-    switch (tema) {
-        case 'Gündelik Yaşam ve Kent Belleği': return '#ECB159';
-        case 'Mimarlık ve Şehircilik': return '#8CB9BD';
-        case 'Şahıs': return '#9B4444';
-        case 'Tarihsel Anekdot': return '#754E1A';
-        default: return '#8c564b';
-    }
-}
-
+// ---------------------------------------------------------------------
+// Not penceresi
+// ---------------------------------------------------------------------
 function convertDriveLink(url) {
     const fileIdMatch = url.match(/\/file\/d\/([^/]+)/);
     if (fileIdMatch) {
@@ -392,14 +617,12 @@ function convertDriveLink(url) {
     return url;
 }
 
-function handleFeatureClick(feature, latlng) {
+// lngLat: [boylam, enlem]
+function handleFeatureClick(feature, lngLat) {
     const currentZoom = map.getZoom();
-    const targetZoom = currentZoom > 17 ? currentZoom : 17;
+    const targetZoom = currentZoom > DETAY_ZOOM ? currentZoom : DETAY_ZOOM;
 
-    map.flyTo(latlng, targetZoom, {
-        duration: 1.5,
-        easeLinearity: 0.2
-    });
+    map.flyTo({ center: lngLat, zoom: targetZoom, duration: 1500, essential: true });
     
     $('#noteModalLabel').text(feature.properties.Mekan || '');
     
@@ -474,66 +697,25 @@ function handleFeatureClick(feature, latlng) {
 }
 
 
+// ---------------------------------------------------------------------
+// Filtreleme
+// ---------------------------------------------------------------------
 function initializeFilters() {
     fetch('assets/geojson/data_v2.geojson')
         .then(response => response.json())
         .then(data => {
             allFeatures = data.features;
-            initializeMarkers(data);
+            // Haritadan tıklanan noktayı orijinal kayda bağlamak için sıra numarası
+            allFeatures.forEach((feature, i) => {
+                feature.properties = feature.properties || {};
+                feature.properties._i = i;
+            });
+            gosterilenler = allFeatures;
+            kaynaklariGuncelle();
             setupFilterModal();
-            setupFilterEvents();
         })
         .catch(error => console.error('Filter data loading error:', error));
 }
-
-function initializeMarkers(data) {
-    markers = L.markerClusterGroup({
-        disableClusteringAtZoom: 17,
-        spiderfyOnMaxZoom: true,
-        showCoverageOnHover: true,
-        zoomToBoundsOnClick: true,
-        maxClusterRadius: 50,
-        iconCreateFunction: function(cluster) {
-            const childCount = cluster.getChildCount();
-            let size = 'large';
-            
-            if (childCount < 10) {
-                size = 'small';
-            } else if (childCount < 100) {
-                size = 'medium';
-            }
-            
-            return new L.DivIcon({
-                html: '<div><span>' + childCount + '</span></div>',
-                className: 'marker-cluster marker-cluster-' + size,
-                iconSize: new L.Point(40, 40)
-            });
-        }
-    });
-
-    geoJsonLayer = L.geoJSON(data, {
-        pointToLayer: function(feature, latlng) {
-            return L.circleMarker(latlng, {
-                radius: 6.5,
-                fillColor: getColor(feature.properties.Tema),
-                color: '#ffffff',
-                weight: 1.5,
-                opacity: 0.8,
-                fillOpacity: 0.8
-            });
-        },
-        onEachFeature: function(feature, layer) {
-            layer.on('click', function() {
-                handleFeatureClick(feature, layer.getLatLng());
-            });
-        }
-    });
-
-    markers.addLayer(geoJsonLayer);
-    map.addLayer(markers);
-    LabelManager.initializeLabels(allFeatures);
-}
-
 
 // Modal açılış eventi için listener ekleyelim
 $('#filterModal').on('show.bs.modal', function () {
@@ -688,13 +870,38 @@ function updateSubThemeOptions() {
     });
 }
 
+function filtreliGorunumeGit(filteredFeatures) {
+    const tumu = selectedThemes.size === 0 && selectedSubThemes.size === 0 && selectedDistricts.size === 0;
+    const koordinatlar = filteredFeatures.filter(gecerliKoordinat).map(f => f.geometry.coordinates);
+
+    if (tumu || koordinatlar.length === 0) {
+        map.flyTo({ center: BASLANGIC_MERKEZ, zoom: BASLANGIC_ZOOM, duration: 1500, essential: true });
+        return;
+    }
+
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    koordinatlar.forEach(([x, y]) => {
+        minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+        minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+    });
+    // Leaflet'teki bounds.pad(0.1) karşılığı
+    const padX = (maxX - minX) * 0.1;
+    const padY = (maxY - minY) * 0.1;
+    map.fitBounds([[minX - padX, minY - padY], [maxX + padX, maxY + padY]], {
+        padding: 50,
+        duration: 1500,
+        maxZoom: DETAY_ZOOM,
+        essential: true
+    });
+}
+
 function applyFilters() {
     const filteredFeatures = allFeatures.filter(feature => {
-        // Handle theme filtering
+        // Tema filtresi
         const themeMatch = selectedThemes.size === 0 || 
                           selectedThemes.has(feature.properties.Tema);
         
-        // Handle subtheme filtering
+        // Alt tema filtresi
         let subThemeMatch = true;
         if (selectedSubThemes.size > 0 && feature.properties.Alt_Tema) {
             const featureSubThemes = feature.properties.Alt_Tema.split(',')
@@ -702,89 +909,21 @@ function applyFilters() {
             subThemeMatch = featureSubThemes.some(t => selectedSubThemes.has(t));
         }
         
-        // Handle district filtering independently
+        // İlçe filtresi temadan bağımsız
         const districtMatch = selectedDistricts.size === 0 || 
                             (feature.properties.Ilce && 
                              selectedDistricts.has(feature.properties.Ilce.trim()));
         
-        // Apply filters: district filter is independent of theme/subtheme filters
         return districtMatch && (
-            // If no themes/subthemes selected, or if they match
             (selectedThemes.size === 0 && selectedSubThemes.size === 0) ||
-            // If themes/subthemes are selected, both must match
             (themeMatch && subThemeMatch)
         );
     });
 
-    // Update markers
-    markers.clearLayers();
-    
-    const newGeoJsonLayer = L.geoJSON({
-        type: 'FeatureCollection',
-        features: filteredFeatures
-    }, {
-        pointToLayer: function(feature, latlng) {
-            return L.circleMarker(latlng, {
-                radius: 6.5,
-                fillColor: getColor(feature.properties.Tema),
-                color: '#ffffff',
-                weight: 1.5,
-                opacity: 0.8,
-                fillOpacity: 0.8
-            });
-        },
-        onEachFeature: function(feature, layer) {
-            layer.on('click', function() {
-                handleFeatureClick(feature, layer.getLatLng());
-            });
-        }
-    });
+    gosterilenler = filteredFeatures;
+    kaynaklariGuncelle();
+    filtreliGorunumeGit(filteredFeatures);
 
-    markers.addLayer(newGeoJsonLayer);
-    
-    // Update labels with filtered features
-    LabelManager.initializeLabels(filteredFeatures);
-
-    // If no filters are selected, return to initial view
-    if (selectedThemes.size === 0 && selectedSubThemes.size === 0 && selectedDistricts.size === 0) {
-        map.flyTo([41.0082, 28.9784], 11, {
-            duration: 1.5,
-            easeLinearity: 0.5
-        });
-    }
-    // Otherwise, fly to bounds of filtered features
-    else if (filteredFeatures.length > 0) {
-        // Get valid coordinates from filtered features
-        const validCoordinates = filteredFeatures
-            .filter(feature => 
-                feature && 
-                feature.geometry && 
-                feature.geometry.coordinates && 
-                Array.isArray(feature.geometry.coordinates) && 
-                feature.geometry.coordinates.length >= 2
-            )
-            .map(feature => {
-                const coords = feature.geometry.coordinates;
-                return [coords[1], coords[0]];
-            });
-
-        if (validCoordinates.length > 0) {
-            const bounds = L.latLngBounds(validCoordinates);
-            const paddedBounds = bounds.pad(0.1);
-            map.flyToBounds(paddedBounds, {
-                padding: [50, 50],
-                duration: 1.5,
-                easeLinearity: 0.5
-            });
-        } else {
-            // If no valid coordinates found, return to initial view
-            map.flyTo([41.0082, 28.9784], 11, {
-                duration: 1.5,
-                easeLinearity: 0.5
-            });
-        }
-    }
-    
     $('#filterModal').modal('hide');
 }
     
@@ -793,49 +932,26 @@ function resetFilters() {
     selectedSubThemes.clear();
     selectedDistricts.clear();
 
-    // Reset all checkboxes and enable them
     document.querySelectorAll('.theme-filters input[type="checkbox"]')
         .forEach(checkbox => {
             checkbox.checked = false;
             checkbox.disabled = false;
         });
 
-    // Reset district dropdown
     const districtSelect = document.getElementById('districtSelect');
     if (districtSelect) {
         districtSelect.value = '';
     }
 
-    // Clear subtheme container
     const subThemeContainer = document.getElementById('subThemeContainer');
     subThemeContainer.innerHTML = '';
 
-    // Reset markers and labels to show all features
-    if (markers && geoJsonLayer) {
-        markers.clearLayers();
-        markers.addLayer(geoJsonLayer);
-        LabelManager.initializeLabels(allFeatures);
-    }
+    gosterilenler = allFeatures;
+    kaynaklariGuncelle();
 
-    // Return to initial view
-    map.flyTo([41.0082, 28.9784], 11, {
-        duration: 1.5,
-        easeLinearity: 0.5
-    });
+    map.flyTo({ center: BASLANGIC_MERKEZ, zoom: BASLANGIC_ZOOM, duration: 1500, essential: true });
 }
 
-
-
-
-// Map event listeners for label management
-let debounceTimer;
-const debouncedUpdate = () => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => LabelManager.updateLabels(), 200);
-};
-
-map.on('zoomend', debouncedUpdate);
-map.on('moveend', debouncedUpdate);
 
 // Initialize on document ready
 $(document).ready(function() {

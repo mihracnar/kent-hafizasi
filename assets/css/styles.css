@@ -5,104 +5,136 @@ body, html, #map {
     font-family: 'Open Sans', sans-serif;
 }
 
-.leaflet-control-location {
-    background: none;
-    border: none;
-    padding: 5px;
-    cursor: pointer;
-    border-radius: 3px;
-    font-size: 18px;
-    color: #000;
+/* Arama kutusu */
+.search-control {
+    position: absolute;
+    left: 190px;
+    top: 45px;
+    width: 25vw;
+    height: 30px;
+    z-index: 1000;
+    background: padding-box rgba(108, 117, 125, 0.9);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
 }
 
-.leaflet-control-search .search-button {
-    display: block;
-    float: left;
+.search-control .search-button {
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 30px;
     height: 30px;
-    background-color: #F2F2F2; /* Arka plan rengi */
+    padding: 0;
+    border: none;
     border-radius: 4px;
-    position: relative;
+    background-color: #F2F2F2;
+    color: #000;
+    font-size: 17px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
 }
 
-.leaflet-control-search .search-input {
-    width: 20vw;
+.search-control .search-button:hover {
+    background-color: #fafafa;
+}
+
+.search-control .search-input {
     position: absolute;
     left: 30px;
     top: 0;
+    width: 20vw;
+    height: 22px;
+    margin: 4px 0 4px 4px;
+    padding: 0 22px 0 8px;
     background: #F2F2F2;
-    padding: 8px;
     border: 1px solid #000;
     border-radius: 5px;
-}
-
-.leaflet-control-search .search-button::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 16px; /* İkon boyutu */
-    height: 16px;
-    background: url(../images/search-icon.png) no-repeat center center;
-    background-size: contain;
-    transform: translate(-50%, -50%);
-}
-
-.leaflet-control-location:hover {
-    background-color: #F2F2F2;
-}
-
-.leaflet-control-search {
-    /* Leaflet arama kontrolünün genişliği */
-    width: 25vw !important; 
-    /* Konumlandırma */
-    position: absolute; 
-    /* Sayfanın sol tarafında */
-    left: 180px; 
-    /* Sayfanın üst tarafında */
-    top: 35px;
-    /* Arama kutusunun z-index değeri */
-    z-index: 1000; /* Haritadan yukarıda olması için */
-}
-
-.leaflet-control-search .search-input {
-    /* Genişlik */
-    width: 20vw; /* İstediğiniz genişliği belirtin */
-    /* Konum */
-    position: absolute; /* Konumlandırma için temel */
-    left: 30px; /* Sol kenardan 0 piksel uzaklık */
-    top: 0; /* Üst kenardan 0 piksel uzaklık */
-  
-    /* Diğer Özellikler */
-    padding: 8px; /* Dolgu */
-    border: 1px solid #000; /* Kenarlık */
-    border-radius: 5px; /* Yuvarlatılmış köşeler */
     font-family: 'Open Sans', sans-serif;
-  }
-
-  .leaflet-control-search .search-icon {
-    background-image: url("path/to/your/search-icon.png"); 
-    background-size: contain;
-    background-repeat: no-repeat;
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-  }
-
-  .leaflet-control-search.search-exp {
-    background: padding-box rgba(108, 117, 125, 0.9);
-    border-width: 0px;
-    border-style: solid;
-    border-color: #F2F2F2;
-    border-image: initial;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Dış kutuya gölge */
-    border-radius: 5px; /* Dış kutunun köşeleri yuvarlatıldı */
+    font-size: 12px;
+    color: #000;
+    outline: none;
 }
 
-/* Leaflet zoom kontrolünü gizle */
-.leaflet-control-zoom {
+.search-control .search-cancel {
+    position: absolute;
+    left: calc(30px + 4px + 20vw - 22px);
+    top: 4px;
+    width: 22px;
+    height: 22px;
     display: none;
-}        
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.search-control .search-cancel:hover {
+    color: #666;
+}
+
+.search-control.search-load .search-cancel {
+    visibility: hidden;
+}
+
+.search-control.search-load .search-input {
+    background: #F2F2F2 linear-gradient(90deg, #F2F2F2 0%, #e2e2e2 50%, #F2F2F2 100%);
+    background-size: 200% 100%;
+    animation: arama-yukleniyor 1s linear infinite;
+}
+
+@keyframes arama-yukleniyor {
+    from { background-position: 100% 0; }
+    to { background-position: -100% 0; }
+}
+
+.search-control .search-tooltip {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+    min-width: 120px;
+    max-height: 122px;
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.25);
+    z-index: 1010;
+    overflow-y: auto;
+    overflow-x: hidden;
+    cursor: pointer;
+}
+
+.search-control .search-tip {
+    margin: 2px;
+    padding: 2px 4px;
+    display: block;
+    color: black;
+    background: #eee;
+    border-radius: .25em;
+    white-space: nowrap;
+}
+
+.search-control .search-tip-select,
+.search-control .search-tip:hover {
+    background-color: #fff;
+}
+
+/* MapLibre kontrolleri */
+.maplibregl-ctrl-top-left {
+    display: none; /* Konum kontrolü gizli, sağ alttaki butonla çalışıyor */
+}
+
+.maplibregl-ctrl-bottom-right .maplibregl-ctrl.maplibregl-ctrl-attrib {
+    margin: 0;
+    border-radius: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+}
 
 /* Menü stil */
 #map-menu-top, #map-menu-bottom {
@@ -334,15 +366,33 @@ body, html, #map {
     transform: translateX(0); /* Modal görünür olduğunda kaydır */
 }
 
-.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control {
-    box-shadow: none;
-    width: 250px;  /* Genişlik ayarı */
-    background-color: #F2F2F2; /* Arka plan rengi */
-    padding: none;  /* İç boşluk */
-    border-radius: 5px; /* Yuvarlatılmış köşeler */
+/* Altlık seçimi (Katmanlar modalı) */
+.basemap-control {
+    width: 250px;
+    background-color: #F2F2F2;
+    padding: 6px 10px 6px 6px;
+    border-radius: 5px;
+    color: #333;
     font-size: large;
+    line-height: 1.5;
     font-family: 'Open Sans', sans-serif;
-  }
+}
+
+.basemap-control label {
+    display: block;
+    margin-bottom: .5rem;
+    cursor: pointer;
+}
+
+.basemap-control label:last-child {
+    margin-bottom: 0;
+}
+
+.basemap-control input[type="radio"] {
+    margin-top: 2px;
+    position: relative;
+    top: 1px;
+}
 
 
 #map-menu-bottom .row {
@@ -500,94 +550,6 @@ body, html, #map {
 #noteModal .figure-thumb:hover {
     transform: none;
     cursor: default;
-}
-
-
-/* Map Label */
-
-.map-label {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    width: 150px; /* Sabit genişlik ekledik */
-    text-align: center; /* Label'ı ortala */
-}
-
-.label-content {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 800;
-    font-size: 14px;
-    color: rgba(13, 13, 13, 0.95);
-    text-align: center;
-    background: transparent;
-    padding: 0;
-    white-space: normal; /* Alt satıra geçmesi için normal yaptık */
-    overflow-wrap: normal; /* Kelimelerin bölünmesini engeller */
-    word-wrap: normal; /* Eski tarayıcılar için */
-    display: block; /* Block element olarak ayarla */
-    /* Text buffer efekti */
-    text-shadow: 
-        -1px -1px 0 rgba(255, 255, 255, 0.8),
-        1px -1px 0 rgba(255, 255, 255, 0.8),
-        -1px 1px 0 rgba(255, 255, 255, 0.8),
-        1px 1px 0 rgba(255, 255, 255, 0.8),
-        -2px 0 0 rgba(255, 255, 255, 0.8),
-        2px 0 0 rgba(255, 255, 255, 0.8),
-        0 2px 0 rgba(255, 255, 255, 0.8),
-        0 -2px 0 rgba(255, 255, 255, 0.8),
-        /* Yeni eklenen alttaki gölge */
-        3px 3px 5px rgba(0, 0, 0, 0.7), /* Daha belirgin ve altta olan gölge */
-        3px 3px 5px rgba(0, 0, 0, 0.7);
-    position: relative;
-    z-index: 1000;
-}
-
-.leaflet-marker-pane {
-    z-index: 600;
-}
-
-.leaflet-marker-icon {
-    z-index: 1000 !important;
-}
-
-.label-connection-line {
-    pointer-events: none;
-}
-
-/* Noktalar için gölge efekti */
-.marker-with-shadow {
-    filter: url(#shadow);
-}
-
-
-/* Cluster Ayarları */
-.marker-cluster-small,
-.marker-cluster-medium,
-.marker-cluster-large {
-    background-color: rgba(64, 95, 115, 0.15);
-}
-
-.marker-cluster-small div,
-.marker-cluster-medium div,
-.marker-cluster-large div {
-    background-color: rgba(64, 95, 115, 0.5);
-    font-family: 'Open Sans', sans-serif;
-}
-
-.marker-cluster div {
-    background-color: #517EA6 !important;
-    font-family: 'Open Sans', sans-serif;
-}
-
-.marker-cluster {
-    background-color: rgba(64, 95, 115, 0.15) !important;
-}
-
-.marker-cluster > div {
-    background-color: rgba(64, 95, 115, 0.5) !important;
-    color: white;
-    font-family: 'Open Sans', sans-serif !important;
-    font-weight: 700 !important;
 }
 
 
@@ -911,22 +873,18 @@ body, html, #map {
     }
     
 
-    .leaflet-control-search {
-        /* Leaflet arama kontrolünün genişliği */
-        width: 90vw !important; 
-        /* Konumlandırma */
-        position: absolute; 
-        /* Sayfanın sol tarafında */
-        left: 5vw; 
-        /* Sayfanın üst tarafında */
-        top: 90px;
-        /* Arama kutusunun z-index değeri */
+    .search-control {
+        width: 90vw;
+        left: calc(5vw + 10px);
+        top: 100px;
     }
-    
-    
-    .leaflet-control-search .search-input {
-      width: 70vw;
-      right: 15vw;
+
+    .search-control .search-input {
+        width: 70vw;
+    }
+
+    .search-control .search-cancel {
+        left: calc(30px + 4px + 70vw - 22px);
     }
 
     .logo {
