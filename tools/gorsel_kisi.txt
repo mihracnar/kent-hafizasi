@@ -1,0 +1,100 @@
+# Fotoğrafta görülen kişiler — altyazılar tek tek okunarak işaretlendi (gorseller.kisi_id).
+# Yalnız fotoğrafın kendisinde görülen ve kişiler tablosunda olan kişiler yazılır; fotoğrafı çeken ya da metinde anılan kişiler yazılmaz.
+G-0049: K-154
+G-0051: K-155
+G-0058: K-054, K-053
+G-0074: K-093
+G-0095: K-287
+G-0178: K-187
+G-0203: K-129
+G-0340: K-178
+G-0384: K-308
+G-0508: K-245
+G-0669: K-217
+G-0742: K-298, K-053
+G-0831: K-093
+G-0838: K-126
+G-0844: K-116, K-021
+G-0873: K-023
+G-0875: K-261, K-033
+G-0881: K-021
+G-0921: K-100
+G-0929: K-066
+G-0969: K-026
+G-1022: K-251
+G-1042: K-324
+G-1044: K-286
+G-1081: K-131
+G-1083: K-261, K-262
+G-1096: K-025
+G-1126: K-179, K-361, K-049, K-180, K-081, K-139
+G-1188: K-142
+G-1202: K-132
+G-1221: K-254
+G-1458: K-072
+G-1467: K-288
+G-1475: K-046
+G-1477: K-095
+G-1481: K-022, K-195
+G-1489: K-214
+G-1525: K-265, K-361
+G-1534: K-247, K-248, K-249
+G-1554: K-173
+G-1603: K-156
+G-1614: K-114
+G-1615: K-114
+G-1629: K-238
+G-1672: K-328, K-330
+G-1681: K-331
+G-1686: K-244
+G-1853: K-358
+G-1067: Atilla Hülagü
+
+# 19 Kasım 2026 — altyazılar yeniden okundu: fotoğrafta görülen ve adı geçen herkes (tabloda yoksa kişi olarak açılır).
+# Fotoğrafı çeken, filmin yönetmeni, tablonun ressamı gibi fotoğrafta görünmeyenler yazılmaz; yalnız ön adla anılan yakınlar ("kızı Gülbün", "Leman Hanım") ve
+# genel unvanlı adlar ("Hüseyin Bey") ad sayılmaz. G-0092/G-0093: etiketler altyazıya göre (Mahmut Muhtar Paşa yalnız ikincisinde).
+G-0026: James Baldwin, Sedat Pakay
+G-0028: James Baldwin, Engin Cezzar, Gülriz Sururi
+G-0031: James Baldwin, Zeynep Oral
+G-0141: Nazım Hikmet, Kâni Kıpçak, Reşit Gürzap, Mahmut Moralı, Sait Köknar, İnci İpekçi, Ferdi Tayfur, Osman İpekçi
+G-0324: Ahmet Uğurlu
+G-0419: Şener Şen, Şevket Altuğ
+G-0486: Tarık Akan, Halit Akçatepe
+G-0575: Onat Kutlar, Hüseyin Baş, Fırat Yücel
+G-0671: Aydemir Akbaş, Bilge Şen, Duygu Sağıroğlu, Selma Güneri, Tuncel Kurtiz
+G-0812: Fahri Korutürk
+G-0833: Sait Faik Abasıyanık, Behçet Necatigil, Naim Tirali, Salah Birsel, İskender Fikret Akdora, Oktay Akbal, Cemil Meriç
+G-0835: Metin Serezli, Altan Erbulak
+G-0836: Nejat Uygur, Müjdat Gezen, Ahmet Sezgin, Altan Erbulak
+G-0840: II. Wilhelm
+G-0846: Bülent Ecevit
+G-0848: Greta Garbo
+G-0857: Nazlı Tlabar, Rüştü Bozcalı, Handan Bozcalı, Sabiha Rüştü Bozcalı, Cemil Tlabar
+G-0916: Necip Âsım Yazıksız, Ahmet Hamdi Tanpınar, Emine Semiye Hanım, Hüseyin Rıfat Işıl, Refik Ahmet Sevengil, Hüseyin Rahmi Gürpınar, İzzet Melih Devrim
+G-0961: Lütfi Kırdar, Meliha Avni Sözen
+G-0965: Sadi Diren, Metin Deniz, Gültekin Çizgen, Nezih Eldem, Mehmet Bayhan, Mustafa Pilevneli, Kaya Özsezgin, Mustafa Aslıer, Fethi Kayaalp, Ülkü Özkaya, Ertuğrul Karabaki, Adnan Çoker, Özdemir Altan, Şadi Çalık, Doğan Aksel, Turan Erol, Şakir Eczacıbaşı, Reha Güney, Mengü Ertel, Füreya Koral, Güler Ertan, Umur Çamaş, Sadun Ersin, Namık Bayık, Doğan Kuban, Zühtü Müridoğlu, Sezer Tansuğ, Cafer Türkmen, Beyhan Saldıray, Perin Üner, Turhan Selçuk, Ozanay Onur, Tan Oral
+G-1073: Aşık Veysel
+G-1074: Âşık Davut Sulari
+G-1093: Fethi Okyar, Galibe Okyar
+G-1139: Ayla Algan, Fatma Girik, Esmeray
+G-1152: Sadri Alışık, Çolpan İlhan, Neriman Köksal, Nüzhet Birsel
+G-1153: Edip Cansever, Erdoğan Değer, Selahattin Hilâv, Ahmet Oktay, Özdemir Asaf
+G-1156: Demirtaş Ceyhun, Ferit Edgü, Demir Özlü, Ünal Tayfun
+G-1254: Bedia Muvahhit, Gönül Ülkü, Gül Gülgün, Oktay Milor, Gazanfer Özcan
+G-1255: Çetin İpekkaya, Nejat Uygur
+G-1266: Mahmud Şevket Paşa
+G-1278: Ruşen Eşref, Yunus Nadi Abalıoğlu, Keregrof
+G-1419: Naşit Özcan, Hayali Safa, Küçük Virjini Hanım
+G-1424: İsmet İnönü, Lütfi Kırdar
+G-1431: Tanburi Dürrü Turan, Sadi Işılay, Ali Rıza Şengel, Santuri Ziya Santur, Kemani Nuri Duyguer, Necmi Rıza Ahıskan, Neyzen Şevki Sevgin, Kemal Niyazi Seyhun, Artaki Candan, Cemal Kamil, Settar Körmükçü
+G-1435: İsmet İnönü, Kâzım Orbay, Lütfi Kırdar
+G-1439: Meliha Avni Sözen
+G-1491: Genco Erkal, Çolpan İlhan, Kamran Yüce, Yıldız Kenter, Müşfik Kenter, Çiğdem Selışık, Şükran Güngör
+G-1553: Zeki Alasya, Metin Akpınar, Ercan Yazgan, Ahmet Gülhan, Suzan Ustan
+G-1606: Bedri Rahmi Eyüboğlu, Cemal Tollu
+G-1662: II. Elizabeth, Prens Philip, Prenses Anne
+G-1383: Nur Koçak, Janset Baybars, Nuray Ataş, Tülin Göksayar, Adnan Çoker, Sevin Ilgaz, Ayten Yetiş Doğu, Naile Orhon
+G-1384: Şükrü Aysan, Serhat Kiraz, Ahmet Öktem, Avni Yamaner
+G-1385: Yusuf Taktak, Adnan Çoker, Mustafa Ata
+G-0092: Prenses Nimetullah Hanım, Neş'edil Hanım, Emine Düriye
+G-0093: Mahmut Muhtar Paşa, Prenses Nimetullah Hanım

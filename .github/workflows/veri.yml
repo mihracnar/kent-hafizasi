@@ -1,0 +1,26 @@
+name: Veriyi Sheets'ten güncelle
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [sheets-yayin]
+permissions:
+  contents: write
+jobs:
+  guncelle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Sheets'ten çek
+        env:
+          SHEETS_URL: ${{ secrets.SHEETS_URL }}
+        run: python tools/pull_sheets.py --gorselleri-kopyala
+      - name: Değiştiyse kaydet
+        run: |
+          git config user.name "hafiza-istanbul-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data assets/gorsel
+          git diff --cached --quiet || git commit -m "Veri Sheets'ten güncellendi"
+          git push

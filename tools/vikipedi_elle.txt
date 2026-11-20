@@ -1,0 +1,20 @@
+# Elle verilen Vikipedi maddeleri — tools/vikipedi_cek.py her çalıştığında bunları getirip Excel'e yazar.
+# Biçim:  id = Türkçe Vikipedi madde başlığı            → onaylı yazılır
+#         id = Madde başlığı | öneri                      → panelde onay bekler
+# Otomatik aramanın bulamadığı ya da yanlış maddeyi önerdiği, kayıtla birlikte okunarak doğrulanan eşleşmeler:
+
+K-010 = Lev Troçki            # "Troçki": Büyükada'daki Sivastopol (Yanaros) Köşkü'nde yaşayan Sovyet devrimci
+K-011 = Ahmet Refik Altınay   # "Ahmet Refik": tarihçi, Andrea Köşkü'nde yaşadı
+K-218 = Deniz Kızı Eftelya    # kantocu Denizkızı Eftalya (Atanasia Yeorgiadu)
+K-385 = Attilâ İlhan          # yazımı farklı ("Atilla İlhan")
+K-354 = Emin Onat             # mimar; otomatik arama yanlışlıkla Turan Onat'ı önermişti
+K-199 = Mîna Urgan            # madde doğruydu, özeti bozuk gelmişti
+K-025 = Agop Ayvaz            # kayıtta "Hagop Ayvaz (1911-2006)": madde Türkiye Ermenisi tiyatrocu, yazar, Kulis dergisi (1946-1996), aynı kişi
+
+M-0019 = Şeref Stadyumu       # otomatik arama Çırağan Sarayı'nı önermişti
+M-0276 = Suphi Paşa Konağı    # Horhor Çeşmesi önerilmişti
+M-0530 = Cibali Tütün Fabrikası  # Kadir Has Üniversitesi önerilmişti
+M-0613 = Taksim Meydanı       # Taksim Camii önerilmişti
+
+# Bilerek verilmeyenler: K-263 "Abdullah Ağa" (Bostancıbaşı; önerilen Abdullah Ağar başka kişi),
+# K-383 "Faik Ali" (mimar; önerilen Fâik Âli Ozansoy şair), K-367 "Hayri İnönü" (doğrulanamadı, öneri olarak bekliyor).

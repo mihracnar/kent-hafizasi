@@ -1,0 +1,57 @@
+# Hikâyelerde adı açıkça geçen kişiler — her hikâye metni okunarak (hikaye_kisi, onaylı).
+# H-xxxx: Ad; Ad; ...   Ad kişiler tablosunda varsa ona bağlanır (öneri ise onaylanır), yoksa yeni kişi açılır.
+# Yalnız metinde adıyla anılan gerçek kişiler; yapı adındaki kişi (ör. "Mehmet Ali Paşa Köşkü") ya da adı verilmeyenler yazılmaz.
+H-0008: Şükrü Naili Paşa
+H-0012: James Baldwin; Marlon Brando; Don Cherry; Linda Sharrock; Sonny Sharrock; Beauford Delaney; Gülriz Sururi; Engin Cezzar
+H-0013: Osman Nuri Ergin
+H-0014: Edmund Allenby
+H-0022: Halide Edip Adıvar
+H-0023: IV. Mehmed
+H-0025: Mesut Cemil Tel; Friedrich von Statzer; Nimet Vahid; Licco Amar
+H-0030: Mustafa Kemal Atatürk
+H-0031: Sabahattin Ali; Yaşar Nabi Nayır; Filiz Ali
+H-0042: Oğuz Atay; Yıldız Ecevit; Pakize Atay
+H-0048: Nazım Hikmet
+H-0049: Nazım Hikmet
+H-0051: Refik Halit Karay; Ziya Gökalp; Cemal Paşa; Hikmet Nazım Bey; Nazım Hikmet; Celile Hanım; Yahya Kemal
+H-0054: Nazım Hikmet; Piraye; Muhsin Ertuğrul; Mahmut Yesari; Muammer Karaca; Memet Fuat
+H-0058: Sabiha Sertel; Zekeriya Sertel; Yıldız Sertel; Nazım Hikmet
+H-0069: Sabahattin Ali; Abidin Dino; Rasih Nuri İleri
+H-0074: Tuncel Kurtiz; Çetin Emeç; Erol Dernek; Ayşegül Parlayan; Mehmet Ömür
+H-0075: Cemalettin Server Revnakoğlu
+H-0083: Mustafa Kemal Atatürk; Makbule Atadan; Afet İnan; Şükrü Kaya; Cevat Abbas Gürer; Bekir Cingöz
+H-0084: Claude Farrère
+H-0085: Cemal Reşit Rey; Alfred Cortot
+H-0147: Sabiha Sertel; Zekeriya Sertel
+H-0212: Abdülhak Hamit Tarhan; Halit Ziya Uşaklıgil; Süleyman Nazif; Samipaşazade Sezai; Namık Görgüç
+H-0224: Kemal Nebioğlu; Saffet Göksüzoğlu; Şaban Yıldız; Rıza Kuas; Hüseyin Uslubaş; Kemal Türkler; Avni Erakalın; Adnan Arkın; Ahmet Muşlu; İbrahim Güzelce; Salih Özkarabay; İbrahim Denizcier
+H-0245: Rüçhan Çamay; Mustafa Kemal Atatürk
+H-0278: Uğur Mumcu; Talat Turhan
+H-0293: Deniz Gezmiş; Hamdi Gezmiş; Can Dündar
+H-0298: Graf Oettingen
+H-0300: İsmet İnönü; Celal Bayar; Mustafa Kemal Atatürk
+H-0301: Yusuf Ahıskalı; Esi Ahıskalı; Yaşar Miraç
+H-0309: Can Yücel; Salim Şengil; Nezihe Meriç; Edip Cansever; Tomris Uyar; Turgut Uyar; Tunga Uyar; Muhteşem Sunter; Mehmetcan Köksal; Dürnev Tunaseli; Pertev Tunaseli; Ömer Uluç; İsa Çelik
+H-0363: Rüştü Onur; Mediha Onur
+H-0390: Şükrü Naili Paşa
+H-0391: Şükrü Naili Paşa
+H-0392: V. Mehmed Reşad; I. Petar
+H-0413: Kemal Sunal; Selahattin Alpay; Oya Aydoğan; Mina Urgan
+H-0414: Gülsün Karamustafa; Grigori Bazlamacı
+H-0461: Atilla Hülagü
+H-0472: Keriman Halis Ece; Mustafa Kemal Atatürk
+H-0492: Şükrü Naili Paşa
+H-0558: Evliya Çelebi
+H-0582: Derviş Osman Baba; Kethüdazade Mehmed Arif Efendi
+H-0588: Katip Sinan
+H-0595: Mahmud Şükrü Bey
+H-0652: Falih Rıfkı Atay; Gülderen Sakallıoğlu; Aziz Bozkır
+H-0801: Fuat Uzkınay
+H-0812: Tanburi Cemil Bey; Uğur Derman; Niyazi Sayın
+H-0818: Santuri Ethem Efendi; Mehmet Ali Durudoğan
+# 19 Kasım 2026 — ikinci okuma: "Vâlâ" Vâlâ Nureddin (Nâzım'ın arkadaşı); resim hikâyelerinde resmi yapan ressam.
+H-0058: Vâlâ Nureddin
+H-0461: Leonardo da Vinci
+H-0546: Hikmet Onat
+H-0547: Cevat Erkul
+H-0548: İbrahim Safi

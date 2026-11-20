@@ -1,0 +1,383 @@
+# Kayıt sırası (0'dan başlar) : o kayıtta asıl anlatılan kişi(ler), ";" ile ayrılır.
+# Başlık ve gerektiğinde metin okunarak elle hazırlandı. Panelde düzeltilebilir.
+1: Fethi Okyar
+3: Reşat Nuri Güntekin
+5: Osman Fahir Seden
+6: Şakir Sırmalı
+7: Zeki Sayar
+8: Cavid Bey
+9: Ziya Paşa
+10: Recaizade Mahmut Ekrem
+11: Ahmet Emin Yalman
+13: Troçki
+15: Ahmet Refik
+16: Şükrü Naili Paşa
+17: Tahsin Nahit
+18: Traje Dikmen
+19: Ziya Gökalp
+20: Ziya Gökalp
+21: İbrahim Necmi Dilmen
+22: Lefter Küçükandonyadis
+23: Nurullah Ataç
+24: Ahmet Rasim
+25: Hüseyin Rahmi Gürpınar
+26: İsmet İnönü
+27: Sait Faik Abasıyanık
+28: Halide Edip Adıvar
+29: İhap Hulusi Görey
+30: Hagop Ayvaz
+33: Sadi Diren
+35: Semavi Eyice
+36: Semavi Eyice
+39: Edip Hakkı Köseoğlu
+41: Ahmet İhsan Tokgöz
+42: Kemal Tahir
+43: Mihran Efendi
+45: Abidin Dino
+47: Muammer Karaca
+48: Oktay Rifat
+49: İffet Halim Oruz
+50: Nazım Hikmet; Piraye
+52: Kazım Karabekir
+54: Cemil Topuzlu
+56: Mehmet Ali Paşa
+58: Ahmet Oktay
+59: Haldun Taner
+60: Refik Durbaş
+62: Yusuf Ahıskalı
+67: Bedri Rahmi Eyüboğlu
+68: Cem Karaca
+71: Falih Rıfkı Atay
+72: Cemal Sahir
+73: Cenap Şahabettin
+74: Cenap Şahabettin
+76: Müfide Ferit Tek
+77: Yusuf Atılgan
+78: Müfit Ekdal
+79: Yahya Kemal; Melek Celal Sofu
+81: Salah Cimcoz
+82: Ayşegül Sarıca
+83: Reşad Ekrem Koçu
+84: Mahmut Muhtar Paşa
+85: Yusuf Atılgan
+86: Cemil Cem; Turhan Selçuk
+87: Sabiha Sertel; Zekeriya Sertel
+88: Cemal Kutay
+89: Zaven Biberyan
+90: Haldun Taner
+91: Jacques Pervititch
+92: Ahmet Süheyl Ünver
+93: Selim İleri
+94: Selim İleri
+95: Şeref Akdik
+96: Naile Akıncı
+97: Burhan Günel
+99: Mustafa Reşit Paşa
+100: Resneli Niyazi Bey
+101: İhsan Ünlüer
+102: Resneli Niyazi Bey
+103: Melih Cevdet Anday
+104: Melih Cevdet Anday
+105: Aziz Nesin
+106: Cemal Süreya
+107: Florinalı Nazım
+108: Ernst E. Hirsch
+109: Nazım Hikmet
+111: Barış Manço
+112: Ahmet Haşim
+114: Samipaşazade Sezai
+115: Sezai Karakoç
+117: Ahmet Haşim
+118: Fazıl Hüsnü Dağlarca
+119: Nazım Hikmet
+120: Şadan Bezeyiş
+121: Celâl Sahir Erozan
+123: Hulki Aktunç
+127: Vecihi Hürkuş
+129: Ziya Osman Saba
+130: Arif Şentürk
+131: Mihri Müşfik Hanım
+132: Mario Levi
+133: Aron Angel
+135: Selda Alkor
+137: Aydın Boysan
+138: Aydın Boysan
+139: Özdemir Asaf
+146: Necip Celal Andel
+152: Sennur Sezer
+157: Necip Fazıl Kısakürek; Nazım Hikmet; Can Yücel; Aziz Nesin; Orhan Kemal; Kemal Tahir; Vedat Türkali
+160: Emin Barın
+161: Emin Barın
+164: Ahmet Ratib Paşa
+167: Nigâr Hanım
+169: Pierre Loti
+170: Ahmet Süheyl Ünver
+171: Tanburi Cemil Bey
+172: Abdullah Cevdet
+174: Kemal Özer
+179: Mustafa Fazıl Paşa
+189: Cemal Süreya
+191: Hüseyin Avni Lifij
+194: Derviş Över
+195: Deniz Gezmiş
+196: Safiye Ali
+198: İbrahim Hakkı Konyalı
+199: Edip Cansever
+205: Keçecizade Fuad Paşa
+212: Mustafa Kemal Atatürk; İsmet İnönü
+213: Avni Anıl
+217: İbnülemin Mahmut Kemal İnal
+224: Derviş Osman Baba
+225: Beşir Fuad
+226: Neyzen Halil Can
+228: Hamid Aytaç
+229: Reşad Ekrem Koçu
+230: Arakel Efendi
+232: Feyhaman Duran
+237: Abdüllatif Suphi Paşa
+238: Nejat Uygur
+240: Ahmet Hamdi Tanpınar
+241: Abdülbaki Gölpınarlı
+242: Hulusi Kentmen
+244: Burhan Felek
+245: Faruk Nafiz Çamlıbel
+246: Adile Naşit
+247: Elmalılı Hamdi Yazır
+250: Salih Sabri Karagözoğlu
+251: Keriman Halis Ece
+254: Mehmet Seyfettin Özege
+255: Musahipzade Celal
+256: Mimar Sinan
+259: Mehmet Akif Ersoy
+260: Mehmet Akif Ersoy
+261: Bahaeddin Toven
+265: Hızır Bey
+271: Kemal Sunal
+273: Kazım Karabekir
+275: Piraye
+278: Nabi
+281: Mehmet Necmeddin Okyay
+283: Mehmet Nermi Haskan
+285: Samiha Ayverdi
+286: Samiha Ayverdi
+288: Giulio Mongeri
+289: Müştak Erenus
+293: Orhan Kemal
+295: Abidin Dino
+296: Osman Nuri Ergin
+298: André Chénier
+301: Boğos Odyan
+310: Mualla Eyüboğlu
+311: Demir Özlü
+312: Demir Özlü
+315: Aron Angel
+316: Aliye Berger
+317: Ahmet Hamdi Tanpınar
+320: Ayla Erduran; Aliye Berger
+321: Jean Botter
+324: Cemalettin Server Revnakoğlu
+326: Nezihe Muhittin
+330: Feridun Dirimtekin
+332: Nuri İyem; Ferruh Başağa; Fethi Karakaş
+334: Adalet Cimcoz
+337: Mario Vitti
+339: Fikret Adil
+340: Giovanni Scognamillo
+342: Abdülhak Şinasi Hisar
+344: Zeki Faik İzer
+346: Leonardo de Mango
+351: Ferit Edgü
+354: Franz Liszt
+355: Oğuz Atay
+356: Münir Özkul
+357: Can Yücel
+358: Gülsün Karamustafa
+360: Giuseppe Garibaldi
+362: Mario Vitti
+363: Cemil Meriç
+365: Iraida Barry
+366: Balkan Naci İslimyeli
+371: Mithat Cemal Kuntay
+372: Mehmet Akif Ersoy
+373: Abdülhak Hamit Tarhan
+376: Turgut Uyar
+377: Demirtaş Ceyhun
+378: İbrahim Çallı
+380: Ara Güler
+382: Yorgo Theotokas
+384: Karagözyan
+389: Abdullah Ziya Kozanoğlu
+395: Ferhan Şensoy
+398: Abdülhak Hamit Tarhan
+399: Sevim Burak
+400: Yusuf Katipoğlu
+402: Sermet Sami Uysal
+403: Ülkü Tamer
+406: Orhon Murat Arıburnu
+408: Naum Paşa
+411: Ercüment Kalmık
+414: Beşir Fuad
+415: Sait Faik Abasıyanık; Afif Yesari
+420: Kyriakos Souliotis
+421: Güngör Dilmen
+422: Mahmut Cuda
+423: Mina Urgan
+424: Behzat Butak
+427: Yahya Kemal
+428: James Baldwin
+429: James Baldwin
+431: Cahide Sonku
+432: Cahide Sonku
+434: Safveti Ziya
+438: Léopold Lévy
+439: Aytaç Arman
+440: Mesut Yılmaz
+441: Cengiz Bektaş
+442: Cengiz Bektaş
+443: Sabiha Rüştü Bozcalı
+445: Naci Kalmukoğlu
+448: Rıfat Ilgaz
+451: Ahmet Hamdi Tanpınar
+452: Margarete Schütte-Lihotzky; Wilhelm Schütte
+453: Cahide Sonku
+454: Cem Karaca
+455: Latife Hanım
+457: Mükerrem Taşçıoğlu
+460: Özdemir Asaf
+463: Ali Fuat Cebesoy
+465: Füsun Onur
+466: Sean Connery
+475: Denizkızı Eftalya; Tomris Uyar
+478: Ziya Osman Saba
+486: Yusuf Ziya Ortaç
+487: Necmi Rıza Ahıskan
+489: Fausto Zonaro
+490: Alaeddin Yavaşça
+491: Sabahattin Kudret Aksal
+493: Nuri Korman
+495: Sedad Hakkı Eldem
+496: Turgut Atalay
+497: Rüştü Onur
+498: Cemal Reşit Rey
+499: Yaşar Kemal
+500: Yaşar Kemal
+505: Behçet Necatigil
+506: Behçet Necatigil
+508: Münevver Ayaşlı
+509: Mehmet Emin Yurdakul
+513: Cahit Sıtkı Tarancı
+514: Asaf Halet Çelebi
+518: Hakkı Süha Gezgin
+523: Bülent Oran
+524: Hayalet Oğuz
+525: Behçet Necatigil
+526: Ercüment Atabay
+527: Şeyh Muhammed Zafir
+528: Behçet Necatigil
+529: Cevdet Altuğ
+530: Erdal Öz
+531: Salih Acar
+532: Sabahattin Eyüboğlu
+533: Abdülhak Hamit Tarhan
+534: Kerime Nadir
+535: Necdet Kalay
+536: İsmet Özel; İsmail Kara; Mustafa Kutlu
+537: Şeyh Galib
+538: Ayşe Kulin
+539: Fahrünnisa Zeid
+540: Leyla Erbil
+541: Yıldız Kenter; Müşfik Kenter; Genco Erkal; Çolpan İlhan
+542: Sabahattin Ali
+544: Behiç Erkin; Betül Mardin
+546: Cüneyt Arkın; Betül Işıl
+548: Abdullah Ağa
+549: Münir Nurettin Selçuk
+550: Vedat Tek
+551: Vedat Tek
+552: Rasih Nuri İleri
+553: Sabahattin Ali
+554: Ahmet Ağaoğlu
+555: Naci Kalmukoğlu
+556: Selim Sırrı Tarcan
+557: Haydar Rıfat Yorulmaz
+558: Naci Kalmukoğlu
+563: Ayhan Işık
+564: Ayhan Işık
+565: Rengin Arda
+568: Ekrem Bora
+571: Tezer Özlü
+572: Zihni Küçümen
+573: Nigâr Hanım
+577: Nazım Hikmet
+579: Arif Müfid Mansel
+580: Arif Müfid Mansel
+583: Güzide Osman
+585: Sait Faik Abasıyanık
+586: Fikret Hakan
+587: Necdet Yakın
+588: Osman Zeki Üngör
+590: Çolpan İlhan
+592: Kadir Savun
+593: Ruhi Su
+594: Osman Zeki Bey
+595: Hüseyin Hilmi Paşa
+596: Mehmet Rauf
+597: Hamit Görele
+599: Osman Zeki Bey
+602: Refik Halit Karay
+603: Refik Halit Karay
+605: Ulvi Uraz
+608: Vasfi Egeli
+609: Hamit Görele
+610: Hayrullah Efendi
+613: Oğuz Atay
+614: Halet Çambel
+617: Tuncel Kurtiz
+618: Utku Varlık
+619: Faruk Nafiz Çamlıbel
+621: Türkan Saylan
+622: Yurdanur Salman
+625: Fikret Kortel
+626: Necdet Kalay
+627: Fecri Ebcioğlu
+628: Dorina Neave
+630: Yakup Kadri Karaosmanoğlu; Yahya Kemal
+631: Kıbrıslı Mehmet Emin Paşa
+634: Necati Cumali
+635: Özdemir Asaf
+636: Erich Auerbach
+637: Hayati Tabanlıoğlu
+638: Neşet Arolat; Şaziment Arolat
+639: Hayalet Oğuz
+640: Belgin Doruk
+642: Neşet Arolat; Şaziment Arolat
+643: Kartal Tibet
+645: Yılmaz Güney
+647: Feyhaman Duran
+649: Zeki Müren
+650: Sabri Berkel
+651: James Baldwin
+652: Cüneyt Arkın
+657: Şevket Dağ
+658: Bahriyeli Sedat Bey
+659: Sadri Alışık; Çolpan İlhan
+660: Ethem Pertev Bey
+663: Reşat Nuri Güntekin
+665: Osman Hamdi Bey
+667: Necip Celal Andel
+668: Recaizade Mahmut Ekrem
+673: Hulusi Behçet
+677: Ahmet Mithat Efendi
+678: Orhan Veli Kanık
+680: Atilla Galatalı
+681: Sabiha Rüştü Bozcalı
+683: Nubar Terziyan
+684: İsmail Hakkı Uzunçarşılı
+686: İsmet Ay
+696: Cemal Reşit Rey
+701: Hasan İzzettin Dinamo
+702: İlhami Bekir Tez
+709: Kamil Paşa
+710: Santuri Ethem Efendi
+263: Şükrü Naili Paşa
+282: Rıza Şah Pehlevi

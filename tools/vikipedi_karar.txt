@@ -1,0 +1,33 @@
+# Vikipedi önerileri — tools/vikipedi_cek.py önerileri tek tek okunarak verilen kararlar.
+# ONAY id... : doğru madde, sitede gösterilir · RED id | neden : yanlış madde, bir daha önerilmez · BEKLE id | neden : karar verilemedi, öneri olarak kalır
+
+RED K-031 | Mihran Apikyan başka kişi; buradaki Mihran Efendi, Sabah gazetesinin sahibi Mihran Nakkaşyan
+RED K-048 | Vikipedi'deki Cemal Sahir operet sanatçısı; kayıttaki ressam Cemal Sahir (1900-1973)
+RED K-071 | Önerilen 1858-1924 arasında yaşayan başka bir Mustafa Reşid Paşa; kayıttaki Tanzimat'ın Hariciye Nazırı (1800-1858)
+RED K-341 | Önerilen Zeki Öztürk uzun mesafe koşucusu; kayıttaki Öncü Kitabevi'ni işleten Zeki Öztürk
+RED K-354 | Önerilen Turan Onat makine mühendisi; kayıttaki mimar Emin Onat (Vikipedi'de "Emin Onat" maddesi var, elle verilebilir)
+BEKLE K-199 | madde doğru ama özet bozuk geldi ("Mîna Urgan ("); panelden elle yeniden getirilmeli
+BEKLE K-367 | Hasan Hayri İnönü'nün kayıttaki "Hayri İnönü" ile aynı kişi olduğu doğrulanamadı; bekletildi
+ONAY M-0004 M-0009 M-0015 M-0017 M-0018 M-0024 M-0026 M-0029 M-0033 M-0034 M-0041 M-0056 M-0057 M-0071 M-0073 M-0083 M-0103 M-0138 M-0139 M-0140 M-0154 M-0156 M-0183 M-0186 M-0188 M-0189 M-0198 M-0199 M-0209 M-0211 M-0212 M-0220 M-0247 M-0255 M-0265
+BEKLE M-0075 | Vikipedi'deki Hatice Usta Camii bugün ayakta görünüyor; kayıttaki yapı 1956'da yıkılmış. Aynı yapı mı, doğrulanamadı
+RED M-0019 | önerilen Çırağan Sarayı yanlış; doğru madde "Şeref Stadyumu" (elle verilebilir)
+RED M-0276 | önerilen Horhor Çeşmesi yanlış; doğru madde "Suphi Paşa Konağı" (elle verilebilir)
+ONAY M-0292 M-0294 M-0303 M-0314 M-0320 M-0323 M-0328 M-0336 M-0341 M-0349 M-0365 M-0369 M-0370 M-0371 M-0372 M-0387 M-0389 M-0395 M-0396 M-0399 M-0405 M-0412 M-0414 M-0445 M-0447 M-0463 M-0466 M-0467 M-0482 M-0489 M-0525 M-0529 M-0550 M-0551 M-0552 M-0553 M-0556 M-0564 M-0572
+RED M-0530 | önerilen Kadir Has Üniversitesi yanlış; doğru madde "Cibali Tütün Fabrikası" (elle verilebilir)
+ONAY M-0578 M-0579 M-0581 M-0583 M-0586 M-0590 M-0604 M-0609 M-0612 M-0619 M-0636 M-0682 M-0688 M-0718 M-0719 M-0785 M-0803 M-0808 M-0812 M-0818
+RED M-0613 | önerilen Taksim Camii yanlış; doğru madde "Taksim Meydanı" (elle verilebilir)
+RED M-0632 | önerilen Vedat Tek Evi, Vedat Tek'in ikinci (köşedeki) evi; bu kayıt ilk evi
+# Bu dosyada adı geçmeyen kişi önerileri okunup doğru bulundu: onaylı. Adı geçmeyen mekân önerileri yanlış bulundu (çoğu bugünkü caddeyi, istasyonu ya da yakındaki başka yapıyı anlatıyor): reddedildi.
+VARSAYILAN kisiler=ONAY mekanlar=RED
+
+# 19 Kasım 2026 — sonradan eklenen kişiler için yapılan aramanın önerileri, kayıtları ve hikâyedeki geçişleriyle birlikte okundu.
+# (Excel döneminde karar doğrudan Excel'in vikipedi_onay sütununa yazıldı; burası kayıt içindir.)
+ONAY K-025 K-402 K-407 K-408 K-409 K-410 K-411 K-413 K-414 K-415 K-416 K-417 K-419 K-421 K-422 K-424 K-428 K-429 K-430 K-432 K-433 K-435 K-437 K-438 K-440 K-444 K-447 K-448 K-449 K-451 K-453 K-455 K-457 K-463 K-464 K-466 K-469 K-472 K-478 K-479 K-480
+RED K-403 | önerilen Don Cherry buz hokeyi oyuncusu; hikâyedeki, Baldwin'in partilerine gelen caz trompetçisi Don Cherry
+ONAY K-126
+
+# 19 Kasım 2026 — Vikipedi aramasının yedek yollarla bulduğu öneriler
+ONAY K-066 K-144 K-332
+RED K-282 | önerilen Osman Zeki Üngör besteci ve tabloda ayrı kişi (K-279); kayıttaki hattat, devlet görevlisi Osman Zeki Bey
+RED K-383 | önerilen Fâik Âli Ozansoy şair; kayıttaki mimar Faik Ali
+RED K-420 | önerilen Nazım el-Kudsi Suriye devlet başkanı; kayıttaki Nâzım Hikmet'in babası Hikmet Nazım Bey

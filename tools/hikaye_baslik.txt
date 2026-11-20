@@ -1,0 +1,75 @@
+# Hikâye başlıkları — her hikâyenin metni okunarak verildi; mekânın adından ayrı.
+# H-xxxx | başlık   (metni boş taslaklar listede yok: metin girilince başlık verilir)
+H-0004 | Bâb-ı Âli Baskını
+H-0007 | Çanakkale'ye Gitmeyi Bekleyen Askerler
+H-0008 | Kurtuluş Günü Türk Askerleri Gülhane'den Geçiyor
+H-0009 | İşgal Yıllarında Tophane Kışlası
+H-0012 | Baldwin'in Evindeki Partiler ve Bitirdiği Roman
+H-0013 | İlk İstiklal Caddesi Tabelası
+H-0014 | General Allenby'yi Karşılayan İngiliz Birlikleri
+H-0022 | Halide Edip Şehremaneti Balkonunda
+H-0023 | Vaka-i Vakvakiye
+H-0025 | Bir Konser, Bir Güçbirliği Toplantısı
+H-0026 | Talimhane'de İşgal Kuvvetleri
+H-0030 | Atatürk'ün Cenaze Korteji Enli Yokuşu'nda
+H-0031 | Filiz Ali'nin Doğumunu Bildiren Mektup
+H-0032 | Has Ahırlar Tünellerinin Yıkımı
+H-0042 | Oğuz Atay'ın Fenalaştığı Akşam
+H-0048 | Nazım Hikmet ve Üç Selvi
+H-0049 | "Güneşe Doğru" Setinde Nazım Hikmet
+H-0051 | Sürenyan Apartmanı'ndaki Buluşmalar
+H-0054 | "Bir Millet Uyanıyor" Bu Bahçede Çekildi
+H-0058 | Sertellerin Kadıköy'e Taşınışı
+H-0062 | Eptalofos Kahvesi'nden Kurtuluş Kutlamaları
+H-0069 | Sabahattin Ali'nin Saklandığı Günler
+H-0073 | II. Abdülhamid Çeşmesi'nin Açılışı
+H-0074 | "Mart Kedisi": Tuncel Kurtiz Çatıda
+H-0075 | Hatice Usta Camii'ni Kurtarma Çabası
+H-0079 | 31 Mart Vakası'nda Yıldız Sarayı
+H-0081 | Fethin 500. Yıldönümü Kutlamaları
+H-0083 | Atatürk Elhamra Sineması'nda
+H-0084 | Claude Farrère'in Konferansı
+H-0085 | Cemal Reşit Rey ve Filarmoni'nin Konser Provası
+H-0101 | Bu Evden Mahkemeye
+H-0142 | Şişli Hastanesi'nde Yaralı Askerler
+H-0147 | Tan Gazetesi Baskını, 4 Aralık 1945
+H-0177 | Singer İşçilerinin Fabrika İşgali
+H-0204 | Nekahathanede Tedavi Gören Askerler
+H-0207 | Belvü Bahçesi'nde 1 Mayıs 1912
+H-0212 | Abdülhak Hâmid'in 75. Doğum Günü
+H-0224 | Türkiye İşçi Partisi'nin Kuruluş Başvurusu
+H-0245 | Rüçhan Çamay'ın Atatürk'le Tanıştığı Balkon
+H-0278 | Talat Turhan'ın İzini Sürdüğü Köşk
+H-0286 | İşgal Askerleri Marko Paşa Yalısı'nda
+H-0293 | Harem Palas'tan Karlık Apartmanı'na
+H-0298 | Karlofça Taslakları ve İlk Klasik Müzik Konseri
+H-0300 | Paşabahçe Şişe ve Cam Fabrikası'nın Açılışı
+H-0301 | İngilizce Dersine Karşılık Bir Gecekondu
+H-0309 | Dünya Ölmeme Günü
+H-0312 | Hollanda'ya Giden Lale Arabası
+H-0318 | Boğaziçi Köprüsü'nün Açılışı
+H-0351 | Haydarpaşa Garı Patlaması
+H-0363 | Şair Rüştü Onur'un Son Günleri
+H-0390 | 3. Kolordu Gebze'den Beyoğlu'na
+H-0391 | 3. Kolordu Gebze'den Beyoğlu'na
+H-0392 | Sırp Kralı I. Petar'ın İstanbul Ziyareti
+H-0413 | Independenta Tanker Kazası
+H-0414 | Göçün Ardından Aynı Kapıda
+H-0461 | Denizin Üzerinde Yürüyen Adam
+H-0472 | Keriman Halis'in Sirkeci'de Karşılanışı
+H-0492 | 3. Kolordu'nun Beyoğlu'na Girişi
+H-0558 | Evliya Çelebi'nin Rüyası
+H-0582 | Soğuğu Hamamcıya Gönderen Derviş
+H-0588 | Katip Sinan'ın Sandukası
+H-0595 | Osmanlı Balonuyla İlk Uçuş
+H-0625 | Tanzimat Fermanı'nın Okunuşu
+H-0647 | Rıza Şah İçin Kurulan Zafer Takları
+H-0650 | Arif Şentürk'ün Kapısız Penceresiz Evi
+H-0652 | Falih Rıfkı Atay'ın "Kuzum, Saat Kaç?" Telefonları
+H-0801 | Ayastefanos Abidesi'nin Yıkılışı ve İlk Türk Filmi
+H-0812 | Tanburi Cemil Bey'in Evinin Yıkımı
+H-0818 | Santuri Edhem Efendi'nin Son Gecesi
+H-0545 | İbrahim Çallı'nın Emirgan Çınaraltı Resmi
+H-0546 | Hikmet Onat'ın Beykoz Meydanı Resmi
+H-0547 | Cevat Erkul'un Beylerbeyi İskelesi Resmi
+H-0548 | İbrahim Safi'nin Yanık Kapı Resmi

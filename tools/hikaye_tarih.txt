@@ -1,0 +1,27 @@
+# Hikâye tarihleri — tarihi boş hikâyelerin metinleri okunarak; yalnız metinde yazan tarih.
+# H-xxxx | tarih | dönem (dönem yalnız boşsa ya da tarihle çelişiyorsa yazılır)
+# (*) işaretliler metinde tarih değil olay adı geçenler: tarih olayın bilinen tarihidir.
+H-0023 | 4 Mart 1656 |
+H-0025 | 18 Aralık 1935 ve 1976 |
+H-0048 | 1933 | 1901 - 1950
+H-0051 | 1936-1937 |
+H-0054 | 1932, 1937 |
+H-0058 | 1929 |
+H-0079 | 1909 (*) |
+H-0204 | 1914-1918 (*) |
+H-0278 | 1986 | 1951 - 1990
+H-0286 | 1920 | 1901 - 1950
+H-0293 | 1969 |
+H-0298 | 1699 | 1900 Öncesi
+H-0300 | 29 Kasım 1935 | 1901 - 1950
+H-0363 | Eylül–Aralık 1942 |
+H-0390 | 4 Ekim 1923 |
+H-0391 | 4 Ekim 1923 |
+H-0392 | Mart 1910 |
+H-0492 | 6 Ekim 1923 |
+H-0582 | 1783 dolayları ve 1910'lar |
+H-0625 | 3 Kasım 1839 |
+H-0652 | 1969 |
+H-0801 | 14 Kasım 1914 | 1901 - 1950
+H-0812 | 1970 | 1951 - 1990
+H-0818 | 14 Eylül 1926 | 1901 - 1950

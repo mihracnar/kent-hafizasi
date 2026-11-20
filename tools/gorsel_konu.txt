@@ -1,0 +1,6 @@
+# Fotoğrafın konusu — altyazılar tek tek okunarak (gorseller.konu).
+#   mekân  : fotoğraf mekânın kendisini gösteriyor (yapı, sokak, eski görünüm, resim, harita)
+#   hikâye : bir anı/olayı gösteriyor (açılış, tören, film çekimi, sahne, kutlama, ziyaret)
+# Kişilerin göründüğü fotoğraflar çekildikleri mekânın fotoğrafıdır; fotoğrafta kimin göründüğü gorsel_kisi.txt'te (gorseller.kisi_id).
+# Burada adı geçmeyen fotoğraflar: bir hikâyeye bağlıysa hikâye, değilse mekân.
+hikâye: G-0324 G-0326 G-0356 G-0419 G-0486 G-0669 G-0671 G-0696 G-0777 G-0799 G-0808 G-0812 G-0831 G-0840 G-0873 G-0875 G-0881 G-0892 G-0914 G-0915 G-0916 G-0961 G-1012 G-1013 G-1075 G-1139 G-1181 G-1221 G-1278 G-1380 G-1392 G-1417 G-1419 G-1424 G-1431 G-1434 G-1435 G-1439 G-1460 G-1553 G-1606 G-1613 G-1662 G-1672

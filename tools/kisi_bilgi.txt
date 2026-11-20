@@ -1,0 +1,118 @@
+# Kişi bilgisi ayrımı — mekân metinleri tek tek okunarak verilen kararlar.
+# M-xxxx > K-yyy | başlangıç || bitiş : mekânın genel bilgisinde "başlangıç" ile başlayan parça, "bitiş"in başladığı yere kadar (bitiş boşsa metnin sonuna kadar)
+#   kişinin bilgisine (kisa_bilgi) taşınır; cümleler değiştirilmez.
+# K-yyy yasam=AAAA-BBBB : metinde açıkça yazan doğum-ölüm yılları kişinin yaşam alanına yazılır.
+
+M-0043 > K-240 | Şeyh Zafir, 1870 yılında || Şeyh için Beşiktaş'ta
+K-240 yasam=1829-1903
+K-222 yasam=1854-1929
+M-0128 > K-140 | 1934'te Soyadı Kanunu'nun || 
+M-0148 > K-122 | Evliliğinin yürümemesi || Bu vakadan sonra
+M-0148 > K-122 | Son yıllarını hastalıklar || 
+K-210 yasam=1911-1993
+K-003 yasam=1924-1998
+K-229 yasam=1904-1985
+K-275 yasam=1905-1975
+K-215 yasam=1882-1968
+K-038 yasam=1882-1948
+M-0197 > K-241 | Aynı zamanda Türk tiyatro || Bu apartmanda yaşadığı
+M-0202 > K-276 | Osmanlı ve erken Cumhuriyet || 
+K-276 yasam=1902-1974
+M-0229 > K-090 | Saray Ressamı Zonaro’dan || 
+M-0234 > K-024 | İhap Hulusi Görey, Türk grafik || 
+M-0236 > K-180 | Osmanlı İmparatorluğu'nun son || Kendisine Belediye
+M-0241 > K-167 | Abdülhak Şinasi Hisar (1887- 1963) || 
+K-167 yasam=1887-1963
+K-043 yasam=1944-2018
+K-151 yasam=1795-1862
+K-071 yasam=1800-1858
+M-0291 > K-111 | Deniz Gezmiş'in iyi bir eğitim || 
+M-0321 > K-193 | Naum Paşa, İstanbul’un en önemli || Naum Paşa’nın ölümünden sonra
+M-0329 > K-112 | Safiye Ali (1894–1952) || 
+K-112 yasam=1894-1952
+K-109 yasam=1886-1927
+K-105 yasam=1850-1923
+M-0402 > K-123 | Yalçın, Arakel Efendi için; || 
+M-0428 > K-204 | Levy, görev süresi boyunca || 
+K-059 yasam=1882-1950
+K-209 yasam=1896-1951
+K-227 yasam=1917-2003
+K-177 yasam=1899-1980
+K-320 yasam=1888-1977
+K-152 yasam=1919-2009
+K-163 yasam=1910-1970
+K-285 yasam=1903-1980
+K-198 yasam=1904-1987
+K-027 yasam=1922-2018
+K-243 yasam=1927-2001
+K-318 yasam=1936-1994
+K-246 yasam=1932-1984
+K-084 yasam=1926-2017
+K-028 yasam=1904-1990
+K-048 yasam=1900-1973
+K-192 yasam=1920-1989
+K-148 yasam=1915-2002
+M-0444 > K-055 | 1931’den 1946’ya kadar || Köşk Salah Cimcoz
+M-0458 > K-085 | Ahmet Celâl Sahir Erozan aynı zamanda || 
+M-0468 > K-104 | Şair Nigâr Hanım (1856 || 1875 yılında
+M-0470 > K-025 | Hagop Ayvaz, (2 Nisan || Eşi Arşaluys
+M-0477 > K-144 | Mehmed Necmeddin Okyay (28 Ocak || Uzun süre bu evde
+M-0479 > K-315 | Ordinariyüs Prof. Dr. Hulusi Behçet || Behçet, vefatına kadar
+M-0483 > K-158 | Nezihe Muhiddin, Türkiye’nin || 
+M-0490 > K-182 | Çamasan adlı eseriyle || 
+M-0505 > K-103 | Ahmet Ratib Paşa, sadrazamlardan || Günümüzde bu yapı
+K-085 yasam=1883-1935
+K-104 yasam=1856-1918
+K-025 yasam=1911-2006
+K-144 yasam=1883-1976
+K-029 yasam=1868-1942
+K-315 yasam=1889-1948
+K-014 yasam=1923-2014
+K-009 yasam=1888-1972
+K-128 yasam=1900-1982
+K-269 yasam=1877-1942
+K-103 yasam=1711-1758
+K-137 yasam=1868-1959
+M-0527 > K-130 | İstanbul Gazeteciler Cemiyeti || 
+M-0531 > K-035 | İffet Halim Oruz (1904 || Faruk Nafiz,
+M-0565 > K-121 | Neyzen Halil Can (7 Aralık || 23 Mayıs 1973’te vefatından
+M-0571 > K-065 | Jacques Pervititch, 17 Şubat || Jacques Pervititch ile eşi
+M-0571 > K-065 | Pervititch’in kartografi || 
+M-0584 > K-275 | Atatürk'ün en değer verdiği || 
+M-0585 > K-104 | Şair Nigâr Hanım (1856 || Uzun bir süre bu konakta
+K-130 yasam=1889-1982
+K-074 yasam=1915-2002
+K-035 yasam=1904-1993
+K-121 yasam=1905-1973
+K-077 yasam=1883-1939
+K-083 yasam=1914-2008
+K-041 yasam=1933-2016
+K-013 yasam=1887-1919
+K-183 yasam=1928-2018
+K-283 yasam=1855-1923
+K-284 yasam=1875-1931
+K-279 yasam=1880-1958
+K-271 yasam=1940-2009
+K-278 yasam=1932-2006
+M-0621 > K-113 | İbrahim Hakkı Konyalı (1896-1984) || 
+M-0631 > K-031 | 1850 yılına Kayseri’de || kendisine ait olan bu yalıda
+M-0653 > K-068 | Şeref Akdik (1899-1972 || Emekli olduktan
+M-0653 > K-068 | 1 Şubat 1972’de || 
+M-0660 > K-069 | Bakırköy'den taşındıktan sonra || 
+M-0661 > K-019 | Yazar, bestekar ve gazeteci Ahmet Rasim, 1865 || Ahmet Rasim ilk tahsiline
+M-0662 > K-156 | Jean Botter, II. Abdülhamit Dönemi’nde || Terzisi Botter’in tasarımlarını
+M-0674 > K-197 | Güngör Dilmen Kalyoncu (1930- 2012) || 
+M-0675 > K-242 | 12 Mart 1971 sonrasında || 
+K-299 yasam=1813-1871
+K-295 yasam=1916-2004
+K-113 yasam=1896-1984
+K-186 yasam=1905-1966
+K-239 yasam=1922-2018
+K-191 yasam=1937-2018
+K-190 yasam=1925-2016
+K-069 yasam=1923-2014
+K-068 yasam=1899-1972
+K-300 yasam=1921-2001
+K-197 yasam=1930-2012
+K-242 yasam=1935-2006
+K-099 yasam=1926-1999

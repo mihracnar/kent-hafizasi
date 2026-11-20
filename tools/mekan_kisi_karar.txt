@@ -1,0 +1,26 @@
+# Mekân–kişi önerileri — her öneri mekânın metni, hikâyeleri ve fotoğraf altyazıları okunarak karara bağlandı.
+# RED mekan>kisi | neden   : kişi metinde geçiyor ama mekânla bağı yok (ya da başka bir kişi)
+# BEKLE mekan>kisi | neden : karar verilemedi, öneri olarak kalır
+# Burada adı geçmeyen öneriler okunup doğru bulundu (yaşadı, doğdu, çalıştı, müdavimiydi, sahne aldı, film çekti, tasarladı, fotoğrafı orada çekildi): onaylı.
+RED M-0003>K-021 | Feyhaman Duran'ın bu evde portresini yaptığı kişi; eve gelmiş değil
+RED M-0003>K-116 | Feyhaman Duran'ın bu evde portresini yaptığı kişi; eve gelmiş değil
+RED M-0033>K-116 | yalnız binayı Yunus Nadi'ye veren kişi olarak anılıyor
+RED M-0162>K-032 | Mina Urgan'ın anısında yalnız benzetme olarak geçiyor
+RED M-0198>K-293 | yalnız adını taşıyan kültür merkezi anılıyor
+RED M-0202>K-158 | Kadın Birliği'nin kurucusu olarak anılıyor, evle bağı yok
+RED M-0229>K-116 | Mihri Müşfik'in portresini yaptığı kişi; konakla bağı yok
+RED M-0292>K-040 | metindeki Mısır Valisi Kavalalı Mehmet Ali Paşa; bu kayıt Erenköy'deki köşkün Mehmet Ali Paşa'sı
+RED M-0336>K-042 | yalnız sahneye adı verilmiş
+RED M-0378>K-265 | binayı Vedat Tek değil oğlu Nihad Vedad Tek yaptı
+RED M-0379>K-396 | ev Vehbi Koç Vakfı'na bağışlanmış; Vehbi Koç'un evle bağı yok
+RED M-0383>K-261 | fotoğraf Cibali Karakolu filminden; filmin bu evde çekildiği yazmıyor
+RED M-0428>K-160 | Leopold Levy'nin öğrencisi; Levy'nin eviyle bağı yok
+RED M-0428>K-161 | Leopold Levy'nin öğrencisi; Levy'nin eviyle bağı yok
+RED M-0428>K-227 | Leopold Levy'nin öğrencisi; Levy'nin eviyle bağı yok
+RED M-0642>K-183 | fotoğrafı çeken kişi
+RED M-0665>K-114 | yalnız bir resmin konusu
+RED M-0675>K-111 | Erdal Öz'le cezaevinde tanışmış; evle bağı yok
+RED M-0785>K-040 | metindeki Kavalalı Mehmet Ali Paşa (Zeynep Hanım'ın babası); bu kayıt başka Mehmet Ali Paşa
+RED M-0785>K-322 | metindeki Yusuf Kâmil Paşa; bu kayıt Kâmil Paşa (sadrazam)
+RED M-0785>K-354 | konağın yerine yapılan Edebiyat Fakültesi'nin mimarı
+BEKLE M-0504>K-142 | fotoğraf Cumhur Film'de; Cumhur Film'in Erman Han'da olup olmadığı doğrulanamadı
