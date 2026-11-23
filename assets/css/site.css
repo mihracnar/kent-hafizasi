@@ -653,3 +653,13 @@ div.foto-altyazi { margin: 6px 0 0; }
 .al-sec span { margin-top: 0; }
 .al-sec select { all: unset; position: static; display: block; width: 100%; padding: 0; font-size: 13px; font-weight: 600; line-height: 18px; cursor: pointer; }
 .al-sec select option { font-weight: 400; }
+
+/* yerinden oynamayan denetimler: seçim yokken pasif görünür ama yer kaplar */
+.cip.temizle[disabled], .al-temizle[disabled], .lj-ek.tumu[disabled], .secim-kipi button[disabled] { opacity: .32; cursor: default; pointer-events: none; }
+.lj-ek.tumu[disabled] { text-decoration: none; color: var(--gri); }
+.secim-bilgi { flex: 1 1 100%; display: flex; gap: 12px; align-items: center; font-size: 13px; min-height: 28px; }
+.secim-bilgi .meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* tür satırı: sabit yükseklik, tek satır, yana kayar */
+.alt-cipler { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; min-height: 44px; box-sizing: border-box; }
+.alt-cipler .cip, .alt-cipler .ipucu { flex: none; }
+.al-onyillar button { scroll-margin: 0 40px; }

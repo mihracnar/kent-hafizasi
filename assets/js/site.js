@@ -315,9 +315,9 @@
           'circle-opacity': ['case', ['boolean', ['get', 'soluk'], false], .25, 1], 'circle-stroke-opacity': ['case', ['boolean', ['get', 'soluk'], false], .25, 1] } });
       // Mekân adları: altlığın kendi yazı tipiyle; MapLibre çakışan adları kendiliğinden gizler, önemli mekânlar önce yerleşir.
       if (map._hafiza.glyphs) {
-        // altlıkta kullanılan kalın yazı tipi (Positron: "Noto Sans Bold"); yoksa normal yazı tipi
+        // altlığın normal (kalın olmayan) yazı tipi (Positron: "Noto Sans Regular"); boyutla öne çıkar
         const fontlar = (map.getStyle().layers || []).map(l => l.layout && l.layout['text-font']).filter(f => Array.isArray(f) && f.every(x => typeof x === 'string'));
-        const yaz = fontlar.find(f => f.some(x => /bold/i.test(x))) || (fontlar[0] ? fontlar[0].map(x => x.replace(/Regular|Italic/, 'Bold')) : ['Noto Sans Bold']);
+        const yaz = fontlar.find(f => f.some(x => /regular/i.test(x))) || (fontlar[0] ? fontlar[0].map(x => x.replace(/Bold|Italic/, 'Regular')) : ['Noto Sans Regular']);
         map.addLayer({ id: 'ad', type: 'symbol', source: 'mekanlar', minzoom: 11.5,
           layout: { 'text-field': ['get', 'ad'], 'text-font': yaz, 'text-size': ['interpolate', ['linear'], ['zoom'], 11.5, 12, 14, 14, 16, 15.5, 18, 17],
             'text-variable-anchor': ['left', 'right', 'top', 'bottom', 'top-left', 'bottom-left'], 'text-radial-offset': .8, 'text-justify': 'auto',
@@ -355,10 +355,10 @@
       const gruplar = S.t.mekan_gruplari.map(g => { const t = S.turlerOf(g.ad).filter(x => turSay.get(x)); return { g, t, n: t.reduce((a, x) => a + turSay.get(x), 0), sec: t.filter(x => this.turler.has(x)) }; }).filter(x => x.n);
       const hepsi = gruplar.every(x => x.sec.length === x.t.length);
       const ac = gruplar.find(x => x.g.ad === this.acikGrup);
-      L.innerHTML = `<div class="lj-cubuk">${!hepsi ? `<button type="button" class="lj-ek tumu" data-lj="tumu">Tümü</button><span class="lj-ayrac"></span>` : ''}
+      L.innerHTML = `<div class="lj-cubuk"><button type="button" class="lj-ek tumu" data-lj="tumu" ${hepsi ? 'disabled aria-disabled="true"' : ''}>Tümü</button><span class="lj-ayrac"></span>
         <div class="lj-kaydir">${gruplar.map(({ g, t, n, sec }) => { const durum = !sec.length ? ' kapali' : sec.length < t.length ? ' yarim' : '';
           return `<span class="lj-grup${durum}${this.acikGrup === g.ad ? ' acik' : ''}" style="--r:${g.renk}">
-            <button type="button" class="lj-ana" data-lj-grup="${esc(g.ad)}" aria-pressed="${sec.length === t.length}" title="${esc(g.ad)}: ${esc(t.join(', '))}"><i></i>${esc(g.ad)}<small>${sec.length && sec.length < t.length ? sec.reduce((a, x) => a + turSay.get(x), 0) + '/' : ''}${n}</small></button>
+            <button type="button" class="lj-ana" data-lj-grup="${esc(g.ad)}" aria-pressed="${sec.length === t.length}" title="${esc(g.ad)}: ${esc(t.join(', '))}"><i></i>${esc(g.ad)}<small>${n}</small></button>
             <button type="button" class="lj-tur-ac" data-lj-turler="${esc(g.ad)}" aria-expanded="${this.acikGrup === g.ad}" aria-label="${esc(g.ad)} türleri">${ik('asagi', 13)}</button></span>`; }).join('')}</div>
         ${ac ? `<div class="lj-turler" style="--r:${ac.g.renk}" role="group" aria-label="${esc(ac.g.ad)} türleri"><h3><i></i>${esc(ac.g.ad)}<button type="button" data-lj-yalniz="${esc(ac.g.ad)}">yalnız bu grup</button></h3>
           ${ac.t.map(x => `<label><input type="checkbox" data-lj-tur="${esc(x)}" ${this.turler.has(x) ? 'checked' : ''}>${esc(x)}<small>${turSay.get(x)}</small></label>`).join('')}</div>` : ''}</div>`;
@@ -680,8 +680,9 @@
     return `<div class="sayfa detay liste"><div class="sayfa-ust"><div><h1>Kişiler</h1><div class="alt-baslik">Yaşadığı, çalıştığı ya da anıldığı yerler, hikâyeler ve fotoğraflarla ${tum.length} kişi.</div></div>
       <div style="width:280px"><label class="sr" for="k-q">Kişi ara</label><input id="k-q" type="search" placeholder="Kişi ara" value="${esc(kisiDurum.q)}" style="height:38px;width:100%;border:1.5px solid var(--murekkep);padding:0 10px;font:inherit"></div>
       <div class="cipler ust-cipler" role="group" aria-label="Mesleğe göre süz">${S.liste('meslek').map(r => [r, meslekSay(r)]).filter(x => x[1]).sort((a, b) => b[1] - a[1]).map(([r, n]) => `<button type="button" class="cip" data-meslek="${esc(r)}" aria-pressed="${d.meslekler.has(r)}">${esc(r)} <small>${n}</small></button>`).join('')}
-        ${sec.length ? '<button type="button" class="cip temizle" data-meslek-temizle>Temizle</button>' : ''}</div>
-      ${sec.length ? `<div class="secim-bilgi" style="flex:1 1 100%;display:flex;gap:10px;align-items:center;font-size:13px">${sec.length > 1 ? `<span class="secim-kipi" role="group" aria-label="Seçim biçimi"><button type="button" data-meslek-kip="herhangi" aria-pressed="${!d.hepsi}">Herhangi biri</button><button type="button" data-meslek-kip="hepsi" aria-pressed="${d.hepsi}">Hepsi</button></span>` : ''}<span class="meta">${uyan.length} kişi: ${sec.map(esc).join(d.hepsi ? ' ve ' : ' ya da ')}</span></div>` : ''}</div>
+        <button type="button" class="cip temizle" data-meslek-temizle ${sec.length ? '' : 'disabled'}>Temizle</button></div>
+      <div class="secim-bilgi"><span class="secim-kipi" role="group" aria-label="Birden çok meslek seçilince"><button type="button" data-meslek-kip="herhangi" aria-pressed="${!d.hepsi}" ${sec.length > 1 ? '' : 'disabled'}>Herhangi biri</button><button type="button" data-meslek-kip="hepsi" aria-pressed="${d.hepsi}" ${sec.length > 1 ? '' : 'disabled'}>Hepsi</button></span>
+        <span class="meta">${sec.length ? `${uyan.length} kişi: ${sec.map(esc).join(d.hepsi ? ' ve ' : ' ya da ')}` : `${uyan.length} kişi`}</span></div></div>
       ${uyan.length ? harfGruplari(uyan, k => k.ad, k => '#kisi-' + k.slug, k => [S.coklu(k.meslekler).slice(0, 2).join(', '), iz(k)].filter(Boolean).join(' · ')) : '<div class="bos">Sonuç yok.</div>'}</div>`;
   }
   const mekDurum = { q: '', ilce: '', gruplar: new Set(), turler: new Set(), yapi: '' };
@@ -698,8 +699,8 @@
       <label class="sr" for="m-yapi">Yapının durumu</label><select id="m-yapi" style="${SEC}"><option value="">Ayakta / yıkılmış</option>${[['ayakta', 'Bugün ayakta'], ['yıkıldı', 'Yıkılmış']].map(([v, l]) => `<option value="${v}" ${mekDurum.yapi === v ? 'selected' : ''}>${l} (${tum.filter(m => m.yapi_durumu === v).length})</option>`).join('')}</select>
       <label class="sr" for="m-ilce">İlçe</label><select id="m-ilce" style="${SEC}"><option value="">Tüm ilçeler</option>${ilceler.map(i => `<option ${mekDurum.ilce === i ? 'selected' : ''}>${esc(i)}</option>`).join('')}</select></div>
       <div class="kategori-suzgec"><div class="cipler ust-cipler" role="group" aria-label="Mekân türü grubu">${S.t.mekan_gruplari.filter(g => grupSay(g.ad)).map(g => `<button type="button" class="cip grup-cip" data-mgrup="${esc(g.ad)}" aria-pressed="${d.gruplar.has(g.ad)}" style="--r:${g.renk}"><i></i>${esc(g.ad)} <small>${grupSay(g.ad)}</small></button>`).join('')}
-        ${d.gruplar.size || d.turler.size ? '<button type="button" class="cip temizle" data-mgrup-temizle>Temizle</button>' : ''}</div>
-        ${d.gruplar.size ? `<div class="cipler alt-cipler" role="group" aria-label="Tür">${[...d.gruplar].flatMap(g => S.turlerOf(g).filter(turSay).map(t => `<button type="button" class="cip tur-cip" data-mtur="${esc(t)}" aria-pressed="${d.turler.has(t)}" style="--r:${S.grupRenk(g)}">${esc(t)} <small>${turSay(t)}</small></button>`)).join('')}<span class="ipucu">Türlerden seçmezseniz grubun tamamı gösterilir.</span></div>` : ''}</div></div>
+        <button type="button" class="cip temizle" data-mgrup-temizle ${d.gruplar.size || d.turler.size ? '' : 'disabled'}>Temizle</button></div>
+        <div class="cipler alt-cipler" role="group" aria-label="Tür">${d.gruplar.size ? [...d.gruplar].flatMap(g => S.turlerOf(g).filter(turSay).map(t => `<button type="button" class="cip tur-cip" data-mtur="${esc(t)}" aria-pressed="${d.turler.has(t)}" style="--r:${S.grupRenk(g)}">${esc(t)} <small>${turSay(t)}</small></button>`)).join('') + '<span class="ipucu">Tür seçmezseniz grubun tamamı gösterilir.</span>' : '<span class="ipucu">Bir grup seçince türleri burada çıkar; istediğiniz türleri ayrıca seçebilirsiniz.</span>'}</div></div></div>
       <div class="meta" style="margin:-8px 0 16px;font-size:13px">${uyan.length} mekân</div>
       ${uyan.length ? harfGruplari(uyan, m => m.ad, m => '#mekan-' + m.slug, m => [m.tur, m.ilce, S.mekanHikayeleri(m.id).length ? S.mekanHikayeleri(m.id).length + ' hikâye' : ''].filter(Boolean).join(' · ')) : '<div class="bos">Sonuç yok.</div>'}</div>`;
   }
@@ -781,8 +782,8 @@
         ${secim('al-grup', 'grup', 'grup', S.t.mekan_gruplari.map(gr => [gr.ad, gr.ad, g => S.mekanGrup(g.mekan_id) === gr.ad]), 'Mekân türü')}
         ${secim('al-konu', 'konu', 'konu', [['mekân', 'Mekânın kendisi', g => (g.konu || 'mekân') === 'mekân'], ['hikâye', 'Bir an, bir olay', g => g.konu === 'hikâye']], 'Konu')}
         ${secim('al-ilce', 'ilce', 'ilce', ilceler.map(i => [i, i, g => (S.ix.mekan.get(g.mekan_id) || {}).ilce === i]), 'İlçe')}
+        <button type="button" class="al-temizle" data-al-temizle ${suzgecVar ? '' : 'disabled'}>Temizle</button>
         ${d.tarih ? `<button type="button" class="al-etiket-cip" data-al-tarih-kaldir>${d.tarih === 'tarihsiz' ? 'Yalnız tarihsiz' : 'Yalnız tarihli'} ${ik('kapat', 12)}</button>` : ''}
-        ${suzgecVar ? '<button type="button" class="al-temizle" data-al-temizle>Temizle</button>' : ''}
       </div></div>
       ${govde}</div>`;
   }
@@ -885,6 +886,7 @@
     const mEl = $('#mini'); if (mEl && mini && mini[0].length) miniHarita(mEl, mini[0], mini[1]); else if (mEl) mEl.remove();
     const su = $('.sayfa-ust', s); if (su && (koru ? y > 90 : false)) su.classList.add('dar');
     baslikOlc();
+    const zs = $('.al-zaman .al-serit', s); if (zs) onyilIsaretle(zs);
     if (koru) { window.scrollTo(0, y); return; }
     const f = $('h1', s); if (f) { f.setAttribute('tabindex', '-1'); f.focus({ preventScroll: true }); }
   }
@@ -911,8 +913,24 @@
     if (e.target.closest('[data-al-temizle]')) { Object.assign(ad, { donem: '', grup: '', konu: '', ilce: '', tarih: '' }); return alyen(); }
     const ah = e.target.closest('[data-al-hepsi]'); if (ah) { ad.grup = ah.dataset.alHepsi; ad.duzen = 'izgara'; ad.n = 60; route(); return; }
     const ak = e.target.closest('[data-al-kaydir]'); if (ak) { const sr = ak.parentElement.querySelector('.al-serit'); sr.scrollBy({ left: +ak.dataset.alKaydir * sr.clientWidth * .8, behavior: 'smooth' }); return; }
-    const ao = e.target.closest('[data-al-onyil]'); if (ao) { const h = document.getElementById(ao.dataset.alOnyil); if (h) { const sr = h.closest('.al-serit'); sr.scrollTo({ left: h.offsetLeft - 8, behavior: 'smooth' }); $$('[data-al-onyil]').forEach(x => x.toggleAttribute('aria-current', x === ao)); } return; }
+    const ao = e.target.closest('[data-al-onyil]'); if (ao) { const h = document.getElementById(ao.dataset.alOnyil); if (h) { const sr = h.closest('.al-serit'); sr.scrollTo({ left: h.offsetLeft - 8, behavior: 'smooth' }); } return; }
   });
+  // albüm, zamana göre: şerit kaydıkça görünen on yılın düğmesi seçili olur, düğme şeridi de onu görünür tutar
+  let onyilKare = 0;
+  document.addEventListener('scroll', e => {
+    const sr = e.target; if (!(sr instanceof Element) || !sr.matches('.al-zaman .al-serit')) return;
+    cancelAnimationFrame(onyilKare); onyilKare = requestAnimationFrame(() => onyilIsaretle(sr));
+  }, true);
+  function onyilIsaretle(sr) {
+    const isaretler = $$('.al-isaret', sr); if (!isaretler.length) return;
+    const esik = sr.scrollLeft + sr.clientWidth * .25;
+    let akt = isaretler[0]; isaretler.forEach(x => { if (x.offsetLeft <= esik) akt = x; });
+    if (sr.scrollLeft + sr.clientWidth >= sr.scrollWidth - 4) akt = isaretler[isaretler.length - 1];
+    const dugme = $(`[data-al-onyil="${akt.id}"]`); if (!dugme || dugme.hasAttribute('aria-current')) return;
+    $$('[data-al-onyil]').forEach(x => x.toggleAttribute('aria-current', x === dugme));
+    const serit = dugme.parentElement, sol = dugme.offsetLeft - serit.offsetLeft;
+    if (sol < serit.scrollLeft || sol + dugme.offsetWidth > serit.scrollLeft + serit.clientWidth) serit.scrollTo({ left: sol - serit.clientWidth / 2 + dugme.offsetWidth / 2, behavior: 'smooth' });
+  }
   function odakla(sec, i) { const el = $$(sec)[i]; if (el) el.focus({ preventScroll: true }); }
   document.addEventListener('change', e => {
     if (!e.target.closest('#sayfa')) return;
