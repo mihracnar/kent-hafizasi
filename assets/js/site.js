@@ -940,13 +940,24 @@
     if ((d < 0 && bas) || (d > 0 && son)) return;
     e.preventDefault(); sr.scrollLeft += d * (e.deltaMode === 1 ? 40 : 1.2);
   }, { passive: false });
-  // şerit yüksekliği: üst çubuk, on yıl şeridi ve şerit birlikte ekrana sığacak kadar büyük
-  // şerit yüksekliği: sayfa dikeyde ekrana sığar, aşağı kaydırmak gerekmez (alt çubuk bu düzende gizli)
+  // şerit yüksekliği: sayfa dikeyde ekrana sığar, aşağı kaydırmak gerekmez (alt çubuk bu düzende gizli).
+  // Yazı tipleri (Google Fonts, display=swap) sonradan yüklenince başlıkların boyu değişir ve şerit aşağı kayar;
+  // bu yüzden hesap yazı tipleri yüklenince ve üstteki alanın boyu her değiştiğinde yinelenir. Ölçü sonrası hâlâ
+  // taşma varsa (tarayıcı yakınlaştırması, kaydırma çubuğu vb.) taşan kadar kısaltılır.
   function zamanYukseklik() {
     const z = $('.al-zaman'), sr = z && $('.al-serit', z); if (!sr) return;
+    const ekran = document.documentElement.clientHeight || window.innerHeight;
     const ust = window.scrollY + sr.getBoundingClientRect().top;
-    z.style.setProperty('--h', Math.max(260, Math.floor(window.innerHeight - ust - 18)) + 'px');
+    let h = Math.max(260, Math.floor(ekran - ust - 18));
+    z.style.setProperty('--h', h + 'px');
+    const tasma = Math.ceil(document.documentElement.scrollHeight - ekran);
+    if (tasma > 0 && h > 260) { h = Math.max(260, h - tasma); z.style.setProperty('--h', h + 'px'); }
+    if (!z._gozcu && window.ResizeObserver) {
+      let kare = 0; z._gozcu = new ResizeObserver(() => { cancelAnimationFrame(kare); kare = requestAnimationFrame(zamanYukseklik); });
+      [$('.albumu .sayfa-ust'), $('.al-onyillar', z), $('#ust')].filter(Boolean).forEach(el => z._gozcu.observe(el));
+    }
   }
+  if (document.fonts) { document.fonts.ready.then(() => zamanYukseklik()); document.fonts.addEventListener && document.fonts.addEventListener('loadingdone', () => zamanYukseklik()); }
   window.addEventListener('resize', () => zamanYukseklik());
   // albüm, zamana göre: şerit kaydıkça görünen on yılın düğmesi seçili olur, düğme şeridi de onu görünür tutar
   let onyilKare = 0;
