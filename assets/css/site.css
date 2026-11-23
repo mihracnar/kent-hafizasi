@@ -663,3 +663,27 @@ div.foto-altyazi { margin: 6px 0 0; }
 .alt-cipler { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; min-height: 44px; box-sizing: border-box; }
 .alt-cipler .cip, .alt-cipler .ipucu { flex: none; }
 .al-onyillar button { scroll-margin: 0 40px; }
+
+/* lejant: panellerin hiçbir zaman girmediği sabit bir alanda (sol panel 426px, sağ panel 390px + kenar boşlukları).
+   Paneller açılıp kapanınca yeri değişmez; gruplar eşit genişlikte düzenli satırlara dizilir. */
+.lejant, .panel-sol:not([hidden]) ~ .lejant, .panel-sag:not([hidden]) ~ .lejant { --lj-sol: 442px; --lj-sag: 406px; transition: none; }
+.lj-cubuk { display: flex; flex-wrap: nowrap; align-items: flex-start; gap: 4px; width: 100%; box-sizing: border-box; }
+.lj-kaydir { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(142px, 1fr)); gap: 2px; overflow: visible; }
+.lj-grup { width: 100%; box-sizing: border-box; justify-content: space-between; }
+.lj-grup .lj-ana { flex: 1; min-width: 0; }
+.lj-grup .lj-ana small { margin-left: auto; padding-left: 4px; }
+.lj-cubuk > .lj-ek.tumu { align-self: stretch; height: auto; min-height: 32px; }
+/* orta genişlikte iki panelin arası çok dar: alan sol panelin sağından ekranın sağına uzanır, sağ panel (kişi) üstünü örter */
+@media (max-width: 1239px) and (min-width: 761px) {
+  .lejant, .panel-sol:not([hidden]) ~ .lejant, .panel-sag:not([hidden]) ~ .lejant { --lj-sag: 60px; }
+}
+@media (max-width: 760px) {
+  .lj-kaydir { display: flex; grid-template-columns: none; }
+  .lj-grup { width: auto; }
+}
+/* pasif düğme gösterilmez; yeri ayrılmıştır, gerektiğinde aynı yerde belirir */
+.cip.temizle[disabled], .al-temizle[disabled], .lj-ek.tumu[disabled], .secim-kipi button[disabled], .secim-kipi:has(button[disabled]) { visibility: hidden; opacity: 1; }
+
+/* harita panelleri: başlık (tür etiketi, ad, paylaş ve kapat düğmeleri) panel kaydırılınca yerinde kalır */
+.panel .panel-baslik { position: sticky; top: 0; z-index: 3; margin: -18px -20px 0; padding: 16px 20px 12px; background: var(--kagit); border-bottom: 1px solid transparent; }
+.panel .panel-baslik.yapisti { border-bottom-color: var(--cizgi, #D8D6CF); box-shadow: 0 6px 10px -8px rgba(0,0,0,.18); }

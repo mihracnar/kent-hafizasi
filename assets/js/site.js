@@ -318,8 +318,8 @@
         // altlığın normal (kalın olmayan) yazı tipi (Positron: "Noto Sans Regular"); boyutla öne çıkar
         const fontlar = (map.getStyle().layers || []).map(l => l.layout && l.layout['text-font']).filter(f => Array.isArray(f) && f.every(x => typeof x === 'string'));
         const yaz = fontlar.find(f => f.some(x => /regular/i.test(x))) || (fontlar[0] ? fontlar[0].map(x => x.replace(/Bold|Italic/, 'Regular')) : ['Noto Sans Regular']);
-        map.addLayer({ id: 'ad', type: 'symbol', source: 'mekanlar', minzoom: 11.5,
-          layout: { 'text-field': ['get', 'ad'], 'text-font': yaz, 'text-size': ['interpolate', ['linear'], ['zoom'], 11.5, 12, 14, 14, 16, 15.5, 18, 17],
+        map.addLayer({ id: 'ad', type: 'symbol', source: 'mekanlar', minzoom: 13,
+          layout: { 'text-field': ['get', 'ad'], 'text-font': yaz, 'text-size': ['interpolate', ['linear'], ['zoom'], 13, 13, 14, 14, 16, 15.5, 18, 17],
             'text-variable-anchor': ['left', 'right', 'top', 'bottom', 'top-left', 'bottom-left'], 'text-radial-offset': .8, 'text-justify': 'auto',
             'text-max-width': 10, 'text-padding': 3, 'symbol-sort-key': ['get', 'sira'] },
           paint: { 'text-color': ['get', 'yazi'], 'text-halo-color': 'rgba(255,255,255,.97)', 'text-halo-width': 2, 'text-halo-blur': .2,
@@ -886,7 +886,7 @@
     const mEl = $('#mini'); if (mEl && mini && mini[0].length) miniHarita(mEl, mini[0], mini[1]); else if (mEl) mEl.remove();
     const su = $('.sayfa-ust', s); if (su && (koru ? y > 90 : false)) su.classList.add('dar');
     baslikOlc();
-    const zs = $('.al-zaman .al-serit', s); if (zs) onyilIsaretle(zs);
+    const zs = $('.al-zaman .al-serit', s); if (zs) { zamanYukseklik(); onyilIsaretle(zs); }
     if (koru) { window.scrollTo(0, y); return; }
     const f = $('h1', s); if (f) { f.setAttribute('tabindex', '-1'); f.focus({ preventScroll: true }); }
   }
@@ -908,13 +908,50 @@
     const ad = albumDurum, alyen = () => { ad.n = 60; route(true); };
     const adn = e.target.closest('[data-al-donem]'); if (adn) { ad.donem = adn.dataset.alDonem; return alyen(); }
     if (e.target.closest('[data-al-tarih-kaldir]')) { ad.tarih = ''; return alyen(); }
-    const adz = e.target.closest('[data-al-duzen]'); if (adz) { ad.duzen = adz.dataset.alDuzen; return alyen(); }
+    const adz = e.target.closest('[data-al-duzen]'); if (adz) { ad.duzen = adz.dataset.alDuzen; alyen();
+      if (ad.duzen === 'zaman') { const k = zamanKonum(); if (k) {
+        const sy = $('#sayfa .albumu'); if (sy) sy.style.minHeight = (k.hedef + window.innerHeight) + 'px';  // şeridi başlığın altına getirecek kadar kaydırılabilsin
+        window.scrollTo({ top: k.hedef, behavior: 'smooth' }); } }
+      return; }
     if (e.target.closest('[data-al-tarihsiz]')) { ad.tarih = 'tarihsiz'; ad.donem = 'o zaman'; ad.duzen = 'izgara'; return alyen(); }
     if (e.target.closest('[data-al-temizle]')) { Object.assign(ad, { donem: '', grup: '', konu: '', ilce: '', tarih: '' }); return alyen(); }
     const ah = e.target.closest('[data-al-hepsi]'); if (ah) { ad.grup = ah.dataset.alHepsi; ad.duzen = 'izgara'; ad.n = 60; route(); return; }
     const ak = e.target.closest('[data-al-kaydir]'); if (ak) { const sr = ak.parentElement.querySelector('.al-serit'); sr.scrollBy({ left: +ak.dataset.alKaydir * sr.clientWidth * .8, behavior: 'smooth' }); return; }
     const ao = e.target.closest('[data-al-onyil]'); if (ao) { const h = document.getElementById(ao.dataset.alOnyil); if (h) { const sr = h.closest('.al-serit'); sr.scrollTo({ left: h.offsetLeft - 8, behavior: 'smooth' }); } return; }
   });
+  // harita panelleri kaydırılınca yapışan başlığa ince bir alt çizgi
+  document.addEventListener('scroll', e => { const p = e.target; if (!(p instanceof Element) || !p.matches('.panel')) return; const b = $('.panel-baslik', p); if (b) b.classList.toggle('yapisti', p.scrollTop > 4); }, true);
+  // albüm, zamana göre: fare tekerleği şeridi yana kaydırır; şeridin başına/sonuna gelince sayfa kaymaya devam eder
+  document.addEventListener('wheel', e => {
+    const sr = e.target.closest && e.target.closest('.al-zaman .al-serit'); if (!sr || e.ctrlKey) return;
+    const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY; if (!d) return;
+    const bas = sr.scrollLeft <= 0, son = sr.scrollLeft + sr.clientWidth >= sr.scrollWidth - 1;
+    if ((d < 0 && bas) || (d > 0 && son)) return;
+    e.preventDefault(); sr.scrollLeft += d * (e.deltaMode === 1 ? 40 : 1.2);
+  }, { passive: false });
+  // şerit yüksekliği: üst çubuk, on yıl şeridi ve şerit birlikte ekrana sığacak kadar büyük
+  // sayfa kaydırılınca daralan yapışkan başlığın alt kenarı (ekran üstünden)
+  function yapiskanAlt() {
+    const ust = $('.ust') ? $('.ust').offsetHeight : 60, su = $('#sayfa .sayfa-ust'); if (!su) return ust;
+    const vardi = su.classList.contains('dar'); su.classList.add('dar'); const h = su.offsetHeight; if (!vardi) su.classList.remove('dar');
+    return ust + h;
+  }
+  // zaman şeridinin başının yapışkan başlığın hemen altına geleceği kaydırma ve o anki başlık alt kenarı.
+  // Başlık 90px'ten sonra daralır; hedef bundan azsa başlık geniş hâliyle kalır.
+  function zamanKonum() {
+    const z = $('.al-zaman'); if (!z) return null;
+    const ust = $('.ust') ? $('.ust').offsetHeight : 60, su = $('#sayfa .sayfa-ust');
+    const ztop = z.getBoundingClientRect().top + window.scrollY;
+    let alt = yapiskanAlt(), hedef = ztop - alt - 8;
+    if (hedef <= 90 && su) { const vardi = su.classList.contains('dar'); su.classList.remove('dar'); alt = ust + su.offsetHeight; if (vardi) su.classList.add('dar'); hedef = Math.max(0, ztop - alt - 8); }
+    return { z, hedef, alt };
+  }
+  function zamanYukseklik() {
+    const k = zamanKonum(); if (!k) return;
+    const bas = $('.al-onyillar', k.z).offsetHeight + ($('.al-not', k.z) ? $('.al-not', k.z).offsetHeight + 12 : 0);
+    k.z.style.setProperty('--h', Math.max(320, Math.round(window.innerHeight - k.alt - 8 - bas - 24)) + 'px');
+  }
+  window.addEventListener('resize', () => zamanYukseklik());
   // albüm, zamana göre: şerit kaydıkça görünen on yılın düğmesi seçili olur, düğme şeridi de onu görünür tutar
   let onyilKare = 0;
   document.addEventListener('scroll', e => {
