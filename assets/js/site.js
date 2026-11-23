@@ -8,7 +8,7 @@
   const IK = {
     link: '<path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>',
     qr: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/>',
-    asagi: '<path d="M6 9l6 6 6-6"/>', sol: '<path d="M19 12H5M11 6l-6 6 6 6"/>', izgara: '<rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect x="13" y="13" width="7" height="7"/>', saat: '<circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/>', katman: '<path d="M12 4l9 5-9 5-9-5z"/><path d="M3 14l9 5 9-5"/>',
+    asagi: '<path d="M6 9l6 6 6-6"/>', sol: '<path d="M19 12H5M11 6l-6 6 6 6"/>', izgara: '<rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect x="13" y="13" width="7" height="7"/>', saat: '<circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/>', katman: '<path d="M12 4l9 5-9 5-9-5z"/><path d="M3 14l9 5 9-5"/>', cerceve: '<rect x="3" y="5" width="18" height="14" rx="1"/><path d="M3 16l5-5 4 4 3-3 6 6"/>',
     kapat: '<path d="M6 6l12 12M18 6L6 18"/>', sag: '<path d="M5 12h14M13 6l6 6-6 6"/>', ok: '<path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/>',
     ara: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>', pin: '<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
     disari: '<path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/>', kamera: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>', buyut: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>', solok: '<path d="M15 5l-7 7 7 7"/>', sagok: '<path d="M9 5l7 7-7 7"/>', menu: '<path d="M4 7h16M4 12h16M4 17h16"/>', indir: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
@@ -315,9 +315,8 @@
           'circle-opacity': ['case', ['boolean', ['get', 'soluk'], false], .25, 1], 'circle-stroke-opacity': ['case', ['boolean', ['get', 'soluk'], false], .25, 1] } });
       // Mekân adları: altlığın kendi yazı tipiyle; MapLibre çakışan adları kendiliğinden gizler, önemli mekânlar önce yerleşir.
       if (map._hafiza.glyphs) {
-        // altlığın normal (kalın olmayan) yazı tipi (Positron: "Noto Sans Regular"); boyutla öne çıkar
-        const fontlar = (map.getStyle().layers || []).map(l => l.layout && l.layout['text-font']).filter(f => Array.isArray(f) && f.every(x => typeof x === 'string'));
-        const yaz = fontlar.find(f => f.some(x => /regular/i.test(x))) || (fontlar[0] ? fontlar[0].map(x => x.replace(/Bold|Italic/, 'Regular')) : ['Noto Sans Regular']);
+        // yarı kalın: glifleri depodan gelir (basemap.js → transformRequest); eksik aralık Regular'a düşer
+        const yaz = (window.HafizaBasemap && HafizaBasemap.YARIKALIN_FONT) || ['Noto Sans Regular'];
         map.addLayer({ id: 'ad', type: 'symbol', source: 'mekanlar', minzoom: 13,
           layout: { 'text-field': ['get', 'ad'], 'text-font': yaz, 'text-size': ['interpolate', ['linear'], ['zoom'], 13, 13, 14, 14, 16, 15.5, 18, 17],
             'text-variable-anchor': ['left', 'right', 'top', 'bottom', 'top-left', 'bottom-left'], 'text-radial-offset': .8, 'text-justify': 'auto',
@@ -711,7 +710,10 @@
   }
   // ================= ALBÜM =================
   // Üç düzen: mekân türüne göre şeritler, zamana göre tek şerit (on yıllar), ya da ızgara. Süzgeçler hepsinde ortak.
-  const albumDurum = { duzen: 'tur', donem: '', grup: '', konu: '', ilce: '', tarih: '', n: 60 };
+  const albumDurum = { duzen: 'tur', donem: '', grup: '', konu: '', ilce: '', gtur: '', tarih: '', n: 60 };
+  // görsel türlerinin gösterim sırası (Excel'deki liste); veride başka bir tür varsa sona eklenir
+  const GORSEL_TURLERI = ['Fotoğraf', 'Kartpostal', 'Resim', 'Gravür', 'Harita', 'Gazete', 'Belge'];
+  const GTUR_BOS = '-';  // "türü girilmemiş" seçeneğinin değeri
   const albumListeleri = {};
   // "1930'lar" → 1930, "1903-1904" → 1903, "1961" → 1961; okunamazsa null
   const yilSayi = y => { const m = String(y || '').match(/(1[5-9]\d\d|20\d\d)/); return m ? +m[1] : null; };
@@ -740,16 +742,18 @@
     // süzgeçler tek seçimli: dönem, mekân türü grubu, konu, ilçe (+ zaman şeridinden gelen "tarihsiz")
     const uy = (g, haric) => (haric === 'donem' || !d.donem || g.donem === d.donem) && (haric === 'konu' || !d.konu || (g.konu || 'mekân') === d.konu) &&
       (haric === 'grup' || !d.grup || S.mekanGrup(g.mekan_id) === d.grup) && (haric === 'ilce' || !d.ilce || (S.ix.mekan.get(g.mekan_id) || {}).ilce === d.ilce) &&
+      (haric === 'gtur' || !d.gtur || (g.tur || GTUR_BOS) === d.gtur) &&
       (!d.tarih || (d.tarih === 'tarihli') === !!yilSayi(g.yil));
     const tum = taban.filter(g => uy(g));
     // önce açıklaması olan arşiv kareleri, sonra diğerleri; zaman düzeninde yıl sırası
     const puan = g => (g.donem === 'o zaman' ? 0 : 2) + (g.altyazi ? 0 : 1);
     const say = (haric, f) => taban.filter(g => uy(g, haric) && f(g)).length;
     const ilceler = [...new Set(taban.map(g => (S.ix.mekan.get(g.mekan_id) || {}).ilce).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'tr'));
-    const suzgecVar = d.donem || d.konu || d.grup || d.ilce || d.tarih;
+    const suzgecVar = d.donem || d.konu || d.grup || d.ilce || d.gtur || d.tarih;
+    const gturler = [...GORSEL_TURLERI, ...[...new Set(taban.map(g => g.tur).filter(t => t && !GORSEL_TURLERI.includes(t)))].sort((a, b) => a.localeCompare(b, 'tr'))];
     const secim = (id, ad, haric, secenekler, bos) => `<label class="al-sec${d[ad] ? ' dolu' : ''}"><span>${bos}</span><select id="${id}" data-al-sec="${ad}">
       <option value="">Tümü</option>${secenekler.map(([v, l, f]) => { const n = say(haric, f); return n || d[ad] === v ? `<option value="${esc(v)}" ${d[ad] === v ? 'selected' : ''}>${esc(l)} (${n})</option>` : ''; }).join('')}</select></label>`;
-    const duzenler = [['tur', 'Mekân türüne göre', 'katman'], ['zaman', 'Zamana göre', 'saat'], ['izgara', 'Tümü', 'izgara']];
+    const duzenler = [['tur', 'Mekân türüne göre', 'katman'], ['zaman', 'Zamana göre', 'saat'], ['gorsel', 'Görsel türüne göre', 'cerceve'], ['izgara', 'Tümü', 'izgara']];
     let govde = '';
     if (!tum.length) govde = '<div class="bos">Bu seçime uyan fotoğraf yok.</div>';
     else if (d.duzen === 'tur') {
@@ -760,20 +764,26 @@
           <button type="button" class="al-hepsi" data-al-hepsi="${esc(gr.ad)}">Tümünü gör ${ik('sag', 14)}</button></div>
           ${mozaik(gs.slice(0, N), 'g-' + S.slugify(gr.ad), { etiket: gr.ad + ' fotoğrafları', daha: gs.length > N ? `data-al-hepsi="${esc(gr.ad)}"` : '', dahaMetin: `${gs.length - N} fotoğraf daha` })}</section>`;
       }).join('');
+    } else if (d.duzen === 'gorsel') {
+      const N = 48, bolum = (v, ad, gs, alt) => `<section class="al-bolum al-gtur${v === GTUR_BOS ? ' bos-tur' : ''}"><div class="al-bolum-ust"><i></i><h2>${esc(ad)}</h2><span>${gs.length} görsel${alt ? ' · ' + alt : ''}</span>
+          <button type="button" class="al-hepsi" data-al-gtur-hepsi="${esc(v)}">Tümünü gör ${ik('sag', 14)}</button></div>
+          ${mozaik(gs.slice(0, N), 'gt-' + S.slugify(v === GTUR_BOS ? 'turu-girilmemis' : v), { etiket: ad, daha: gs.length > N ? `data-al-gtur-hepsi="${esc(v)}"` : '', dahaMetin: `${gs.length - N} görsel daha` })}</section>`;
+      govde = gturler.map(t => { const gs = tum.filter(g => g.tur === t).sort((a, b) => puan(a) - puan(b)); return gs.length ? bolum(t, t, gs) : ''; }).join('');
+      const bos = tum.filter(g => !g.tur).sort((a, b) => puan(a) - puan(b));
+      if (bos.length) govde += bolum(GTUR_BOS, 'Türü henüz girilmemiş', bos, 'içerik panelinden girildikçe yukarıdaki bölümlere geçer');
     } else if (d.duzen === 'zaman') {
       const tarihli = tum.filter(g => g.donem !== 'bugün' && yilSayi(g.yil)).sort((a, b) => yilSayi(a.yil) - yilSayi(b.yil) || puan(a) - puan(b));
       const tarihsiz = tum.filter(g => g.donem !== 'bugün' && !yilSayi(g.yil)).sort((a, b) => puan(a) - puan(b));
       const bugun = tum.filter(g => g.donem === 'bugün');
-      const T = 60, sira = [...tarihli, ...tarihsiz.slice(0, T), ...bugun.slice(0, T)];
+      const sira = [...tarihli, ...tarihsiz, ...bugun];
       const isaret = new Map();
       const onlar = new Map(); tarihli.forEach(g => { const o = onYil(yilSayi(g.yil)); onlar.set(o, (onlar.get(o) || 0) + 1); });
       const ekAd = o => String(o) + (/(10|30|40|60|90)$/.test(String(o)) ? "'lar" : "'ler");  // 1930'lar, 1950'ler
       let k = 0; [...onlar.entries()].forEach(([o, n]) => { isaret.set(k, { id: 'al-on-' + o, ad: ekAd(o), n }); k += n; });
-      if (tarihsiz.length) { isaret.set(k, { id: 'al-on-tarihsiz', ad: 'Tarihsiz arşiv', n: tarihsiz.length }); k += Math.min(T, tarihsiz.length); }
+      if (tarihsiz.length) { isaret.set(k, { id: 'al-on-tarihsiz', ad: 'Tarihsiz arşiv', n: tarihsiz.length }); k += tarihsiz.length; }
       if (bugun.length) isaret.set(k, { id: 'al-on-bugun', ad: 'Bugün', n: bugun.length });
       govde = `<div class="al-zaman"><div class="al-onyillar" role="group" aria-label="On yıla git">${[...onlar.entries()].map(([o, n]) => `<button type="button" data-al-onyil="al-on-${o}"><b>${ekAd(o)}</b><small>${n}</small></button>`).join('')}
           ${tarihsiz.length ? `<button type="button" data-al-onyil="al-on-tarihsiz" class="ayri"><b>Tarihsiz</b><small>${tarihsiz.length}</small></button>` : ''}${bugun.length ? `<button type="button" data-al-onyil="al-on-bugun"><b>Bugün</b><small>${bugun.length}</small></button>` : ''}</div>
-        <p class="al-not">${tarihli.length} fotoğrafın tarihi biliniyor. Tarihsiz ve bugünkü karelerden ilk ${T}'ar tanesi şeridin sonunda${tarihsiz.length > T ? '; tamamı için <button type="button" class="satir-ici" data-al-tarihsiz>tarihsiz arşivi açın</button>' : ''}.</p>
         ${mozaik(sira, 'zaman', { isaret, etiket: 'Zamana göre fotoğraflar' })}</div>`;
     } else {
       const gs = tum.slice().sort((a, b) => puan(a) - puan(b)); albumListe = gs.map(g => g.id);
@@ -787,6 +797,7 @@
         ${secim('al-grup', 'grup', 'grup', S.t.mekan_gruplari.map(gr => [gr.ad, gr.ad, g => S.mekanGrup(g.mekan_id) === gr.ad]), 'Mekân türü')}
         ${secim('al-konu', 'konu', 'konu', [['mekân', 'Mekânın kendisi', g => (g.konu || 'mekân') === 'mekân'], ['hikâye', 'Bir an, bir olay', g => g.konu === 'hikâye']], 'Konu')}
         ${secim('al-ilce', 'ilce', 'ilce', ilceler.map(i => [i, i, g => (S.ix.mekan.get(g.mekan_id) || {}).ilce === i]), 'İlçe')}
+        ${secim('al-gtur', 'gtur', 'gtur', [...gturler.map(t => [t, t, g => g.tur === t]), [GTUR_BOS, 'Türü girilmemiş', g => !g.tur]], 'Görsel türü')}
         <button type="button" class="al-temizle" data-al-temizle ${suzgecVar ? '' : 'disabled'}>Temizle</button>
         ${d.tarih ? `<button type="button" class="al-etiket-cip" data-al-tarih-kaldir>${d.tarih === 'tarihsiz' ? 'Yalnız tarihsiz' : 'Yalnız tarihli'} ${ik('kapat', 12)}</button>` : ''}
       </div></div>
@@ -916,8 +927,8 @@
     const adz = e.target.closest('[data-al-duzen]'); if (adz) { ad.duzen = adz.dataset.alDuzen; alyen();
       if (ad.duzen === 'zaman') window.scrollTo(0, 0);
       return; }
-    if (e.target.closest('[data-al-tarihsiz]')) { ad.tarih = 'tarihsiz'; ad.donem = 'o zaman'; ad.duzen = 'izgara'; return alyen(); }
-    if (e.target.closest('[data-al-temizle]')) { Object.assign(ad, { donem: '', grup: '', konu: '', ilce: '', tarih: '' }); return alyen(); }
+    if (e.target.closest('[data-al-temizle]')) { Object.assign(ad, { donem: '', grup: '', konu: '', ilce: '', gtur: '', tarih: '' }); return alyen(); }
+    const agt = e.target.closest('[data-al-gtur-hepsi]'); if (agt) { ad.gtur = agt.dataset.alGturHepsi; ad.duzen = 'izgara'; ad.n = 60; route(); return; }
     const ah = e.target.closest('[data-al-hepsi]'); if (ah) { ad.grup = ah.dataset.alHepsi; ad.duzen = 'izgara'; ad.n = 60; route(); return; }
     const ak = e.target.closest('[data-al-kaydir]'); if (ak) { const sr = ak.parentElement.querySelector('.al-serit'); sr.scrollBy({ left: +ak.dataset.alKaydir * sr.clientWidth * .8, behavior: 'smooth' }); return; }
     const ao = e.target.closest('[data-al-onyil]'); if (ao) { const h = document.getElementById(ao.dataset.alOnyil); if (h) { const sr = h.closest('.al-serit'); sr.scrollTo({ left: h.offsetLeft - 8, behavior: 'smooth' }); } return; }
