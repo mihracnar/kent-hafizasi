@@ -114,7 +114,6 @@
   // yuvarlak kırpmada yalnız kişinin tek başına göründüğü fotoğraf kullanılır; toplu fotoğraflarda baş harfler
   const portre = k => S.kisiGorselleri(k.id).find(g => S.fotoKisileri(g).length === 1);
   // mekânın "burada çekilmiş" fotoğrafları: rozette portre olarak zaten görünenler tekrar gösterilmez
-  const anFotolari = (m, kisiler) => { const kul = new Set(kisiler.map(portre).filter(Boolean).map(g => g.id)); return S.mekanAnGorselleri(m.id).filter(g => !kul.has(g.id)); };
   function kisilerBolumu(dk, ks, opts) {
     const n = dk.length + ks.length; if (!n) return '';
     return `<div class="bolum-baslik"${opts.ust ? ' style="margin-top:28px"' : ''}>Kişiler <span>${n}</span></div><div class="kisi-rozetler${opts.buyuk ? ' buyuk' : ''}">${dk.map(k => kisiKart(k, opts.harita)).join('')}${ks.map(k => kisiKart(k, opts.harita, 'hikâyede')).join('')}</div>`;
@@ -417,7 +416,6 @@
         ${m.aciklama ? `<div class="genel-bilgi metin">${aciklamaHtml(m, { kisa: uzun ? 420 : 0 })}${uzun ? `<div class="kisa-baglanti"><a href="#mekan-${m.slug}">Devamı mekân sayfasında ${ik('disari', 13)}</a></div>` : ''}</div>` : ''}
         ${!m.aciklama && S.vikipedi(m) ? `<div class="genel-bilgi">${vikiBlok(m, { kisa: 380 })}</div>` : ''}
         ${kisilerBolumu(dk, ks, { harita: true })}
-        ${(() => { const an = anFotolari(m, dk.concat(ks)); return an.length ? `<div class="bolum-baslik">Burada çekilmiş fotoğraflar <span>${an.length}</span></div>${seritHtml(an, 4, 'Burada çekilmiş fotoğraflar')}` : ''; })()}
         ${hs.length ? `<div class="bolum-baslik">Bu mekânla ilgili hikâyeler <span>${hs.length}</span></div>
         <div>${hs.map(h => this.hikayeOgesi(h, m)).join('')}</div>` : ''}</div>`;
     },
@@ -557,7 +555,6 @@
         <div class="ikili">${m.aciklama || S.vikipedi(m) ? `<div><div class="bolum-baslik" style="margin-top:28px">Mekân hakkında <span></span></div>
         <div class="genel-bilgi metin" style="font-size:18px">${vikiParagraf(m)}${m.aciklama ? aciklamaHtml(m, { kaynak: m.aciklama_kaynak }) : ''}</div></div>` : ''}
         ${dk.length || ks.length ? `<div>${kisilerBolumu(dk, ks, { buyuk: true, ust: true })}</div>` : ''}</div>
-        ${(() => { const an = anFotolari(m, dk.concat(ks)); return an.length ? `<div class="bolum-baslik" style="margin-top:28px">Burada çekilmiş fotoğraflar <span>${an.length}</span></div><div class="foto-izgara">${an.map((g, i) => `<figure><button type="button" class="kucuk-medya" data-medya-liste="${an.map(x => x.id).join(',')}" data-medya-i="${i}" aria-label="Fotoğraf ${i + 1} / ${an.length}, tam ekran aç">${img(g, 500)}</button><figcaption>${fotoAlt(g)}</figcaption></figure>`).join('')}</div>` : ''; })()}
         ${hs.length ? `<div class="bolum-baslik" style="margin-top:28px">Bu mekânla ilgili hikâyeler <span>${hs.length} hikâye</span></div>` : ''}
         <div class="hikaye-bloklar">${hs.map(h => {
           const mek = S.hikayeMekanlari(h.id), ksh = S.hikayeKisileri(h.id);
