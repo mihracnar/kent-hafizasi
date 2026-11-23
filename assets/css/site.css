@@ -687,3 +687,11 @@ div.foto-altyazi { margin: 6px 0 0; }
 /* harita panelleri: başlık (tür etiketi, ad, paylaş ve kapat düğmeleri) panel kaydırılınca yerinde kalır */
 .panel .panel-baslik { position: sticky; top: 0; z-index: 3; margin: -18px -20px 0; padding: 16px 20px 12px; background: var(--kagit); border-bottom: 1px solid transparent; }
 .panel .panel-baslik.yapisti { border-bottom-color: var(--cizgi, #D8D6CF); box-shadow: 0 6px 10px -8px rgba(0,0,0,.18); }
+
+/* zaman şeridi: yakalama (snap) yok, tekerlekle kesintisiz akar; sayfa ekrana sığar */
+.al-zaman .al-serit, .al-zaman .al-sutun, .al-zaman .al-isaret { scroll-snap-type: none; scroll-snap-align: none; }
+.al-zaman .al-onyillar { margin-bottom: 6px; }
+.al-zaman .al-not { margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: none; }
+body.zaman-duzeni .alt-cubuk { display: none; }
+body.zaman-duzeni #sayfa > .sayfa { padding-bottom: 0; }
+body.zaman-duzeni .albumu .sayfa-ust { margin-bottom: 14px; }
