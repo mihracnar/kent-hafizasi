@@ -3,7 +3,7 @@
  *
  * Kurulum:
  *  1. data/sheets/*.csv dosyalarını bir Google Sheets dosyasına, her biri ayrı sekme olacak şekilde aktarın.
- *     Sekme adları: mekanlar, hikayeler, kisiler, gorseller, hikaye_mekan, hikaye_kisi, temalar
+ *     Sekme adları: mekanlar, hikayeler, kisiler, gorseller, hikaye_mekan, hikaye_kisi, mekan_kisi, mekan_gruplari, mekan_turleri, listeler
  *  2. Uzantılar → Apps Script → bu dosyayı yapıştırın.
  *  3. Proje ayarları → Komut dosyası özellikleri:
  *       PANEL_ANAHTARI   panelin yazarken gönderdiği gizli anahtar (zorunlu)
@@ -16,11 +16,13 @@
  * Okuma herkese açıktır ama anahtarsız okumada iç alanlar (veri giren, not, konu notu…) gönderilmez.
  * Yazma, silme, yükleme ve yayınlama anahtar ister.
  */
-var TABLOLAR = ['mekanlar', 'hikayeler', 'kisiler', 'gorseller', 'hikaye_mekan', 'hikaye_kisi', 'mekan_kisi', 'temalar'];
-var ANAHTAR_SUTUNLARI = { hikaye_mekan: ['hikaye_id', 'mekan_id'], hikaye_kisi: ['hikaye_id', 'kisi_id'], mekan_kisi: ['mekan_id', 'kisi_id'], temalar: ['ad'] };
+var TABLOLAR = ['mekanlar', 'hikayeler', 'kisiler', 'gorseller', 'hikaye_mekan', 'hikaye_kisi', 'mekan_kisi', 'mekan_gruplari', 'mekan_turleri', 'listeler'];
+var ANAHTAR_SUTUNLARI = { hikaye_mekan: ['hikaye_id', 'mekan_id'], hikaye_kisi: ['hikaye_id', 'kisi_id'], mekan_kisi: ['mekan_id', 'kisi_id'], mekan_gruplari: ['ad'], mekan_turleri: ['ad'], listeler: ['liste', 'deger'] };
 var SAYI_SUTUNLARI = { enlem: 1, boylam: 1, sira: 1, kaynak_satir: 1 };
 // Yalnız panelin görmesi gereken iç alanlar: anahtarsız okumada (site, herkes) gönderilmez.
-var IC_ALANLAR = { kaynak_sekme: 1, kaynak_satir: 1, giren: 1, giris_tarihi: 1, konu_notu: 1, not: 1, tabela_ham: 1, koordinat_ham: 1, ham: 1, kaynak_kayitlar: 1, kayit_notlari: 1, vikipedi_neden: 1 };
+var IC_ALANLAR = { kaynak_sekme: 1, kaynak_satir: 1, giren: 1, giris_tarihi: 1, konu_notu: 1, not: 1, tabela_ham: 1, koordinat_ham: 1, ham: 1, kaynak_kayitlar: 1, kayit_notlari: 1, vikipedi_neden: 1, tema: 1, alt_temalar: 1, roller: 1 };
+// Yalnız bir sekmede iç olan alanlar (mekânın eski dönem sınıflaması; hikâyenin ve görselin dönemi herkese açıktır)
+var IC_SEKME_ALANLARI = { mekanlar: { donem: 1 } };
 
 function doGet(e) {
   var p = (e && e.parameter) || {};
@@ -30,7 +32,7 @@ function doGet(e) {
   var out = {};
   TABLOLAR.forEach(function (t) {
     var rows = oku_(t);
-    if (!tam) rows = rows.map(function (r) { var o = {}; Object.keys(r).forEach(function (k) { if (!IC_ALANLAR[k]) o[k] = r[k]; }); return o; });
+    if (!tam) rows = rows.map(function (r) { var o = {}; Object.keys(r).forEach(function (k) { if (!IC_ALANLAR[k] && !(IC_SEKME_ALANLARI[t] || {})[k]) o[k] = r[k]; }); return o; });
     out[t] = rows;
   });
   out.tam = tam;

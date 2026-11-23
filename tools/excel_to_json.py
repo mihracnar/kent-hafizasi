@@ -10,18 +10,20 @@ Kullanım:  python tools/excel_to_json.py [hafiza-veri.xlsx]
 """
 import sys, json, pathlib, re
 from openpyxl import load_workbook
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import kategoriler as KAT
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 XLSX = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'data_ozel' / 'hafiza-veri.xlsx'
-SEKMELER = ['mekanlar', 'hikayeler', 'kisiler', 'gorseller', 'hikaye_mekan', 'hikaye_kisi', 'mekan_kisi', 'temalar']
+SEKMELER = ['mekanlar', 'hikayeler', 'kisiler', 'gorseller', 'hikaye_mekan', 'hikaye_kisi', 'mekan_kisi', 'mekan_gruplari', 'mekan_turleri', 'listeler']
 SAYI = {'enlem', 'boylam', 'sira', 'kaynak_satir'}
-IC = {'kaynak_sekme', 'kaynak_satir', 'giren', 'giris_tarihi', 'konu_notu', 'not', 'tabela_ham', 'koordinat_ham', 'ham', 'kaynak_kayitlar', 'kayit_notlari', 'vikipedi_neden'}
 LISTE = {('hikayeler', 'durum'): {'yayinda', 'taslak', 'arsiv'}, ('mekanlar', 'durum'): {'yayinda', 'taslak', 'arsiv'}, ('kisiler', 'durum'): {'yayinda', 'taslak'},
          ('hikayeler', 'donem'): {'', '1900 Öncesi', '1901 - 1950', '1951 - 1990', '1991 Sonrası'},
          ('mekanlar', 'tabela'): {'', 'evet', 'hayır'}, ('mekanlar', 'karekod_basildi'): {'', 'evet', 'hayır'}, ('gorseller', 'donem'): {'o zaman', 'bugün'}, ('gorseller', 'konu'): {'', 'mekân', 'hikâye'},
          ('hikaye_mekan', 'rol'): {'ana', 'geçtiği'}, ('hikaye_kisi', 'onay'): {'onaylı', 'öneri', 'reddedildi'}, ('mekan_kisi', 'onay'): {'onaylı', 'öneri', 'reddedildi'},
          ('mekanlar', 'donem'): {'', '1900 Öncesi', '1901 - 1950', '1951 - 1990', '1991 Sonrası'},
-         ('kisiler', 'vikipedi_onay'): {'', 'öneri', 'onaylı', 'reddedildi'}, ('mekanlar', 'vikipedi_onay'): {'', 'öneri', 'onaylı', 'reddedildi'}}
+         ('kisiler', 'vikipedi_onay'): {'', 'öneri', 'onaylı', 'reddedildi'}, ('mekanlar', 'vikipedi_onay'): {'', 'öneri', 'onaylı', 'reddedildi'},
+         ('mekanlar', 'yapi_durumu'): {''} | set(KAT.YAPI_DURUMU), ('gorseller', 'tur'): {''} | set(KAT.GORSEL_TURLERI), ('listeler', 'liste'): {'hikaye_konu', 'meslek'}}
 
 VIKI = ('vikipedi_baslik', 'vikipedi_url', 'wikidata', 'vikipedi_ozet')
 if not XLSX.exists():
@@ -29,7 +31,7 @@ if not XLSX.exists():
 wb = load_workbook(XLSX, data_only=True, read_only=True)
 T = {}
 for ad in SEKMELER:
-    if ad not in wb.sheetnames: sys.exit(f'"{ad}" sekmesi yok' + (' — bu sekme mekân bilgisi ayrımıyla eklendi; yeni hafiza-veri.xlsx dosyasını kullanın' if ad == 'mekan_kisi' else ''))
+    if ad not in wb.sheetnames: sys.exit(f'"{ad}" sekmesi yok' + (' — kategori sekmeleri eksik; önce python tools/kategori_ekle.py çalıştırın' if ad in ('mekan_gruplari', 'mekan_turleri', 'listeler') else ''))
     it = wb[ad].iter_rows(values_only=True)
     basliklar = [str(h).strip() if h is not None else '' for h in next(it)]
     rows = []
@@ -76,10 +78,20 @@ for i, g in enumerate(T['gorseller']):
 for (ad, alan), izin in LISTE.items():
     for i, r in enumerate(T[ad], 2):
         if r.get(alan, '') not in izin: hata.append(f'{ad} satır {i}: {alan} "{r.get(alan)}" geçersiz (izinli: {", ".join(sorted(x for x in izin if x))})')
-temalar = {t['ad'] for t in T['temalar']}
-for sk in ('hikayeler', 'mekanlar'):
+gruplar = {g['ad'] for g in T['mekan_gruplari']}
+turler = {t['ad'] for t in T['mekan_turleri']}
+for i, t in enumerate(T['mekan_turleri'], 2):
+    if t.get('grup') not in gruplar: hata.append(f'mekan_turleri satır {i}: grup "{t.get("grup")}" mekan_gruplari sekmesinde yok')
+for i, g in enumerate(T['mekan_gruplari'], 2):
+    if not re.fullmatch(r'#[0-9A-Fa-f]{6}', g.get('renk', '')): hata.append(f'mekan_gruplari satır {i}: renk "{g.get("renk")}" #RRGGBB biçiminde olmalı')
+for i, m in enumerate(T['mekanlar'], 2):
+    if m.get('tur') and m['tur'] not in turler: hata.append(f'mekanlar satır {i}: tur "{m["tur"]}" mekan_turleri sekmesinde yok')
+izinli = {}
+for l in T['listeler']: izinli.setdefault(l['liste'], set()).add(l['deger'])
+for sk, alan, liste in (('hikayeler', 'konular', 'hikaye_konu'), ('kisiler', 'meslekler', 'meslek')):
     for i, r in enumerate(T[sk], 2):
-        if r.get('tema') and r['tema'] not in temalar: hata.append(f'{sk} satır {i}: tema "{r["tema"]}" temalar sekmesinde yok')
+        for v in [x.strip() for x in (r.get(alan) or '').split(',') if x.strip()]:
+            if v not in izinli.get(liste, set()): hata.append(f'{sk} satır {i}: {alan} içindeki "{v}" listeler sekmesinde ({liste}) yok')
 for i, m in enumerate(T['mekanlar'], 2):
     if m.get('enlem') is not None and not (40.5 <= m['enlem'] <= 41.7 and 27.9 <= (m.get('boylam') or 0) <= 30.0):
         uyari.append(f'mekanlar satır {i}: koordinat İstanbul dışında görünüyor ({m["enlem"]}, {m.get("boylam")})')
@@ -108,13 +120,15 @@ def jyaz(yol, rows):
     yol.write_text('[\n' + ',\n'.join(json.dumps(r, ensure_ascii=False) for r in rows) + '\n]\n', encoding='utf-8')
 (ROOT / 'data').mkdir(exist_ok=True); (ROOT / 'data_ozel').mkdir(exist_ok=True)
 for ad, rows in T.items():
-    acik = [{k: v for k, v in r.items() if k not in IC} for r in rows]
+    acik = [{k: v for k, v in r.items() if not KAT.ic(ad, k)} for r in rows]
     if ad == 'gorseller': acik = [g for g in acik if g.get('drive_id') or g.get('site_url')]
     if ad in ('kisiler', 'mekanlar'):  # onaylanmamış Vikipedi önerisi herkese açık veriye girmez (panel tam hâlini data_ozel'den okur)
         acik = [r if r.get('vikipedi_onay') == 'onaylı' else dict(r, **{k: '' for k in VIKI if k in r}) for r in acik]
     jyaz(ROOT / 'data' / f'{ad}.json', acik)
     if ad in ('mekanlar', 'hikayeler', 'gorseller', 'kisiler'):
-        jyaz(ROOT / 'data_ozel' / f'{ad}.json', [dict({k: r.get(k, '') for k in r if k in IC or (k in VIKI and r.get('vikipedi_onay') != 'onaylı')}, id=r['id']) for r in rows])
-jyaz(ROOT / 'data_ozel' / 'gorseller_tum.json', [{k: v for k, v in g.items() if k not in IC} for g in T['gorseller']])
+        jyaz(ROOT / 'data_ozel' / f'{ad}.json', [dict({k: r.get(k, '') for k in r if KAT.ic(ad, k) or (k in VIKI and r.get('vikipedi_onay') != 'onaylı')}, id=r['id']) for r in rows])
+jyaz(ROOT / 'data_ozel' / 'gorseller_tum.json', [{k: v for k, v in g.items() if not KAT.ic('gorseller', k)} for g in T['gorseller']])
+eski = ROOT / 'data' / 'temalar.json'
+if eski.exists(): eski.unlink(); print('data/temalar.json kaldırıldı (yerini mekan_gruplari.json aldı).')
 print({ad: len(r) for ad, r in T.items()})
 print('data/*.json ve data_ozel/*.json yazıldı.')

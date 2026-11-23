@@ -6,6 +6,8 @@ Adı "_" ile başlayan sütunlar okumayı kolaylaştıran otomatik formüllerdir
 Kullanım:  python tools/excel_olustur.py [çıktı.xlsx]
 """
 import csv, sys, pathlib
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import kategoriler as KAT
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment
 from openpyxl.worksheet.datavalidation import DataValidation
@@ -15,18 +17,20 @@ from openpyxl.utils import get_column_letter
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = ROOT / 'data_ozel' / 'sheets'
 OUT = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'data_ozel' / 'hafiza-veri.xlsx'
-SEKMELER = ['hikayeler', 'mekanlar', 'kisiler', 'gorseller', 'hikaye_mekan', 'hikaye_kisi', 'mekan_kisi', 'temalar']
+SEKMELER = KAT.SEKMELER
 SAYI = {'enlem', 'boylam', 'sira', 'kaynak_satir'}
-IC = {'kaynak_sekme', 'kaynak_satir', 'giren', 'giris_tarihi', 'konu_notu', 'not', 'tabela_ham', 'koordinat_ham', 'ham', 'kaynak_kayitlar', 'kayit_notlari', 'vikipedi_neden'}
 GENISLIK = {'id': 9, 'slug': 28, 'baslik': 40, 'ad': 34, 'metin': 70, 'kaynak': 45, 'bugunku_ad': 34, 'alt_temalar': 28, 'drive_id': 36,
-            'konu_notu': 34, 'not': 34, 'tema': 26, 'altyazi': 30, 'kisa_bilgi': 40, 'roller': 24, 'koordinat_ham': 26, 'ham': 30, 'site_url': 24, 'aciklama': 70, 'aciklama_kaynak': 40, 'kaynak_kayitlar': 26, 'kayit_notlari': 40, 'iliski': 20, 'vikipedi_ozet': 60, 'vikipedi_baslik': 28, 'vikipedi_url': 30, 'vikipedi_neden': 40, 'vikipedi_onay': 14, 'wikidata': 12, 'kisi_id': 18, 'konu': 10, 'bilgi_kaynak': 40}
+            'konu_notu': 34, 'not': 34, 'tema': 26, 'altyazi': 30, 'kisa_bilgi': 40, 'roller': 24, 'koordinat_ham': 26, 'ham': 30, 'site_url': 24, 'aciklama': 70, 'aciklama_kaynak': 40, 'kaynak_kayitlar': 26, 'kayit_notlari': 40, 'iliski': 20, 'vikipedi_ozet': 60, 'vikipedi_baslik': 28, 'vikipedi_url': 30, 'vikipedi_neden': 40, 'vikipedi_onay': 14, 'wikidata': 12, 'kisi_id': 18, 'konu': 10, 'bilgi_kaynak': 40,
+            'tur': 14, 'yapi_durumu': 12, 'konular': 28, 'meslekler': 28, 'grup': 14, 'liste': 14, 'deger': 22, 'renk': 10}
 LISTE = {('hikayeler', 'durum'): 'yayinda,taslak,arsiv', ('mekanlar', 'durum'): 'yayinda,taslak,arsiv', ('kisiler', 'durum'): 'yayinda,taslak',
          ('hikayeler', 'donem'): '1900 Öncesi,1901 - 1950,1951 - 1990,1991 Sonrası',
          ('mekanlar', 'tabela'): 'evet,hayır', ('mekanlar', 'karekod_basildi'): 'evet,hayır', ('gorseller', 'donem'): 'o zaman,bugün', ('gorseller', 'konu'): 'mekân,hikâye',
          ('gorseller', 'izin'): 'Kamu malı,İzinli,Kaynak gösterilerek,İzin bekleniyor', ('hikaye_mekan', 'rol'): 'ana,geçtiği',
          ('hikaye_kisi', 'onay'): 'onaylı,öneri,reddedildi', ('mekan_kisi', 'onay'): 'onaylı,öneri,reddedildi',
          ('mekanlar', 'donem'): '1900 Öncesi,1901 - 1950,1951 - 1990,1991 Sonrası',
-         ('kisiler', 'vikipedi_onay'): 'öneri,onaylı,reddedildi', ('mekanlar', 'vikipedi_onay'): 'öneri,onaylı,reddedildi'}
+         ('kisiler', 'vikipedi_onay'): 'öneri,onaylı,reddedildi', ('mekanlar', 'vikipedi_onay'): 'öneri,onaylı,reddedildi',
+         ('mekanlar', 'yapi_durumu'): ','.join(KAT.YAPI_DURUMU), ('gorseller', 'tur'): ','.join(KAT.GORSEL_TURLERI),
+         ('mekan_turleri', 'grup'): ','.join(g for g, _ in KAT.GRUPLAR), ('listeler', 'liste'): 'hikaye_konu,meslek'}
 # yardımcı sütunlar: (sütun adı, kimlik sütunu, hedef sekme, hedef sütun)
 YARDIM = {'hikaye_mekan': [('_hikaye', 'hikaye_id', 'hikayeler', 'baslik'), ('_mekan', 'mekan_id', 'mekanlar', 'ad')],
           'hikaye_kisi': [('_hikaye', 'hikaye_id', 'hikayeler', 'baslik'), ('_kisi', 'kisi_id', 'kisiler', 'ad')],
@@ -44,7 +48,13 @@ ACIKLAMA = {'id': 'Değişmez kimlik. Yeni satırda bir sonraki numarayı verin 
             'iliski': 'İsteğe bağlı kısa not: yaşadı, doğdu, atölyesi…',
             'altyazi': 'Fotoğrafın altyazısı: fotoğrafta ne/kim görülüyor.',
             'vikipedi_onay': 'tools/vikipedi_cek.py öneri yazar. Doğru maddeyse onaylı yapın; ancak o zaman özet sitede (Vikipedi atfıyla) görünür. Yanlışsa reddedildi: betik bir daha önermez.',
-            'vikipedi_ozet': 'Türkçe Vikipedi maddesinin giriş paragrafı (CC BY-SA 4.0). Elle değiştirmeyin; ekibin metni kisa_bilgi / aciklama sütununa yazılır.'}
+            'vikipedi_ozet': 'Türkçe Vikipedi maddesinin giriş paragrafı (CC BY-SA 4.0). Elle değiştirmeyin; ekibin metni kisa_bilgi / aciklama sütununa yazılır.',
+            'tur': 'mekanlar: mekânın türü, mekan_turleri sekmesindeki listeden tek değer; haritadaki renk türün grubundan gelir. gorseller: Fotoğraf, Kartpostal, Resim, Gravür, Harita, Gazete ya da Belge.',
+            'yapi_durumu': 'Yapı bugün ayakta mı: ayakta / yıkıldı. Bilinmiyorsa boş bırakın.',
+            'konular': 'Hikâyenin konuları, listeler sekmesindeki hikaye_konu değerlerinden; birden çoksa virgülle (Edebiyat, Siyaset).',
+            'meslekler': 'Kişinin meslekleri, listeler sekmesindeki meslek değerlerinden; birden çoksa virgülle (Yazar, Gazeteci).',
+            'tema': 'Eski sınıflama, yalnız ekip içi kayıt. Sitede kullanılmaz.', 'alt_temalar': 'Eski sınıflama, yalnız ekip içi kayıt. Sitede kullanılmaz.',
+            'roller': 'Eski sınıflama, yalnız ekip içi kayıt. Sitede meslekler sütunu kullanılır.'}
 
 AR = 'Arial'
 BASLIK = Font(name=AR, bold=True, color='FFFFFF'); BASLIK_DOLGU = PatternFill('solid', fgColor='141414')
@@ -70,22 +80,24 @@ satirlar = [
     ('hikaye_mekan', 'Hangi hikâye hangi mekânlarda geçiyor (çoktan çoğa). sira: metindeki sıra.'),
     ('hikaye_kisi', 'Hangi hikâyede hangi kişi anlatılıyor. onay sütunu önerileri ayırır.'),
     ('mekan_kisi', 'Hangi kişi hangi mekânla doğrudan ilişkili (burada yaşadı, evi, atölyesi…). onay sütunu önerileri ayırır.'),
-    ('temalar', 'Dört ana tema ve haritadaki renkleri.'),
+    ('mekan_gruplari', 'Mekân türü grupları (Konut, Dinî yapı, Kamu…) ve haritadaki renkleri.'),
+    ('mekan_turleri', 'mekanlar.tur sütununun izinli değerleri ve her türün grubu. Yeni tür gerekirse buraya satır ekleyin.'),
+    ('listeler', 'Çok seçimli alanların izinli değerleri: hikaye_konu (hikayeler.konular) ve meslek (kisiler.meslekler).'),
     ('', ''),
     ('Kurallar', ''),
     ('1', 'id değişmez ve tekrar kullanılmaz. Bağlar hep id ile kurulur, satır numarasıyla değil.'),
     ('2', 'Bir hücreye tek değer: bir fotoğraf bir satır, bir bağ bir satır.'),
     ('3', 'Silmek yerine durum = arsiv yapın.'),
-    ('4', 'Siyah başlıklı sütunlar herkese açık site verisidir. Kahverengi başlıklılar (veri giren, not, konu notu, ham değerler) ekip içidir; sitede görünmez.'),
+    ('4', 'Siyah başlıklı sütunlar herkese açık site verisidir. Kahverengi başlıklılar (veri giren, not, konu notu, ham değerler, eski tema ve rol sınıflaması) ekip içidir; sitede görünmez.'),
     ('5', 'Gri başlıklı, "_" ile başlayan sütunlar formüldür ve yalnız okumayı kolaylaştırır; yeni satırda üstteki hücreden aşağı çekin. Betikler bu sütunları okumaz.'),
-    ('6', 'Açılır listeli hücrelerde yalnız listedeki değerler geçerlidir (durum, dönem, rol, onay…).'),
+    ('6', 'Açılır listeli hücrelerde yalnız listedeki değerler geçerlidir (durum, dönem, rol, onay, tür…). Çok seçimli alanlarda (konular, meslekler) değerler virgülle ayrılır ve listeler sekmesinde bulunmalıdır.'),
     ('', ''),
     ('Genel bilgi mi, hikâye mi?', 'Yeri tanıtan bilgi (kim yaptırdı, kim yaşadı, ne zaman yıkıldı) mekanlar → aciklama sütununa; o yerde yaşanmış bir olay ya da anlatı hikayeler sekmesine. Yalnız fotoğrafı anlatan metin gorseller → altyazi sütununa.'),
     ('Yeni hikâye eklemek', 'hikayeler\'e bir satır (yeni id, slug, baslik, metin…) + hikaye_mekan\'a en az bir satır (hikaye_id, mekan_id, sira 1, rol ana).'),
     ('Siteyi güncellemek', 'python tools/excel_to_json.py  — dosyayı okur, denetler ve data/*.json dosyalarını yazar.'),
 ]
 for r in satirlar: ok.append(list(r))
-KALIN = {'A4', 'B4', 'A14', 'A22', 'A23', 'A24'}
+KALIN = {'A4', 'B4', 'A16', 'A24', 'A25', 'A26'}
 for row in ok.iter_rows():
     for c in row:
         c.font = Font(name=AR, size=11, bold=c.coordinate in KALIN)
@@ -112,7 +124,7 @@ for ad in SEKMELER:
     n = len(rows) + 1
     for j, k in enumerate(basliklar, 1):
         c = ws.cell(row=1, column=j); c.font = BASLIK
-        c.fill = YARDIM_DOLGU if k.startswith('_') else IC_DOLGU if k in IC else BASLIK_DOLGU
+        c.fill = YARDIM_DOLGU if k.startswith('_') else IC_DOLGU if KAT.ic(ad, k) else BASLIK_DOLGU
         c.alignment = Alignment(vertical='center')
         if k in ACIKLAMA: c.comment = Comment(ACIKLAMA[k], 'Hafıza İstanbul')
         ws.column_dimensions[get_column_letter(j)].width = GENISLIK.get(k, 16 if not k.startswith('_') else 30)
@@ -136,9 +148,10 @@ for ad in SEKMELER:
             col = get_column_letter(basliklar.index(k) + 1)
             dv = DataValidation(type='list', formula1=f'"{liste}"', allow_blank=True, showErrorMessage=True, errorTitle='Geçersiz değer', error='Listeden bir değer seçin.')
             ws.add_data_validation(dv); dv.add(f'{col}2:{col}{n + 500}')
-    if ad in ('hikayeler', 'mekanlar') and 'tema' in basliklar:
-        col = get_column_letter(basliklar.index('tema') + 1)
-        dv = DataValidation(type='list', formula1='temalar!$A$2:$A$20', allow_blank=True); ws.add_data_validation(dv); dv.add(f'{col}2:{col}{n + 500}')
+    if ad == 'mekanlar' and 'tur' in basliklar:
+        col = get_column_letter(basliklar.index('tur') + 1)
+        dv = DataValidation(type='list', formula1='mekan_turleri!$A$2:$A$200', allow_blank=True, showErrorMessage=True, errorTitle='Geçersiz tür', error='mekan_turleri sekmesindeki bir türü seçin.')
+        ws.add_data_validation(dv); dv.add(f'{col}2:{col}{n + 500}')
     ws.freeze_panes = 'B2'; ws.auto_filter.ref = f'A1:{get_column_letter(len(basliklar))}{n}'
     sayac[ad] = len(rows)
 

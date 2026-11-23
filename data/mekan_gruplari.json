@@ -1,0 +1,11 @@
+[
+{"ad": "Konut", "renk": "#9B4444", "sira": 1},
+{"ad": "Dinî yapı", "renk": "#6B5B95", "sira": 2},
+{"ad": "Kamu", "renk": "#3F6E9A", "sira": 3},
+{"ad": "Kültür", "renk": "#B8862E", "sira": 4},
+{"ad": "Yeme-içme", "renk": "#C8643B", "sira": 5},
+{"ad": "İş yeri", "renk": "#3E8A82", "sira": 6},
+{"ad": "Açık alan", "renk": "#5E8C4A", "sira": 7},
+{"ad": "Sanayi", "renk": "#6E6A64", "sira": 8},
+{"ad": "Anıt", "renk": "#7A5230", "sira": 9}
+]

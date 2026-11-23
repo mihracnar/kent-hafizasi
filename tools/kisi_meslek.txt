@@ -1,0 +1,619 @@
+# Kişi meslekleri — denetimli liste; her kişi tek tek okunarak verildi. Birden çok meslek virgülle.
+# Boş = elde yeterli bilgi yok (Vikipedi taramasından sonra tamamlanacak).
+# Biçim: id | meslekler
+K-001 | Asker, Siyasetçi
+K-002 | Yazar
+K-003 | Yönetmen, Senarist
+K-004 | Yönetmen, Senarist
+K-005 | Mimar, Yayıncı
+K-006 | Siyasetçi
+K-007 | Şair, Devlet görevlisi
+K-008 | Şair, Yazar
+K-009 | Gazeteci, Yazar
+K-010 | Siyasetçi
+K-011 | Tarihçi, Yazar
+K-012 | Asker
+K-013 | Şair
+K-014 | Ressam
+K-015 | Yazar, Şair, Siyasetçi
+K-016 | Bilim insanı
+K-017 | Sporcu
+K-018 | Yazar
+K-019 | Yazar, Gazeteci
+K-020 | Yazar
+K-021 | Asker, Siyasetçi
+K-022 | Yazar
+K-023 | Yazar, Siyasetçi
+K-024 | Grafik sanatçısı
+K-025 | Oyuncu, Yazar, Yayıncı
+K-026 | Seramik sanatçısı
+K-027 | Tarihçi, Akademisyen
+K-028 | Ressam
+K-029 | Gazeteci, Yayıncı
+K-030 | Yazar
+K-031 | Yayıncı
+K-032 | Ressam
+K-033 | Oyuncu
+K-034 | Şair, Yazar
+K-035 | Şair, Yazar
+K-036 | Şair
+K-037 | 
+K-038 | Asker, Siyasetçi
+K-039 | Hekim, Devlet görevlisi
+K-040 | 
+K-041 | Şair, Yazar
+K-042 | Yazar
+K-043 | Şair, Gazeteci
+K-044 | Yazar, Şair
+K-045 | Ressam, Şair
+K-046 | Müzisyen
+K-047 | Yazar, Gazeteci
+K-048 | Ressam
+K-049 | Şair, Yazar
+K-050 | Yazar
+K-051 | Yazar
+K-052 | Hekim, Tarihçi
+K-053 | Şair, Siyasetçi
+K-054 | Ressam, Heykeltıraş
+K-055 | Siyasetçi
+K-056 | Müzisyen
+K-057 | Tarihçi, Yazar
+K-058 | Asker, Devlet görevlisi
+K-059 | Grafik sanatçısı
+K-060 | Grafik sanatçısı
+K-061 | Gazeteci, Yazar
+K-062 | Gazeteci, Yayıncı
+K-063 | Tarihçi, Yazar
+K-064 | Yazar
+K-065 | Mühendis
+K-066 | Hekim, Yazar
+K-067 | Yazar
+K-068 | Ressam, Hattat
+K-069 | Ressam
+K-070 | Yazar
+K-071 | Devlet görevlisi
+K-072 | Asker
+K-073 | Gazeteci, Şarkıcı
+K-074 | Şair, Yazar
+K-075 | Yazar
+K-076 | Şair
+K-077 | Şair
+K-078 | Akademisyen
+K-079 | Müzisyen
+K-080 | Şair
+K-081 | Yazar
+K-082 | Şair
+K-083 | Şair
+K-084 | Ressam
+K-085 | Şair, Yayıncı
+K-086 | Şair, Yazar
+K-087 | Asker, Mühendis
+K-088 | Şair
+K-089 | Müzisyen
+K-090 | Ressam
+K-091 | Yazar
+K-092 | Mimar
+K-093 | Oyuncu
+K-094 | Mimar, Gazeteci
+K-095 | Şair
+K-096 | Müzisyen, Besteci
+K-097 | Şair, Yazar
+K-098 | Şair, Yazar
+K-099 | Şair, Çevirmen
+K-100 | Yazar
+K-101 | Yazar, Senarist
+K-102 | Hattat
+K-103 | Devlet görevlisi
+K-104 | Şair
+K-105 | Yazar
+K-106 | Siyasetçi, Hekim
+K-107 | Şair
+K-108 | Devlet görevlisi
+K-109 | Ressam
+K-110 | Ressam
+K-111 | Siyasetçi
+K-112 | Hekim
+K-113 | Tarihçi
+K-114 | Şair
+K-115 | Devlet görevlisi
+K-116 | Asker, Siyasetçi
+K-117 | Besteci
+K-118 | Yazar, Tarihçi
+K-119 | Din adamı
+K-120 | Yazar, Asker
+K-121 | Müzisyen
+K-122 | Hattat
+K-123 | Yayıncı
+K-124 | Ressam, Hattat
+K-125 | Devlet görevlisi
+K-126 | Oyuncu
+K-127 | Yazar, Şair, Akademisyen
+K-128 | Tarihçi, Çevirmen
+K-129 | Oyuncu
+K-130 | Gazeteci, Yazar
+K-131 | Şair
+K-132 | Oyuncu
+K-133 | Din adamı
+K-134 | İş insanı
+K-135 | 
+K-136 | Bilim insanı
+K-137 | Yazar
+K-138 | Mimar
+K-139 | Şair
+K-140 | Bilim insanı
+K-141 | Din adamı
+K-142 | Oyuncu
+K-143 | Şair
+K-144 | Hattat
+K-145 | Yazar
+K-146 | Yazar
+K-147 | Mimar
+K-148 | Şair
+K-149 | Tarihçi
+K-150 | Şair
+K-151 | Mimar
+K-152 | Mimar
+K-153 | Yazar
+K-154 | Ressam
+K-155 | Müzisyen
+K-156 | Terzi
+K-157 | Tarihçi
+K-158 | Yazar, Gazeteci
+K-159 | Tarihçi
+K-160 | Ressam
+K-161 | Ressam
+K-162 | Ressam
+K-163 | Çevirmen, Yazar
+K-164 | Yazar
+K-165 | Yazar, Gazeteci
+K-166 | Yazar, Tarihçi
+K-167 | Yazar
+K-168 | Ressam
+K-169 | Ressam
+K-170 | Yazar, Yayıncı
+K-171 | Besteci, Müzisyen
+K-172 | Yazar
+K-173 | Oyuncu
+K-174 | Ressam
+K-175 | Asker, Siyasetçi
+K-176 | Yazar, Çevirmen
+K-177 | Heykeltıraş
+K-178 | Ressam
+K-179 | Şair, Yazar
+K-180 | Şair, Yazar
+K-181 | Şair
+K-182 | Yazar
+K-183 | Fotoğrafçı, Gazeteci
+K-184 | Yazar
+K-185 | Ressam
+K-186 | Mimar, Yazar
+K-187 | Oyuncu, Yazar
+K-188 | Yazar
+K-189 | Ressam
+K-190 | Yazar
+K-191 | Şair, Gazeteci
+K-192 | Yönetmen, Oyuncu, Şair
+K-193 | Devlet görevlisi
+K-194 | Ressam
+K-195 | Yazar
+K-196 | Ressam
+K-197 | Yazar
+K-198 | Ressam
+K-199 | Çevirmen, Akademisyen
+K-200 | Oyuncu
+K-201 | Yazar
+K-202 | Oyuncu, Yönetmen
+K-203 | Yazar
+K-204 | Ressam
+K-205 | Oyuncu
+K-206 | Siyasetçi
+K-207 | Mimar
+K-208 | Ressam
+K-209 | Ressam
+K-210 | Şair, Yazar
+K-211 | Mimar
+K-212 | Mimar
+K-213 | 
+K-214 | Siyasetçi
+K-215 | Asker, Siyasetçi
+K-216 | Heykeltıraş
+K-217 | Oyuncu
+K-218 | Şarkıcı
+K-219 | Yazar, Çevirmen
+K-220 | Şair
+K-221 | Besteci
+K-222 | Ressam
+K-223 | Müzisyen, Hekim
+K-224 | Şair, Yazar
+K-225 | Hattat
+K-226 | Mimar
+K-227 | Ressam
+K-228 | Şair
+K-229 | Besteci, Müzisyen
+K-230 | Yazar
+K-231 | Şair, Çevirmen
+K-232 | Yazar
+K-233 | Şair
+K-234 | Şair
+K-235 | Şair
+K-236 | Yazar, Gazeteci
+K-237 | Senarist, Oyuncu
+K-238 | Şair, Çevirmen
+K-239 | Yazar
+K-240 | Din adamı
+K-241 | Seramik sanatçısı
+K-242 | Yazar, Yayıncı
+K-243 | Ressam
+K-244 | Yazar, Çevirmen
+K-245 | Yazar
+K-246 | Ressam
+K-247 | Şair
+K-248 | Akademisyen
+K-249 | Yazar
+K-250 | Şair, Din adamı
+K-251 | Yazar
+K-252 | Ressam
+K-253 | Yazar
+K-254 | Oyuncu
+K-255 | Oyuncu
+K-256 | Oyuncu
+K-257 | Oyuncu
+K-258 | Yazar
+K-259 | Asker, Siyasetçi
+K-260 | 
+K-261 | Oyuncu
+K-262 | 
+K-263 | Devlet görevlisi
+K-264 | Şarkıcı, Besteci
+K-265 | Mimar
+K-266 | Yazar, Siyasetçi
+K-267 | Siyasetçi
+K-268 | Sporcu, Siyasetçi
+K-269 | Yazar, Çevirmen
+K-270 | Oyuncu
+K-271 | Oyuncu
+K-272 | Oyuncu
+K-273 | Yazar
+K-274 | Oyuncu, Yönetmen
+K-275 | Arkeolog
+K-276 | Yazar
+K-277 | Oyuncu
+K-278 | Oyuncu
+K-279 | Besteci, Müzisyen
+K-280 | Oyuncu
+K-281 | Müzisyen
+K-282 | Devlet görevlisi, Hattat, Yayıncı
+K-283 | Devlet görevlisi
+K-284 | Yazar
+K-285 | Ressam
+K-286 | Yazar
+K-287 | Oyuncu, Yönetmen
+K-288 | Mimar
+K-289 | Hekim, Devlet görevlisi
+K-290 | Arkeolog
+K-291 | Oyuncu
+K-292 | Ressam
+K-293 | Hekim, Akademisyen
+K-294 | Çevirmen
+K-295 | Akademisyen
+K-296 | Besteci
+K-297 | Yazar
+K-298 | Yazar
+K-299 | Devlet görevlisi
+K-300 | Yazar, Şair
+K-301 | Akademisyen
+K-302 | Mimar
+K-303 | Mimar
+K-304 | Mimar
+K-305 | Oyuncu
+K-306 | Oyuncu, Yönetmen
+K-307 | Oyuncu, Yönetmen
+K-308 | Şarkıcı
+K-309 | Ressam
+K-310 | Ressam
+K-311 | Asker
+K-312 | Oyuncu
+K-313 | İş insanı
+K-314 | Ressam, Arkeolog
+K-315 | Hekim
+K-316 | Yazar, Gazeteci
+K-317 | Şair
+K-318 | Seramik sanatçısı
+K-319 | Oyuncu
+K-320 | Tarihçi, Siyasetçi
+K-321 | Oyuncu
+K-322 | Devlet görevlisi
+K-323 | Hükümdar
+K-324 | 
+K-325 | Ressam
+K-326 | Küratör, Yayıncı
+K-327 | Seramik sanatçısı
+K-328 | Hükümdar
+K-329 | Din adamı
+K-330 | 
+K-331 | 
+K-332 | Hekim, Şair
+K-333 | Gazeteci, Yayıncı
+K-334 | Mimar
+K-335 | Küratör, Yazar
+K-336 | Şarkıcı
+K-337 | Gazeteci
+K-338 | Asker, Tarihçi
+K-339 | Yazar, Yayıncı
+K-340 | Devlet görevlisi
+K-341 | 
+K-342 | 
+K-343 | 
+K-344 | Yazar
+K-345 | Gazeteci, Siyasetçi
+K-346 | Yazar
+K-347 | Bilim insanı, Akademisyen
+K-348 | Mimar
+K-349 | 
+K-350 | Oyuncu
+K-351 | Yazar, Gazeteci
+K-352 | Yazar, Akademisyen
+K-353 | Gazeteci, Yazar
+K-354 | Mimar
+K-355 | Mimar
+K-356 | Mimar
+K-357 | Mimar
+K-358 | Mimar
+K-359 | Mimar
+K-360 | Mimar
+K-361 | Şair, Yazar
+K-362 | Şair
+K-363 | Tarihçi, Yazar
+K-364 | Yazar
+K-365 | Yazar
+K-366 | Besteci
+K-367 | 
+K-368 | Oyuncu
+K-369 | Oyuncu
+K-370 | Asker
+K-371 | 
+K-372 | Oyuncu
+K-373 | Yönetmen
+K-374 | Oyuncu
+K-375 | Oyuncu
+K-376 | Oyuncu
+K-377 | Oyuncu
+K-378 | Oyuncu
+K-379 | Şarkıcı, Oyuncu
+K-380 | Gazeteci
+K-381 | İş insanı
+K-382 | İş insanı
+K-383 | Mimar
+K-384 | Din adamı
+K-385 | Şair, Yazar
+K-386 | Fotoğrafçı
+K-387 | 
+K-388 | Gazeteci
+K-389 | Yayıncı
+K-390 | Şair, Yazar
+K-391 | Oyuncu
+K-392 | Asker, Siyasetçi
+K-393 | Grafik sanatçısı, Oyuncu
+K-394 | Oyuncu
+K-395 | Oyuncu
+K-396 | İş insanı
+K-397 | 
+K-398 | Müzisyen, Besteci
+K-399 | Yazar
+K-400 | Şair
+K-401 | Müzisyen, Besteci
+K-402 | Oyuncu
+K-403 | Müzisyen
+K-404 | Şarkıcı
+K-405 | Müzisyen
+K-406 | Ressam
+K-407 | Oyuncu
+K-408 | Oyuncu, Yönetmen
+K-409 | Asker
+K-410 | Hükümdar
+K-411 | Müzisyen
+K-412 | Müzisyen
+K-413 | Şarkıcı
+K-414 | Müzisyen
+K-415 | Yayıncı, Şair
+K-416 | Müzisyen, Akademisyen
+K-417 | Akademisyen, Yazar
+K-418 | 
+K-419 | Asker, Siyasetçi
+K-420 | Devlet görevlisi
+K-421 | Ressam
+K-422 | Oyuncu, Yönetmen
+K-423 | Gazeteci
+K-424 | Gazeteci
+K-425 | Fotoğrafçı
+K-426 | 
+K-427 | 
+K-428 | Tarihçi, Akademisyen
+K-429 | Siyasetçi
+K-430 | Asker, Siyasetçi
+K-431 | 
+K-432 | Yazar
+K-433 | Müzisyen
+K-434 | 
+K-435 | Siyasetçi
+K-436 | Siyasetçi
+K-437 | Siyasetçi
+K-438 | Siyasetçi
+K-439 | Siyasetçi
+K-440 | Siyasetçi
+K-441 | Siyasetçi
+K-442 | Siyasetçi
+K-443 | Siyasetçi
+K-444 | Siyasetçi
+K-445 | Siyasetçi
+K-446 | Siyasetçi
+K-447 | Şarkıcı
+K-448 | Gazeteci
+K-449 | Asker, Yazar
+K-450 | 
+K-451 | Gazeteci
+K-452 | Devlet görevlisi
+K-453 | Siyasetçi
+K-454 | 
+K-455 | Şair
+K-456 | Yayıncı
+K-457 | Yazar
+K-458 | 
+K-459 | 
+K-460 | 
+K-461 | 
+K-462 | 
+K-463 | Ressam
+K-464 | Fotoğrafçı
+K-465 | 
+K-466 | Hükümdar
+K-467 | Hükümdar
+K-468 | 
+K-469 | Oyuncu
+K-470 | İş insanı
+K-471 | Asker
+K-472 | Yazar
+K-473 | Yazar
+K-474 | Devlet görevlisi
+K-475 | Mühendis
+K-476 | Gazeteci
+K-477 | 
+K-478 | Yönetmen
+K-479 | Yazar
+K-480 | Müzisyen
+K-481 | 
+K-482 | Yazar, Gazeteci
+K-483 | Ressam, Mühendis
+K-484 | Ressam
+K-485 | Ressam
+K-486 | Ressam
+K-487 | Fotoğrafçı
+K-488 | Gazeteci, Yazar
+K-489 | 
+K-490 | Oyuncu
+K-491 | Oyuncu
+K-492 | 
+K-493 | 
+K-494 | Şarkıcı, Oyuncu
+K-495 | 
+K-496 | 
+K-497 | Oyuncu
+K-498 | Oyuncu
+K-499 | Oyuncu
+K-500 | Oyuncu
+K-501 | Yazar, Senarist
+K-502 | 
+K-503 | 
+K-504 | Oyuncu
+K-505 | 
+K-506 | Oyuncu
+K-507 | Oyuncu
+K-508 | Asker, Siyasetçi
+K-509 | Şair
+K-510 | Şair, Yazar
+K-511 | 
+K-512 | Yazar
+K-513 | Oyuncu
+K-514 | Oyuncu
+K-515 | 
+K-516 | Hükümdar
+K-517 | Siyasetçi, Şair
+K-518 | Oyuncu
+K-519 | 
+K-520 | 
+K-521 | 
+K-522 | 
+K-523 | Tarihçi, Yazar
+K-524 | Yazar
+K-525 | 
+K-526 | Yazar, Tarihçi
+K-527 | Yazar
+K-528 | Hekim, Siyasetçi
+K-529 | Ressam
+K-530 | 
+K-531 | Fotoğrafçı
+K-532 | Mimar
+K-533 | 
+K-534 | İş insanı
+K-535 | Yazar
+K-536 | Ressam
+K-537 | 
+K-538 | 
+K-539 | 
+K-540 | Ressam
+K-541 | Ressam
+K-542 | Heykeltıraş
+K-543 | 
+K-544 | Ressam
+K-545 | İş insanı, Fotoğrafçı
+K-546 | 
+K-547 | Grafik sanatçısı
+K-548 | Ressam
+K-549 | 
+K-550 | Heykeltıraş
+K-551 | Ressam
+K-552 | Mimar, Tarihçi
+K-553 | Heykeltıraş
+K-554 | Yazar
+K-555 | 
+K-556 | 
+K-557 | 
+K-558 | 
+K-559 | Grafik sanatçısı
+K-560 | Müzisyen, Şair
+K-561 | Müzisyen, Şair
+K-562 | 
+K-563 | Şarkıcı
+K-564 | 
+K-565 | 
+K-566 | Yazar, Çevirmen
+K-567 | 
+K-568 | Oyuncu
+K-569 | Oyuncu
+K-570 | Oyuncu
+K-571 | 
+K-572 | Oyuncu
+K-573 | Oyuncu, Yönetmen
+K-574 | Asker, Devlet görevlisi
+K-575 | Yazar, Siyasetçi
+K-576 | 
+K-577 | Oyuncu
+K-578 | 
+K-579 | 
+K-580 | Müzisyen
+K-581 | Müzisyen
+K-582 | Besteci
+K-583 | Müzisyen
+K-584 | Müzisyen
+K-585 | Müzisyen
+K-586 | Besteci
+K-587 | Besteci
+K-588 | Müzisyen
+K-589 | 
+K-590 | Asker
+K-591 | 
+K-592 | Oyuncu
+K-593 | Oyuncu
+K-594 | Oyuncu
+K-595 | Oyuncu
+K-596 | Oyuncu
+K-597 | Oyuncu
+K-598 | 
+K-599 | Ressam
+K-600 | 
+K-601 | Ressam
+K-602 | 
+K-603 | 
+K-604 | 
+K-605 | 
+K-606 | 
+K-607 | 
+K-608 | 
+K-609 | 
+K-610 | 
+K-611 | 
+K-612 | 
+K-613 | 
+K-614 | 
+K-615 | 
+K-616 | 

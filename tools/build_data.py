@@ -14,8 +14,10 @@ kaynak/ ve data_ozel/ depoya girmez (.gitignore): ekip adları ve iç notlar iç
 
 Kullanım:  python tools/build_data.py
 """
-import csv, json, re, math, pathlib, unicodedata, collections
+import csv, json, re, math, pathlib, unicodedata, collections, sys
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / 'tools'))
+import kategoriler as KAT
 KAYNAK = ROOT / 'kaynak'
 OUT = ROOT / 'data'; OZEL = ROOT / 'data_ozel'
 for d in (OUT, OZEL, OZEL / 'sheets'): d.mkdir(parents=True, exist_ok=True)
@@ -404,13 +406,35 @@ if VJ.exists():
         if neden: r['_ozel']['vikipedi_neden'] = ('inceleme: ' + neden + ' · ' + r['_ozel']['vikipedi_neden']).strip(' ·')
         viki_say[tablo + ' ' + onay] += 1
 
+# ---------- kategoriler (tools/mekan_tur.txt, hikaye_konu.txt, kisi_meslek.txt, gorsel_tur.txt; kayıtlar tek tek okunarak) ----------
+# Eski tema / alt_temalar / roller ve mekânın dönemi ekip içi sütunlara taşınır; sitede yeni alanlar kullanılır.
+_mt = KAT.karar_oku(ROOT / 'tools/mekan_tur.txt'); _hk = KAT.karar_oku(ROOT / 'tools/hikaye_konu.txt')
+_km = KAT.karar_oku(ROOT / 'tools/kisi_meslek.txt'); _gt = KAT.karar_oku(ROOT / 'tools/gorsel_tur.txt')
+def _sirala(tablo, r, yeni, tasinan):
+    r.update(yeni)
+    for k in tasinan: r['_ozel'][k] = r.pop(k, '')
+    acik = [k for k in KAT.SUTUNLAR[tablo] if not KAT.ic(tablo, k)]
+    ozel = [k for k in KAT.SUTUNLAR[tablo] if KAT.ic(tablo, k)]
+    sirali = {k: r[k] for k in acik if k in r}; sirali.update({k: v for k, v in r.items() if k not in sirali and k != '_ozel'})
+    sirali['_ozel'] = {**{k: r['_ozel'][k] for k in ozel if k in r['_ozel']}, **{k: v for k, v in r['_ozel'].items() if k not in ozel}}
+    r.clear(); r.update(sirali)
+for m in mekanlar:
+    v = _mt.get(m['id'], [])
+    _sirala('mekanlar', m, {'tur': v[0] if v else '', 'yapi_durumu': (v[1] if len(v) > 1 else '').lower()}, ('tema', 'alt_temalar', 'donem'))
+for h in hikayeler: _sirala('hikayeler', h, {'konular': (_hk.get(h['id']) or [''])[0]}, ('tema', 'alt_temalar'))
+for k in kisiler: _sirala('kisiler', k, {'meslekler': (_km.get(k['id']) or [''])[0]}, ('roller',))
+_gy = KAT.karar_oku(ROOT / 'tools/gorsel_yil.txt')
+for g in gorseller: _sirala('gorseller', g, {'tur': (_gt.get(g['id']) or [''])[0], 'yil': g.get('yil') or (_gy.get(g['id']) or [''])[0]}, ())
+mekan_gruplari, mekan_turleri, listeler = KAT.grup_satirlari(), KAT.tur_satirlari(), KAT.liste_satirlari()
+
 # ---------- yaz ----------
 VIKI = ('vikipedi_baslik', 'vikipedi_url', 'wikidata', 'vikipedi_ozet')  # onaylanmamış Vikipedi önerisi siteye gitmez, yalnız data_ozel'de durur
 def acik(rows): return [{k: ('' if k in VIKI and r.get('vikipedi_onay') != 'onaylı' else v) for k, v in r.items() if k != '_ozel'} for r in rows]
 def tam(rows): return [dict({k: v for k, v in r.items() if k != '_ozel'}, **r.get('_ozel', {})) for r in rows]
 def jyaz(yol, rows):
     yol.write_text('[\n' + ',\n'.join(json.dumps(r, ensure_ascii=False) for r in rows) + '\n]\n', encoding='utf-8')
-TABLO = {'mekanlar': mekanlar, 'hikayeler': hikayeler, 'kisiler': kisiler, 'gorseller': gorseller, 'hikaye_mekan': hm, 'hikaye_kisi': hk, 'mekan_kisi': mk, 'temalar': temalar}
+TABLO = {'mekanlar': mekanlar, 'hikayeler': hikayeler, 'kisiler': kisiler, 'gorseller': gorseller, 'hikaye_mekan': hm, 'hikaye_kisi': hk, 'mekan_kisi': mk,
+         'mekan_gruplari': mekan_gruplari, 'mekan_turleri': mekan_turleri, 'listeler': listeler}
 for ad, rows in TABLO.items():
     jyaz(OUT / f'{ad}.json', acik([r for r in rows if not (ad == 'gorseller' and not r['drive_id'] and not r['site_url'])]) if ad == 'gorseller' else acik(rows))
     if any('_ozel' in r for r in rows):

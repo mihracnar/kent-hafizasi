@@ -18,6 +18,12 @@
   const ik = (n, s) => `<svg class="ikon" viewBox="0 0 24 24" aria-hidden="true"${s ? ` style="width:${s}px;height:${s}px"` : ''}>${P[n]}</svg>`;
   const kopya = o => JSON.parse(JSON.stringify(o));
   const DONEMLER = ['1900 Öncesi', '1901 - 1950', '1951 - 1990', '1991 Sonrası'];
+  // çok seçimli alanlar (hikâye konuları, meslekler): listeler sekmesinden onay kutuları; değer virgüllü metin olarak saklanır
+  const cokluSecim = (ad, liste, deger) => { const sec = new Set(S.coklu(deger)); const ek = [...sec].filter(v => !liste.includes(v));
+    return `<div class="coklu" role="group" id="${ad}">${liste.concat(ek).map(v => `<label class="${ek.includes(v) ? 'listede-yok' : ''}"><input type="checkbox" value="${esc(v)}" ${sec.has(v) ? 'checked' : ''}>${esc(v)}</label>`).join('')}</div>`; };
+  const cokluOku = ad => $$('#' + ad + ' input:checked').map(i => i.value).join(', ');
+  // mekân türü seçimi: gruplara ayrılmış açılır liste
+  const turSecim = deger => `<select id="m-tur"><option value="">—</option>${S.t.mekan_gruplari.map(g => `<optgroup label="${esc(g.ad)}">${S.turlerOf(g.ad).map(t => `<option ${deger === t ? 'selected' : ''}>${esc(t)}</option>`).join('')}</optgroup>`).join('')}${deger && !S.ix.tur.has(deger) ? `<option selected>${esc(deger)}</option>` : ''}</select>`;
   const bos = v => !String(v == null ? '' : v).trim();
   const metreYaz = d => d < 1000 ? Math.round(d) + ' m' : (d / 1000).toFixed(1).replace('.', ',') + ' km';
   function bildir(t, hata) { const b = document.createElement('div'); b.className = 'bildirim' + (hata ? ' hata' : ''); b.setAttribute('role', 'status'); b.textContent = t; document.body.appendChild(b); setTimeout(() => b.remove(), 3200); }
@@ -147,7 +153,7 @@
     const oneriH = new Set(K.oneri.map(x => x.hikaye_id));
     const kaynakH = new Set(K.kaynak.map(h => h.id)), gorselsizH = new Set(K.gorselsiz.map(h => h.id));
     const ayniBaslik = h => { const m = S.anaMekan(h.id); return m && m.ad === h.baslik; };
-    const F = { tumu: () => true, kaynak: h => kaynakH.has(h.id), gorselsiz: h => gorselsizH.has(h.id), metin: h => bos(h.metin), oneri: h => oneriH.has(h.id), taslak: h => h.durum === 'taslak', baslik: ayniBaslik, donem: h => !h.donem };
+    const F = { tumu: () => true, kaynak: h => kaynakH.has(h.id), gorselsiz: h => gorselsizH.has(h.id), metin: h => bos(h.metin), oneri: h => oneriH.has(h.id), taslak: h => h.durum === 'taslak', baslik: ayniBaslik, donem: h => !h.donem, konusuz: h => !(h.konular || '').trim() };
     const tum = S.t.hikayeler;
     const uyan = tum.filter(F[L.f] || F.tumu).filter(h => !L.q || fold(h.baslik + ' ' + h.metin + ' ' + h.id).includes(fold(L.q)));
     const sayfa = uyan.slice(L.s * SAYFA, (L.s + 1) * SAYFA);
@@ -157,20 +163,20 @@
         <td><a class="baslik" href="#hikaye-${h.id.toLowerCase()}">${esc(h.baslik)}</a><div class="mono soluk">${h.id}</div></td>
         <td>${mek[0] ? `<span class="mekan-cip">${ik('pin', 12)}${esc(mek[0].ad)}</span>${mek.length > 1 ? ` <span class="soluk">+${mek.length - 1}</span>` : ''}` : '<span class="cip kirmizi">Mekânsız</span>'}</td>
         <td>${ok ? `<span class="sayi">${ok}</span>` : '<span class="soluk">—</span>'} ${on ? `<span class="cip oneri">${on} öneri</span>` : ''}</td>
-        <td class="soluk">${esc(h.tema)}</td><td class="sayi">${esc(h.yil || '—')}</td><td class="sayi">${S.hikayeGorselleri(h.id).length}</td>
+        <td class="soluk">${esc(S.coklu(h.konular).join(', ') || '—')}</td><td class="sayi">${esc(h.yil || '—')}</td><td class="sayi">${S.hikayeGorselleri(h.id).length}</td>
         <td>${durumCip(h)} ${bos(h.kaynak) ? '<span class="cip kirmizi">Kaynak eksik</span>' : ''}</td></tr>`;
     };
     kabuk('hikayeler', '<b>Hikâyeler</b>', `
       <div class="satir"><h1>Hikâyeler</h1><span class="soluk">${tum.length} kayıt</span><div class="sag">${aramaHtml('l-q', L.q, 'Başlık, metin, kimlik ara')}<a class="d ana-d" href="#yeni-hikaye">${ik('arti', 16)}Yeni hikâye</a></div></div>
-      <div class="filtreler">${filtreHtml([['tumu', 'Tümü', tum.length], ['kaynak', 'Kaynak eksik', K.kaynak.length], ['gorselsiz', 'Görselsiz', K.gorselsiz.length], ['metin', 'Metni boş', K.metin.length], ['oneri', 'Kişi önerisi bekliyor', oneriH.size], ['baslik', 'Başlığı mekân adıyla aynı', tum.filter(ayniBaslik).length], ['donem', 'Dönemi boş', tum.filter(h => !h.donem).length], ['taslak', 'Taslak', tum.filter(h => h.durum === 'taslak').length]], L.f)}</div>
-      ${L.sec.size ? `<div class="toplu"><b>${L.sec.size} kayıt seçili</b><label class="sr" for="toplu-tema">Tema</label><select id="toplu-tema" class="girdi" style="width:auto;height:30px;font-size:12px"><option value="">Temayı değiştir…</option>${S.t.temalar.map(t => `<option>${esc(t.ad)}</option>`).join('')}</select>
+      <div class="filtreler">${filtreHtml([['tumu', 'Tümü', tum.length], ['kaynak', 'Kaynak eksik', K.kaynak.length], ['gorselsiz', 'Görselsiz', K.gorselsiz.length], ['metin', 'Metni boş', K.metin.length], ['oneri', 'Kişi önerisi bekliyor', oneriH.size], ['baslik', 'Başlığı mekân adıyla aynı', tum.filter(ayniBaslik).length], ['donem', 'Dönemi boş', tum.filter(h => !h.donem).length], ['konusuz', 'Konusu boş', tum.filter(h => !(h.konular || '').trim()).length], ['taslak', 'Taslak', tum.filter(h => h.durum === 'taslak').length]], L.f)}</div>
+      ${L.sec.size ? `<div class="toplu"><b>${L.sec.size} kayıt seçili</b><label class="sr" for="toplu-konu">Konu ekle</label><select id="toplu-konu" class="girdi" style="width:auto;height:30px;font-size:12px"><option value="">Konu ekle…</option>${S.liste('hikaye_konu').map(t => `<option>${esc(t)}</option>`).join('')}</select>
         <button type="button" class="d kucuk" data-toplu="taslak">Taslağa al</button><button type="button" class="d kucuk" data-toplu="yayinda">Yayına al</button><button type="button" class="d kucuk duz" data-toplu="temizle">Seçimi kaldır</button></div>` : ''}
-      <div class="tablo-kap"><table class="tablo"><thead><tr><th><input type="checkbox" id="hepsi" aria-label="Bu sayfadakileri seç" style="width:16px;height:16px"></th><th>Başlık</th><th>Mekânlar</th><th>Kişiler</th><th>Tema</th><th>Yıl</th><th>Görsel</th><th>Durum</th></tr></thead>
+      <div class="tablo-kap"><table class="tablo"><thead><tr><th><input type="checkbox" id="hepsi" aria-label="Bu sayfadakileri seç" style="width:16px;height:16px"></th><th>Başlık</th><th>Mekânlar</th><th>Kişiler</th><th>Konular</th><th>Yıl</th><th>Görsel</th><th>Durum</th></tr></thead>
       <tbody>${sayfa.map(satir).join('') || '<tr><td colspan="8" class="bos">Kayıt yok</td></tr>'}</tbody></table></div>${sayfalama(uyan.length, L.s)}`);
     listeOlaylari(L, () => hikayelerSayfasi());
     $('#hepsi').onchange = e => { sayfa.forEach(h => e.target.checked ? L.sec.add(h.id) : L.sec.delete(h.id)); hikayelerSayfasi(); };
     $$('[data-sec]').forEach(c => c.onchange = () => { c.checked ? L.sec.add(c.dataset.sec) : L.sec.delete(c.dataset.sec); hikayelerSayfasi(); });
-    const tt = $('#toplu-tema'); if (tt) tt.onchange = async () => { if (!tt.value) return; for (const id of L.sec) await S.save('hikayeler', Object.assign(kopya(S.ix.hikaye.get(id)), { tema: tt.value })); bildir(L.sec.size + ' hikâyenin teması değişti'); L.sec.clear(); kontrolTaze(); hikayelerSayfasi(); };
+    const tt = $('#toplu-konu'); if (tt) tt.onchange = async () => { if (!tt.value) return; for (const id of L.sec) { const h = kopya(S.ix.hikaye.get(id)); h.konular = [...new Set(S.coklu(h.konular).concat(tt.value))].join(', '); await S.save('hikayeler', h); } bildir(L.sec.size + ' hikâyeye "' + tt.value + '" konusu eklendi'); L.sec.clear(); kontrolTaze(); hikayelerSayfasi(); };
     $$('[data-toplu]').forEach(b => b.onclick = async () => {
       const v = b.dataset.toplu; if (v === 'temizle') { L.sec.clear(); return hikayelerSayfasi(); }
       for (const id of L.sec) await S.save('hikayeler', Object.assign(kopya(S.ix.hikaye.get(id)), { durum: v }));
@@ -186,18 +192,18 @@
   function mekanlarSayfasi() {
     const L = liste.mekanlar;
     const tum = S.t.mekanlar;
-    const F = { tumu: m => m.durum !== 'arsiv', koordinat: m => m.enlem == null && m.durum !== 'arsiv', bugun: m => bos(m.bugunku_ad) && m.durum !== 'arsiv', bugunfoto: m => m.durum !== 'arsiv' && !S.mekanGorselleri(m.id, 'bugün').length, karekod: m => m.karekod_basildi === 'evet', arsiv: m => m.durum === 'arsiv', hikayesiz: m => m.durum !== 'arsiv' && !S.mekanHikayeleri(m.id).length, bilgili: m => m.durum !== 'arsiv' && !!(m.aciklama || '').trim(), bilgisiz: m => m.durum !== 'arsiv' && !(m.aciklama || '').trim() && !S.mekanHikayeleri(m.id).length };
-    const uyan = tum.filter(F[L.f] || F.tumu).filter(m => !L.q || fold(m.ad + ' ' + m.bugunku_ad + ' ' + m.ilce + ' ' + m.id).includes(fold(L.q)));
+    const F = { tumu: m => m.durum !== 'arsiv', koordinat: m => m.enlem == null && m.durum !== 'arsiv', bugun: m => bos(m.bugunku_ad) && m.durum !== 'arsiv', bugunfoto: m => m.durum !== 'arsiv' && !S.mekanGorselleri(m.id, 'bugün').length, karekod: m => m.karekod_basildi === 'evet', arsiv: m => m.durum === 'arsiv', hikayesiz: m => m.durum !== 'arsiv' && !S.mekanHikayeleri(m.id).length, bilgili: m => m.durum !== 'arsiv' && !!(m.aciklama || '').trim(), bilgisiz: m => m.durum !== 'arsiv' && !(m.aciklama || '').trim() && !S.mekanHikayeleri(m.id).length, tursuz: m => m.durum !== 'arsiv' && !m.tur };
+    const uyan = tum.filter(F[L.f] || F.tumu).filter(m => !L.q || fold(m.ad + ' ' + m.bugunku_ad + ' ' + m.ilce + ' ' + (m.tur || '') + ' ' + m.id).includes(fold(L.q)));
     const sayfa = uyan.slice(L.s * SAYFA, (L.s + 1) * SAYFA);
     const n = k => tum.filter(F[k]).length;
     kabuk('mekanlar', '<b>Mekânlar</b>', `
       <div class="satir"><h1>Mekânlar</h1><span class="soluk">${n('tumu')} mekân</span><div class="sag">${aramaHtml('l-q', L.q, 'Ad, adres, ilçe ara')}<a class="d ana-d" href="#yeni-mekan">${ik('arti', 16)}Yeni mekân</a></div></div>
-      <div class="filtreler">${filtreHtml([['tumu', 'Tümü', n('tumu')], ['koordinat', 'Koordinatsız', n('koordinat')], ['bugun', 'Bugünkü adı boş', n('bugun')], ['bugunfoto', 'Bugünkü fotoğrafı yok', n('bugunfoto')], ['bilgili', 'Genel bilgisi var', n('bilgili')], ['hikayesiz', 'Hikâyesiz', n('hikayesiz')], ['bilgisiz', 'Bilgisi de hikâyesi de yok', n('bilgisiz')], ['karekod', 'Karekodu basıldı', n('karekod')], ['arsiv', 'Arşiv', n('arsiv')]], L.f)}</div>
-      <div class="tablo-kap"><table class="tablo"><thead><tr><th></th><th>Mekân</th><th>İlçe</th><th>Genel bilgi</th><th>Hikâye</th><th>Görsel (o zaman / bugün)</th><th>Koordinat</th><th>Durum</th></tr></thead><tbody>
-      ${sayfa.map(m => `<tr><td></td><td><a class="baslik" href="#mekan-${m.id.toLowerCase()}">${esc(m.ad)}</a><div class="soluk" style="font-size:12px">${esc(m.bugunku_ad || '')}</div></td><td>${esc(m.ilce || '—')}</td>
+      <div class="filtreler">${filtreHtml([['tumu', 'Tümü', n('tumu')], ['koordinat', 'Koordinatsız', n('koordinat')], ['bugun', 'Bugünkü adı boş', n('bugun')], ['bugunfoto', 'Bugünkü fotoğrafı yok', n('bugunfoto')], ['bilgili', 'Genel bilgisi var', n('bilgili')], ['hikayesiz', 'Hikâyesiz', n('hikayesiz')], ['bilgisiz', 'Bilgisi de hikâyesi de yok', n('bilgisiz')], ['tursuz', 'Türü boş', n('tursuz')], ['karekod', 'Karekodu basıldı', n('karekod')], ['arsiv', 'Arşiv', n('arsiv')]], L.f)}</div>
+      <div class="tablo-kap"><table class="tablo"><thead><tr><th></th><th>Mekân</th><th>Tür</th><th>İlçe</th><th>Genel bilgi</th><th>Hikâye</th><th>Görsel (o zaman / bugün)</th><th>Koordinat</th><th>Durum</th></tr></thead><tbody>
+      ${sayfa.map(m => `<tr><td></td><td><a class="baslik" href="#mekan-${m.id.toLowerCase()}">${esc(m.ad)}</a><div class="soluk" style="font-size:12px">${esc(m.bugunku_ad || '')}</div></td><td>${m.tur ? `<span style="display:inline-flex;align-items:center;gap:6px"><i style="width:9px;height:9px;border-radius:50%;background:${S.mekanRenk(m)};display:inline-block"></i>${esc(m.tur)}</span>${m.yapi_durumu === 'yıkıldı' ? ' <span class="soluk" style="font-size:12px">yıkıldı</span>' : ''}` : '<span class="cip kirmizi">Yok</span>'}</td><td>${esc(m.ilce || '—')}</td>
         <td>${(m.aciklama || '').trim() ? '<span class="cip yesil">Var</span>' : '<span class="soluk">—</span>'}</td><td class="sayi">${S.mekanHikayeleri(m.id).length}</td><td class="sayi">${S.mekanGorselleri(m.id, 'o zaman').length} / ${S.mekanGorselleri(m.id, 'bugün').length}</td>
         <td>${m.enlem != null ? `<span class="mono soluk">${(+m.enlem).toFixed(4)}, ${(+m.boylam).toFixed(4)}</span>` : '<span class="cip kirmizi">Yok</span>'}</td>
-        <td>${durumCip(m)} ${m.karekod_basildi === 'evet' ? `<span class="cip gri">${ik('kilit', 12)}Karekod</span>` : ''}</td></tr>`).join('') || '<tr><td colspan="8" class="bos">Kayıt yok</td></tr>'}
+        <td>${durumCip(m)} ${m.karekod_basildi === 'evet' ? `<span class="cip gri">${ik('kilit', 12)}Karekod</span>` : ''}</td></tr>`).join('') || '<tr><td colspan="9" class="bos">Kayıt yok</td></tr>'}
       </tbody></table></div>${sayfalama(uyan.length, L.s)}`);
     listeOlaylari(L, () => mekanlarSayfasi());
   }
@@ -206,14 +212,14 @@
     const L = liste.kisiler;
     const tum = S.t.kisiler;
     const onSay = k => S.t.hikaye_kisi.filter(x => x.kisi_id === k.id && x.onay === 'öneri').length + S.t.mekan_kisi.filter(x => x.kisi_id === k.id && x.onay === 'öneri').length;
-    const F = { tumu: () => true, oneri: k => onSay(k) > 0, bilgi: k => bos(k.kisa_bilgi) && bos(k.yasam), hikayesiz: k => !S.kisiMekanlari(k.id).length };
-    const uyan = tum.filter(F[L.f] || F.tumu).filter(k => !L.q || fold(k.ad + ' ' + k.roller).includes(fold(L.q))).sort((a, b) => a.ad.localeCompare(b.ad, 'tr'));
+    const F = { tumu: () => true, oneri: k => onSay(k) > 0, bilgi: k => bos(k.kisa_bilgi) && bos(k.yasam), hikayesiz: k => !S.kisiMekanlari(k.id).length, mesleksiz: k => !(k.meslekler || '').trim() };
+    const uyan = tum.filter(F[L.f] || F.tumu).filter(k => !L.q || fold(k.ad + ' ' + (k.meslekler || '')).includes(fold(L.q))).sort((a, b) => a.ad.localeCompare(b.ad, 'tr'));
     const sayfa = uyan.slice(L.s * SAYFA, (L.s + 1) * SAYFA);
     kabuk('kisiler', '<b>Kişiler</b>', `
       <div class="satir"><h1>Kişiler</h1><span class="soluk">${tum.length} kişi</span><div class="sag">${aramaHtml('l-q', L.q, 'Kişi ara')}<a class="d ana-d" href="#yeni-kisi">${ik('arti', 16)}Yeni kişi</a></div></div>
-      <div class="filtreler">${filtreHtml([['tumu', 'Tümü', tum.length], ['oneri', 'Öneri bekleyen', tum.filter(F.oneri).length], ['bilgi', 'Yaşam ve kısa bilgi boş', tum.filter(F.bilgi).length], ['hikayesiz', 'Onaylı mekânı ya da hikâyesi yok', tum.filter(F.hikayesiz).length]], L.f)}</div>
-      <div class="tablo-kap"><table class="tablo"><thead><tr><th></th><th>Kişi</th><th>Roller</th><th>Hikâye</th><th>Mekân</th><th>Öneri</th></tr></thead><tbody>
-      ${sayfa.map(k => { const o = onSay(k); return `<tr><td></td><td><a class="baslik" href="#kisi-${k.id.toLowerCase()}">${esc(k.ad)}</a><div class="mono soluk">${k.id}</div></td><td class="soluk">${esc(k.roller || '—')}</td>
+      <div class="filtreler">${filtreHtml([['tumu', 'Tümü', tum.length], ['oneri', 'Öneri bekleyen', tum.filter(F.oneri).length], ['bilgi', 'Yaşam ve kısa bilgi boş', tum.filter(F.bilgi).length], ['hikayesiz', 'Onaylı mekânı ya da hikâyesi yok', tum.filter(F.hikayesiz).length], ['mesleksiz', 'Mesleği boş', tum.filter(F.mesleksiz).length]], L.f)}</div>
+      <div class="tablo-kap"><table class="tablo"><thead><tr><th></th><th>Kişi</th><th>Meslekler</th><th>Hikâye</th><th>Mekân</th><th>Öneri</th></tr></thead><tbody>
+      ${sayfa.map(k => { const o = onSay(k); return `<tr><td></td><td><a class="baslik" href="#kisi-${k.id.toLowerCase()}">${esc(k.ad)}</a><div class="mono soluk">${k.id}</div></td><td class="soluk">${esc(S.coklu(k.meslekler).join(', ') || '—')}</td>
         <td class="sayi">${S.kisiHikayeleri(k.id).length}</td><td class="sayi">${S.kisiMekanlari(k.id).length}</td><td>${o ? `<span class="cip oneri">${o} öneri</span>` : ''}</td></tr>`; }).join('') || '<tr><td colspan="6" class="bos">Kayıt yok</td></tr>'}
       </tbody></table></div>${sayfalama(uyan.length, L.s)}`);
     listeOlaylari(L, () => kisilerSayfasi());
@@ -250,7 +256,7 @@
   const kisiKaynak = (haric) => q => {
     const f = fold(q);
     const v = S.t.kisiler.filter(k => !haric.has(k.id) && fold(k.ad).includes(f)).slice(0, 7)
-      .map(k => ({ tip: 'mevcut', k, html: `<span><b>${esc(k.ad)}</b> <span class="soluk">${esc(k.roller || '')}</span></span><small>${S.kisiHikayeleri(k.id).length} hikâye</small>` }));
+      .map(k => ({ tip: 'mevcut', k, html: `<span><b>${esc(k.ad)}</b> <span class="soluk">${esc(S.coklu(k.meslekler).join(', '))}</span></span><small>${S.kisiHikayeleri(k.id).length} hikâye</small>` }));
     v.push({ tip: 'yeni', ad: q, html: `${ik('arti', 16)}<span>"${esc(q)}" adıyla <b>yeni kişi</b> oluştur</span>` });
     return v;
   };
@@ -259,7 +265,7 @@
     await S.save('mekanlar', m); return m;
   }
   async function yeniKisi(ad) {
-    const k = { id: S.nextId('kisiler', 'K', 3), slug: S.uniqueSlug('kisiler', ad), ad, yasam: '', roller: '', kisa_bilgi: '', bilgi_kaynak: '', durum: 'yayinda' };
+    const k = { id: S.nextId('kisiler', 'K', 3), slug: S.uniqueSlug('kisiler', ad), ad, yasam: '', meslekler: '', kisa_bilgi: '', bilgi_kaynak: '', durum: 'yayinda' };
     await S.save('kisiler', k); return k;
   }
 
@@ -297,7 +303,7 @@
   async function hikayeDuzenle(id) {
     const yeni = !id; const orj = yeni ? null : S.ix.hikaye.get(id);
     if (!yeni && !orj) return bulunamadi();
-    const h = yeni ? { id: S.nextId('hikayeler', 'H'), slug: '', baslik: '', yil: '', tarih: '', tema: S.t.temalar[0].ad, alt_temalar: '', metin: '', kaynak: '', durum: 'taslak' } : kopya(orj);
+    const h = yeni ? { id: S.nextId('hikayeler', 'H'), slug: '', baslik: '', yil: '', tarih: '', donem: '', konular: '', metin: '', kaynak: '', durum: 'taslak' } : kopya(orj);
     let mek = yeni ? (yeniHikayeMekan ? [{ hikaye_id: h.id, mekan_id: yeniHikayeMekan, sira: 1, rol: 'ana' }] : []) : (S.ix.hmByHikaye.get(h.id) || []).map(x => kopya(x)).sort((a, b) => (+a.sira || 0) - (+b.sira || 0));
     let kis = yeni ? [] : S.t.hikaye_kisi.filter(x => x.hikaye_id === h.id).map(kopya);
     const mekOrj = kopya(mek), kisOrj = kopya(kis);
@@ -318,9 +324,8 @@
           <div class="izgara"><div class="alan"><label for="h-yil">Yıl</label><input id="h-yil" value="${esc(h.yil)}" inputmode="numeric"></div>
             <div class="alan"><label for="h-tarih">Tarih <span class="soluk" style="font-weight:400">(serbest: 1914-1916, 20. yy…)</span></label><input id="h-tarih" value="${esc(h.tarih)}"></div>
             <div class="alan"><label for="h-donem">Dönem</label><select id="h-donem"><option value="">—</option>${DONEMLER.map(d => `<option ${h.donem === d ? 'selected' : ''}>${d}</option>`).join('')}</select></div>
-            <div class="alan"><label for="h-tema">Tema</label><select id="h-tema">${S.t.temalar.map(t => `<option ${t.ad === h.tema ? 'selected' : ''}>${esc(t.ad)}</option>`).join('')}</select></div>
             <div class="alan"><label for="h-durum">Durum</label><select id="h-durum">${[['yayinda', 'Yayında'], ['taslak', 'Taslak'], ['arsiv', 'Arşiv']].map(([v, l]) => `<option value="${v}" ${h.durum === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div></div>
-          <div class="alan"><label for="h-alt">Alt temalar <span class="soluk" style="font-weight:400">(virgülle)</span></label><input id="h-alt" value="${esc(h.alt_temalar)}" list="alt-liste"><datalist id="alt-liste">${[...new Set(S.t.hikayeler.flatMap(x => (x.alt_temalar || '').split(',').map(y => y.trim()).filter(Boolean)))].map(a => `<option value="${esc(a)}">`).join('')}</datalist></div>
+          <div class="alan"><span class="etiket">Konular <span class="soluk" style="font-weight:400">(birden çok seçilebilir)</span></span>${cokluSecim('h-konular', S.liste('hikaye_konu'), h.konular)}</div>
           <div class="alan"><span class="etiket" id="h-metin-e">Metin</span>
             <div class="arac" role="toolbar" aria-label="Metin araçları"><button type="button" class="yer" id="sec-mekan">${ik('pin', 14)}Seçili adı mekâna bağla</button><button type="button" class="kisi" id="sec-kisi">${ik('kisi', 14)}Seçili adı kişiye bağla</button></div>
             <textarea id="h-metin" rows="9" aria-labelledby="h-metin-e">${esc(h.metin)}</textarea>
@@ -361,7 +366,7 @@
     const oku = () => {
       h.baslik = $('#h-baslik').value.trim(); h.slug = $('#h-slug').value.trim(); h.yil = $('#h-yil').value.trim(); h.tarih = $('#h-tarih').value.trim(); h.donem = $('#h-donem').value;
       h.konu_notu = $('#h-konu').value.trim(); h.not = $('#h-not').value.trim();
-      h.tema = $('#h-tema').value; h.durum = $('#h-durum').value; h.alt_temalar = $('#h-alt').value.split(',').map(x => x.trim()).filter(Boolean).join(', ');
+      h.durum = $('#h-durum').value; h.konular = cokluOku('h-konular');
       h.metin = $('#h-metin').value; h.kaynak = $('#h-kaynak').value.trim();
     };
     const olaylar = (mekR) => {
@@ -436,7 +441,7 @@
   async function mekanDuzenle(id) {
     const yeni = !id; const orj = yeni ? null : S.ix.mekan.get(id);
     if (!yeni && !orj) return bulunamadi();
-    const m = yeni ? { id: S.nextId('mekanlar', 'M'), slug: '', ad: '', bugunku_ad: '', ilce: '', enlem: null, boylam: null, karekod_basildi: 'hayır', durum: 'yayinda', aciklama: '', aciklama_kaynak: '', tema: '', alt_temalar: '', donem: '' } : kopya(orj);
+    const m = yeni ? { id: S.nextId('mekanlar', 'M'), slug: '', ad: '', bugunku_ad: '', ilce: '', enlem: null, boylam: null, karekod_basildi: 'hayır', durum: 'yayinda', aciklama: '', aciklama_kaynak: '', tur: '', yapi_durumu: '' } : kopya(orj);
     let mkB = yeni ? [] : S.t.mekan_kisi.filter(x => x.mekan_id === m.id).map(kopya); const mkEski = new Map(mkB.map(x => [x.kisi_id, x]));
     let degisti = false;
     const ciz = () => {
@@ -455,7 +460,9 @@
           <div class="izgara2"><div class="alan"><label for="m-ad">Mekânın adı</label><input id="m-ad" class="buyuk" value="${esc(m.ad)}"></div>
             <div class="alan"><label for="m-bugun">Bugünkü adı ya da adresi</label><input id="m-bugun" class="buyuk ${bos(m.bugunku_ad) ? 'eksik' : ''}" value="${esc(m.bugunku_ad)}"></div></div>
           <div class="satir" style="align-items:flex-end;gap:14px">
-            <div class="alan" style="min-width:200px"><label for="m-ilce">İlçe</label><input id="m-ilce" list="ilce-liste" value="${esc(m.ilce)}"><datalist id="ilce-liste">${ilceler.map(i => `<option value="${esc(i)}">`).join('')}</datalist></div>
+            <div class="alan" style="min-width:170px"><label for="m-tur">Tür <span class="soluk" style="font-weight:400">(haritadaki renk)</span></label>${turSecim(m.tur)}</div>
+            <div class="alan" style="min-width:150px"><label for="m-yapi">Yapı bugün</label><select id="m-yapi">${[['', 'Bilinmiyor'], ['ayakta', 'Ayakta'], ['yıkıldı', 'Yıkıldı']].map(([v, l]) => `<option value="${v}" ${(m.yapi_durumu || '') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+            <div class="alan" style="min-width:170px"><label for="m-ilce">İlçe</label><input id="m-ilce" list="ilce-liste" value="${esc(m.ilce)}"><datalist id="ilce-liste">${ilceler.map(i => `<option value="${esc(i)}">`).join('')}</datalist></div>
             <div class="alan" style="min-width:150px"><label for="m-tabela">Tabela yapılabilir mi?</label><select id="m-tabela">${[['', '—'], ['evet', 'Evet'], ['hayır', 'Hayır']].map(([v, l]) => `<option value="${v}" ${(m.tabela || '') === v ? 'selected' : ''}>${l}</option>`).join('')}</select>${m.tabela_ham && !['evet', 'hayır'].includes(m.tabela_ham.toLocaleLowerCase('tr')) ? `<span class="ipucu">Tabloda: "${esc(m.tabela_ham)}"</span>` : ''}</div>
             <div class="alan" style="min-width:150px"><label for="m-durum">Durum</label><select id="m-durum">${[['yayinda', 'Yayında'], ['taslak', 'Taslak'], ['arsiv', 'Arşiv']].map(([v, l]) => `<option value="${v}" ${m.durum === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div></div>
           <div class="satir" style="align-items:flex-end">
@@ -468,11 +475,8 @@
         <section class="kart"><div class="satir"><h2>Mekânın genel bilgisi</h2><span class="soluk sag">mekânı tanıtan metin; olaylar ve anlatılar hikâye olarak girilir</span></div>
           <div class="alan"><label for="m-aciklama">Genel bilgi</label><textarea id="m-aciklama" rows="${Math.min(16, Math.max(5, Math.ceil((m.aciklama || '').length / 110)))}">${esc(m.aciklama || '')}</textarea><span class="ipucu">Paragrafları boş satırla ayırın.</span></div>
           <div class="alan"><label for="m-akaynak">Kaynak</label><input id="m-akaynak" value="${esc(m.aciklama_kaynak || '')}"></div>
-          <div class="satir" style="align-items:flex-end;gap:14px">
-            <div class="alan" style="min-width:220px"><label for="m-tema">Tema <span class="soluk" style="font-weight:400">(haritadaki renk)</span></label><select id="m-tema"><option value="">—</option>${S.t.temalar.map(t => `<option ${m.tema === t.ad ? 'selected' : ''}>${esc(t.ad)}</option>`).join('')}</select></div>
-            <div class="alan" style="min-width:160px"><label for="m-donem">Dönem</label><select id="m-donem"><option value="">—</option>${DONEMLER.map(d => `<option ${m.donem === d ? 'selected' : ''}>${d}</option>`).join('')}</select></div>
-            <div class="alan" style="flex:1;min-width:220px"><label for="m-alt">Alt temalar <span class="soluk" style="font-weight:400">(virgülle)</span></label><input id="m-alt" value="${esc(m.alt_temalar || '')}"></div></div>
-          ${m.kaynak_kayitlar || m.kayit_notlari ? `<details class="ic-alanlar"><summary>Ekip notları <span class="soluk">(sitede görünmez)</span></summary>
+          ${m.kaynak_kayitlar || m.kayit_notlari || m.tema || m.alt_temalar || m.donem ? `<details class="ic-alanlar"><summary>Ekip notları <span class="soluk">(sitede görünmez)</span></summary>
+            ${m.tema || m.alt_temalar || m.donem ? `<div class="alan"><label>Eski sınıflama</label><span class="soluk" style="font-size:13px">${[m.tema, m.alt_temalar, m.donem].filter(Boolean).map(esc).join(' · ')}</span></div>` : ''}
             ${m.kaynak_kayitlar ? `<div class="alan"><label>Eski tablodaki satırlar</label><span class="mono soluk">${esc(m.kaynak_kayitlar)}</span></div>` : ''}
             ${m.kayit_notlari ? `<div class="alan"><label>Kayıt notları</label><div style="white-space:pre-line;font-size:13px">${esc(m.kayit_notlari)}</div></div>` : ''}</details>` : ''}
         </section>
@@ -505,8 +509,7 @@
       olaylar();
     };
     const oku = () => {
-      m.aciklama = $('#m-aciklama').value.replace(/\r/g, '').replace(/\n{3,}/g, '\n\n').trim(); m.aciklama_kaynak = $('#m-akaynak').value.trim(); m.tema = $('#m-tema').value; m.donem = $('#m-donem').value;
-      m.alt_temalar = $('#m-alt').value.split(',').map(x => x.trim()).filter(Boolean).join(', ');
+      m.aciklama = $('#m-aciklama').value.replace(/\r/g, '').replace(/\n{3,}/g, '\n\n').trim(); m.aciklama_kaynak = $('#m-akaynak').value.trim(); m.tur = $('#m-tur').value; m.yapi_durumu = $('#m-yapi').value;
       $$('.mk-iliski').forEach(el => { const x = mkB.find(y => y.kisi_id === el.dataset.mk); if (x) x.iliski = el.value.trim(); });
       m.ad = $('#m-ad').value.trim(); m.bugunku_ad = $('#m-bugun').value.trim(); m.ilce = $('#m-ilce').value.trim(); m.durum = $('#m-durum').value; m.tabela = $('#m-tabela').value;
       const la = parseFloat(String($('#m-enlem').value).replace(',', '.')), lo = parseFloat(String($('#m-boylam').value).replace(',', '.'));
@@ -521,7 +524,7 @@
         const ad = $('#m-kisi-ekle').value.trim(); if (!ad) return;
         oku();
         let k = S.t.kisiler.find(x => fold(x.ad) === fold(ad));
-        if (!k) { k = { id: S.nextId('kisiler', 'K', 3), slug: S.uniqueSlug('kisiler', ad), ad, yasam: '', roller: '', kisa_bilgi: '', bilgi_kaynak: '', durum: 'yayinda' }; await S.save('kisiler', k); bildir(`Yeni kişi: ${ad}`); }
+        if (!k) { k = { id: S.nextId('kisiler', 'K', 3), slug: S.uniqueSlug('kisiler', ad), ad, yasam: '', meslekler: '', kisa_bilgi: '', bilgi_kaynak: '', durum: 'yayinda' }; await S.save('kisiler', k); bildir(`Yeni kişi: ${ad}`); }
         if (!mkB.some(x => x.kisi_id === k.id)) mkB.push({ mekan_id: m.id, kisi_id: k.id, iliski: '', onay: 'onaylı' });
         degisti = true; ciz();
       };
@@ -587,7 +590,7 @@
   function kisiDuzenle(id) {
     const yeni = !id; const orj = yeni ? null : S.ix.kisi.get(id);
     if (!yeni && !orj) return bulunamadi();
-    const k = yeni ? { id: S.nextId('kisiler', 'K', 3), slug: '', ad: '', yasam: '', roller: '', kisa_bilgi: '', bilgi_kaynak: '', durum: 'yayinda' } : kopya(orj);
+    const k = yeni ? { id: S.nextId('kisiler', 'K', 3), slug: '', ad: '', yasam: '', meslekler: '', kisa_bilgi: '', bilgi_kaynak: '', durum: 'yayinda' } : kopya(orj);
     const baglar = yeni ? [] : S.t.hikaye_kisi.filter(x => x.kisi_id === k.id);
     const ok = baglar.filter(x => x.onay === 'onaylı'), on = baglar.filter(x => x.onay === 'öneri');
     const mBag = yeni ? [] : S.t.mekan_kisi.filter(x => x.kisi_id === k.id && x.onay !== 'reddedildi');
@@ -596,7 +599,8 @@
         <div class="izgara2"><div class="alan"><label for="k-ad">Ad</label><input id="k-ad" class="buyuk" value="${esc(k.ad)}"></div>
           <div class="alan"><label for="k-slug">Kalıcı adres</label><div class="onek"><span>#kisi-</span><input id="k-slug" value="${esc(k.slug)}"></div></div></div>
         <div class="izgara2"><div class="alan"><label for="k-yasam">Yaşam</label><input id="k-yasam" value="${esc(k.yasam)}" placeholder="1906–1954"></div>
-          <div class="alan"><label for="k-roller">Roller <span class="soluk" style="font-weight:400">(virgülle)</span></label><input id="k-roller" value="${esc(k.roller)}" placeholder="Yazar, Şair"></div></div>
+          <div></div></div>
+        <div class="alan"><span class="etiket">Meslekler <span class="soluk" style="font-weight:400">(birden çok seçilebilir)</span></span>${cokluSecim('k-meslekler', S.liste('meslek'), k.meslekler)}</div>
         <div class="alan"><label for="k-bilgi">Kişi bilgisi (biyografi)</label><textarea id="k-bilgi" rows="6" placeholder="Kim olduğu, ne yaptığı, İstanbul'la bağı. Mekânı anlatan cümleler mekânın genel bilgisine, olaylar hikâyelere yazılır.">${esc(k.kisa_bilgi)}</textarea></div>
         <div class="alan"><label for="k-bkaynak">Bilginin kaynağı</label><input id="k-bkaynak" value="${esc(k.bilgi_kaynak || '')}"></div>
         <div class="alan" style="max-width:220px"><label for="k-durum">Durum</label><select id="k-durum">${[['yayinda', 'Yayında'], ['taslak', 'Taslak']].map(([v, l]) => `<option value="${v}" ${k.durum === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
@@ -619,10 +623,10 @@
     $$('[data-mk-red]').forEach(b => b.onclick = () => mbagla(b.dataset.mkRed, 'reddedildi'));
     $$('[data-kaldir]').forEach(b => b.onclick = async () => { const x = S.t.hikaye_kisi.find(y => y.hikaye_id === b.dataset.kaldir && y.kisi_id === k.id); await S.remove('hikaye_kisi', x); kisiDuzenle(k.id); });
     $('#k-ad').addEventListener('input', e => { if (yeni) $('#k-slug').value = S.uniqueSlug('kisiler', e.target.value, k.id); });
-    const kOku = () => Object.assign(k, { ad: $('#k-ad').value.trim() || k.ad, slug: $('#k-slug').value.trim() || k.slug, yasam: $('#k-yasam').value.trim(), roller: $('#k-roller').value.split(',').map(x => x.trim()).filter(Boolean).join(', '), kisa_bilgi: $('#k-bilgi').value.trim(), bilgi_kaynak: $('#k-bkaynak').value.trim(), durum: $('#k-durum').value });
+    const kOku = () => Object.assign(k, { ad: $('#k-ad').value.trim() || k.ad, slug: $('#k-slug').value.trim() || k.slug, yasam: $('#k-yasam').value.trim(), meslekler: cokluOku('k-meslekler'), kisa_bilgi: $('#k-bilgi').value.trim(), bilgi_kaynak: $('#k-bkaynak').value.trim(), durum: $('#k-durum').value });
     vikiOlaylar(k, async d => { kOku(); Object.assign(k, d); await S.save('kisiler', k); kontrolTaze(); bildir(d.vikipedi_onay === 'onaylı' ? 'Vikipedi özeti onaylandı' : 'Kaydedildi'); kisiDuzenle(k.id); });
     $('#kaydet').onclick = async () => {
-      Object.assign(k, { ad: $('#k-ad').value.trim(), slug: $('#k-slug').value.trim(), yasam: $('#k-yasam').value.trim(), roller: $('#k-roller').value.split(',').map(x => x.trim()).filter(Boolean).join(', '), kisa_bilgi: $('#k-bilgi').value.trim(), bilgi_kaynak: $('#k-bkaynak').value.trim(), durum: $('#k-durum').value });
+      Object.assign(k, { ad: $('#k-ad').value.trim(), slug: $('#k-slug').value.trim(), yasam: $('#k-yasam').value.trim(), meslekler: cokluOku('k-meslekler'), kisa_bilgi: $('#k-bilgi').value.trim(), bilgi_kaynak: $('#k-bkaynak').value.trim(), durum: $('#k-durum').value });
       if (!k.ad) return bildir('Ad boş olamaz', true);
       if (!k.slug) k.slug = S.uniqueSlug('kisiler', k.ad, k.id);
       if (S.t.kisiler.some(x => x.slug === k.slug && x.id !== k.id)) return bildir('Bu kalıcı adres başka bir kişide kullanılıyor', true);
@@ -728,7 +732,7 @@
       const rows = K[D.sekme], mekan = D.sekme === 'bugun' || D.sekme === 'koordinat';
       govde = `<div class="tablo-kap"><table class="tablo"><thead><tr><th></th><th>${mekan ? 'Mekân' : 'Hikâye'}</th><th>${mekan ? 'İlçe' : 'Mekân'}</th><th>${mekan ? 'Hikâye' : 'Tema'}</th></tr></thead><tbody>
         ${rows.slice(0, 200).map(r => mekan ? `<tr><td></td><td><a class="baslik" href="#mekan-${r.id.toLowerCase()}">${esc(r.ad)}</a></td><td>${esc(r.ilce || '—')}</td><td class="sayi">${S.mekanHikayeleri(r.id).length}</td></tr>`
-          : `<tr><td></td><td><a class="baslik" href="#hikaye-${r.id.toLowerCase()}">${esc(r.baslik)}</a><div class="mono soluk">${r.id}</div></td><td>${esc((S.anaMekan(r.id) || {}).ad || '—')}</td><td class="soluk">${esc(r.tema)}</td></tr>`).join('') || '<tr><td colspan="4" class="bos">Bu türde sorun kalmadı.</td></tr>'}</tbody></table></div>`;
+          : `<tr><td></td><td><a class="baslik" href="#hikaye-${r.id.toLowerCase()}">${esc(r.baslik)}</a><div class="mono soluk">${r.id}</div></td><td>${esc((S.anaMekan(r.id) || {}).ad || '—')}</td><td class="soluk">${esc(S.coklu(r.konular).join(', '))}</td></tr>`).join('') || '<tr><td colspan="4" class="bos">Bu türde sorun kalmadı.</td></tr>'}</tbody></table></div>`;
     }
     kabuk('kontrol', '<b>Kontrol kuyruğu</b>', `<div><h1>Kontrol kuyruğu</h1><p class="soluk" style="margin:4px 0 0;max-width:760px;line-height:1.5">Eski tablodan taşınan kayıtlarda panelin bulduğu sorunlar. "Ayrı tut" dediğiniz çift bir daha önerilmez.</p></div>
       <div class="sekmeler" role="tablist">${sek.map(([k, l, n]) => `<button type="button" role="tab" data-sekme="${k}" aria-selected="${D.sekme === k}">${l}${n ? `<i>${n}</i>` : ''}</button>`).join('')}</div>${govde}`);

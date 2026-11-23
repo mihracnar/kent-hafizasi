@@ -10,7 +10,9 @@ Böylece Drive'daki dosya silinse ya da taşınsa da sitede kalır.
 """
 import json, os, sys, pathlib, urllib.request
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-TABLOLAR = ['mekanlar', 'hikayeler', 'kisiler', 'gorseller', 'hikaye_mekan', 'hikaye_kisi', 'mekan_kisi', 'temalar']
+sys.path.insert(0, str(ROOT / 'tools'))
+import kategoriler as KAT
+TABLOLAR = ['mekanlar', 'hikayeler', 'kisiler', 'gorseller', 'hikaye_mekan', 'hikaye_kisi', 'mekan_kisi', 'mekan_gruplari', 'mekan_turleri', 'listeler']
 url = os.environ.get('SHEETS_URL')
 if not url: sys.exit('SHEETS_URL tanımlı değil')
 with urllib.request.urlopen(url + ('&' if '?' in url else '?') + 'action=all', timeout=120) as r:
@@ -29,9 +31,8 @@ if '--gorselleri-kopyala' in sys.argv:
             except Exception as e:
                 print('indirilemedi', g['id'], e); continue
         g['site_url'] = f"assets/gorsel/{g['drive_id']}.jpg"
-IC = {'kaynak_sekme', 'kaynak_satir', 'giren', 'giris_tarihi', 'konu_notu', 'not', 'tabela_ham', 'koordinat_ham', 'ham', 'kaynak_kayitlar', 'kayit_notlari', 'vikipedi_neden'}
 for t in TABLOLAR:  # Apps Script anahtarsız okumada iç alanları zaten göndermez; yine de ayıkla
-    veri[t] = [{k: v for k, v in r.items() if k not in IC} for r in veri[t]]
+    veri[t] = [{k: v for k, v in r.items() if not KAT.ic(t, k)} for r in veri[t]]
 veri['gorseller'] = [g for g in veri['gorseller'] if g.get('drive_id') or g.get('site_url')]
 VIKI = ('vikipedi_baslik', 'vikipedi_url', 'wikidata', 'vikipedi_ozet')  # onaylanmamış Vikipedi önerisi siteye gitmez
 for t in ('kisiler', 'mekanlar'):

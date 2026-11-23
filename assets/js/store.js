@@ -1,6 +1,7 @@
 /* Hafıza İstanbul — ortak veri katmanı.
  *
- * Yedi tablo: mekanlar, hikayeler, kisiler, gorseller, hikaye_mekan, hikaye_kisi, temalar.
+ * Tablolar: mekanlar, hikayeler, kisiler, gorseller, hikaye_mekan, hikaye_kisi, mekan_kisi
+ * ve kategori listeleri: mekan_gruplari (renkler), mekan_turleri (tür → grup), listeler (hikâye konuları, meslekler).
  * Taban veri data/*.json dosyalarından okunur. Üzerine iki katman biner:
  *   yayin  : yayınlanmış değişiklikler (site bunları görür)
  *   taslak : panelde kaydedilmiş ama yayınlanmamış değişiklikler (yalnız panel görür)
@@ -11,7 +12,7 @@
  */
 (function () {
   'use strict';
-  const TABLES = ['mekanlar', 'hikayeler', 'kisiler', 'gorseller', 'hikaye_mekan', 'hikaye_kisi', 'mekan_kisi', 'temalar'];
+  const TABLES = ['mekanlar', 'hikayeler', 'kisiler', 'gorseller', 'hikaye_mekan', 'hikaye_kisi', 'mekan_kisi', 'mekan_gruplari', 'mekan_turleri', 'listeler'];
   const CFG = Object.assign({ sheetsUrl: '', dataPath: 'data/', siteUrl: '' }, window.HAFIZA_CONFIG || {});
 
   // ---------- yardımcılar ----------
@@ -31,7 +32,8 @@
     if (table === 'hikaye_mekan') return r.hikaye_id + '__' + r.mekan_id;
     if (table === 'hikaye_kisi') return r.hikaye_id + '__' + r.kisi_id;
     if (table === 'mekan_kisi') return r.mekan_id + '__' + r.kisi_id;
-    if (table === 'temalar') return slugify(r.ad);
+    if (table === 'mekan_gruplari' || table === 'mekan_turleri') return slugify(r.ad);
+    if (table === 'listeler') return r.liste + '__' + slugify(r.deger);
     return r.id;
   }
   function imgUrl(g, w) {
@@ -170,7 +172,10 @@
       ix.gByKisi = new Map();
       gor.forEach(g => String(g.kisi_id || '').split(',').map(x => x.trim()).filter(Boolean).forEach(k => { if (!ix.gByKisi.has(k)) ix.gByKisi.set(k, []); ix.gByKisi.get(k).push(g); }));
       ix.gByKisi.forEach(a => a.sort((p, q) => String(p.kisi_id).split(',').length - String(q.kisi_id).split(',').length)); // önce kişinin tek başına göründüğü kareler
-      ix.tema = new Map(t.temalar.map(r => [r.ad, r]));
+      const sira = (a, b) => (+a.sira || 0) - (+b.sira || 0);
+      t.mekan_gruplari.sort(sira); t.mekan_turleri.sort(sira); t.listeler.sort(sira);
+      ix.grup = new Map(t.mekan_gruplari.map(r => [r.ad, r]));
+      ix.tur = new Map(t.mekan_turleri.map(r => [r.ad, r]));
     },
 
     // ---------- sorgular ----------
@@ -197,8 +202,13 @@
     mekanIcerikli(m) { return !!((m.aciklama || '').trim() || this.vikipedi(m) || this.mekanHikayeleri(m.id).length || this.mekanKisiBaglari(m.id).length); },
     // onaylı Vikipedi özeti (yoksa null); site yalnız onaylıyı gösterir
     vikipedi(r) { return r && r.vikipedi_onay === 'onaylı' && (r.vikipedi_ozet || '').trim() ? { ozet: r.vikipedi_ozet, url: r.vikipedi_url, baslik: r.vikipedi_baslik } : null; },
-    mekanTema(mid) { const m = this.ix.mekan.get(mid); if (m && m.tema) return m.tema; const h = this.mekanHikayeleri(mid)[0]; return h ? h.tema : ''; },
-    temaRenk(tema) { const t = this.ix.tema.get(tema); return t ? t.renk : '#6E6E6E'; },
+    // mekân türü → grup → haritadaki renk
+    mekanGrup(mid) { const m = typeof mid === 'object' ? mid : this.ix.mekan.get(mid); const t = m && this.ix.tur.get(m.tur); return t ? t.grup : ''; },
+    grupRenk(grup) { const g = this.ix.grup.get(grup); return g ? g.renk : '#8A8A84'; },
+    mekanRenk(mid) { return this.grupRenk(this.mekanGrup(mid)); },
+    turlerOf(grup) { return this.t.mekan_turleri.filter(t => t.grup === grup).map(t => t.ad); },
+    liste(ad) { return this.t.listeler.filter(l => l.liste === ad).map(l => l.deger); },   // 'hikaye_konu' | 'meslek'
+    coklu(s) { return String(s || '').split(',').map(x => x.trim()).filter(Boolean); },   // virgüllü alanlar (konular, meslekler)
     mekanGorselleri(mid, donem, konu) { return (this.ix.gByMekan.get(mid) || []).filter(g => (!donem || g.donem === donem) && (!konu || (g.konu || 'mekân') === konu)); },
     // mekânın kendi fotoğrafı olmayan, bir hikâyeye de bağlı olmayan kareler: o yerde yaşanmış anlar ve kişiler
     mekanAnGorselleri(mid) { return (this.ix.gByMekan.get(mid) || []).filter(g => (g.konu || 'mekân') !== 'mekân' && !(g.hikaye_id && this.ix.hikaye.has(g.hikaye_id) && this.mekanHikayeleri(mid).some(h => h.id === g.hikaye_id))); },

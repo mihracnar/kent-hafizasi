@@ -192,3 +192,14 @@ table.tablo { width: 100%; border-collapse: collapse; min-width: 900px; }
   .arama { width: 100%; }
 }
 .tablo td.mono { white-space: nowrap; }
+
+.ic-alanlar { border: 1px dashed var(--girdi); border-radius: 6px; padding: 10px 12px; background: #FCFCFA; }
+.ic-alanlar summary { cursor: pointer; font-size: 13px; font-weight: 600; }
+.ic-alanlar[open] { display: flex; flex-direction: column; gap: 12px; }
+
+/* çok seçimli alanlar (hikâye konuları, meslekler) */
+.coklu { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.coklu label { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px 0 8px; border: 1px solid var(--girdi); border-radius: 15px; font-size: 13px; font-weight: 500; cursor: pointer; background: #fff; }
+.coklu label:has(input:checked) { border-color: var(--ink); background: var(--ink); color: #fff; }
+.coklu input { width: 14px; height: 14px; margin: 0; }
+.coklu label.listede-yok { border-style: dashed; }

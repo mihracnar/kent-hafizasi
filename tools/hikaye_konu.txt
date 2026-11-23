@@ -1,0 +1,81 @@
+# Hikâye konuları — her hikâye tek tek okunarak verildi. Birden çok konu virgülle.
+# Biçim: id | konular
+H-0004 | Siyaset
+H-0007 | Savaş
+H-0008 | Savaş
+H-0009 | Savaş
+H-0012 | Edebiyat, Resim
+H-0013 | Mimarlık
+H-0014 | Savaş
+H-0022 | Siyaset, Savaş
+H-0023 | Siyaset
+H-0025 | Müzik, Sinema
+H-0026 | Savaş
+H-0030 | Siyaset
+H-0031 | Edebiyat
+H-0032 | Mimarlık
+H-0042 | Edebiyat
+H-0048 | Edebiyat
+H-0049 | Sinema
+H-0051 | Edebiyat, Siyaset
+H-0054 | Sinema, Edebiyat
+H-0058 | Edebiyat
+H-0062 | Savaş
+H-0069 | Edebiyat, Siyaset
+H-0073 | Mimarlık
+H-0074 | Fotoğraf, Basın
+H-0075 | Mimarlık
+H-0079 | Siyaset
+H-0081 | Siyaset
+H-0083 | Sinema, Siyaset
+H-0084 | Edebiyat
+H-0085 | Müzik
+H-0101 | Siyaset
+H-0142 | Siyaset
+H-0147 | Basın, Siyaset
+H-0177 | Siyaset
+H-0204 | Savaş
+H-0207 | Siyaset
+H-0212 | Edebiyat
+H-0224 | Siyaset
+H-0245 | Müzik
+H-0278 | Siyaset
+H-0286 | Savaş
+H-0293 | Gündelik yaşam
+H-0298 | Siyaset, Müzik
+H-0300 | Siyaset
+H-0301 | Edebiyat
+H-0309 | Edebiyat
+H-0312 | Gündelik yaşam
+H-0318 | Mimarlık
+H-0351 | Afet, Savaş
+H-0363 | Edebiyat
+H-0390 | Savaş
+H-0391 | Savaş
+H-0392 | Siyaset
+H-0413 | Afet
+H-0414 | Göç, Resim
+H-0461 | Gündelik yaşam
+H-0472 | Gündelik yaşam
+H-0492 | Savaş
+H-0545 | Resim
+H-0546 | Resim
+H-0547 | Resim
+H-0548 | Resim
+H-0558 | Din
+H-0582 | Din
+H-0588 | Din
+H-0595 | Gündelik yaşam
+H-0625 | Siyaset
+H-0647 | Siyaset
+H-0650 | Müzik, Göç
+H-0652 | Basın, Edebiyat
+H-0703 | 
+H-0720 | Edebiyat
+H-0731 | Edebiyat
+H-0732 | Edebiyat
+H-0765 | Edebiyat
+H-0784 | Gündelik yaşam
+H-0801 | Savaş, Sinema
+H-0812 | Müzik, Mimarlık
+H-0818 | Müzik

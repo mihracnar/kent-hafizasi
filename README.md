@@ -7,20 +7,24 @@
 
 ## Veri modeli
 
-Tek tablo yerine sekiz tablo. Site `data/*.json` dosyalarını okur; panel aynı tabloları Google Sheets'te yönetir.
+Tek tablo yerine yedi kayıt tablosu ve üç kategori listesi. Site `data/*.json` dosyalarını okur; panel aynı tabloları Google Sheets'te yönetir.
 
 | Tablo | Ne tutar |
 |---|---|
-| `mekanlar` | id (M-0001), slug, ad, bugunku_ad, ilce, enlem, boylam, karekod_basildi, durum, **aciklama** (mekânın genel bilgisi), aciklama_kaynak, tema, alt_temalar, donem |
-| `hikayeler` | id (H-0001), slug, baslik, yil, tarih, tema, alt_temalar, metin, kaynak, durum |
-| `kisiler` | id (K-001), slug, ad, yasam, roller, **kisa_bilgi** (kişinin bilgisi / biyografisi), bilgi_kaynak, durum |
-| `gorseller` | id (G-0001), drive_id, site_url, donem (o zaman / bugün), yil, altyazi, kaynak, izin, mekan_id, hikaye_id, **kisi_id** (fotoğrafta görülen kişiler, virgülle), **konu** (mekân / hikâye) |
+| `mekanlar` | id (M-0001), slug, ad, bugunku_ad, **tur** (mekân türü), **yapi_durumu** (ayakta / yıkıldı / boş), ilce, enlem, boylam, karekod_basildi, durum, **aciklama** (mekânın genel bilgisi), aciklama_kaynak |
+| `hikayeler` | id (H-0001), slug, baslik, yil, tarih, donem, **konular** (virgülle), metin, kaynak, durum |
+| `kisiler` | id (K-001), slug, ad, yasam, **meslekler** (virgülle), **kisa_bilgi** (kişinin bilgisi / biyografisi), bilgi_kaynak, durum |
+| `gorseller` | id (G-0001), drive_id, site_url, **tur** (Fotoğraf, Kartpostal, Resim, Gravür, Harita, Gazete, Belge), donem (o zaman / bugün), yil, altyazi, kaynak, izin, mekan_id, hikaye_id, **kisi_id** (fotoğrafta görülen kişiler, virgülle), **konu** (mekân / hikâye) |
 | `hikaye_mekan` | hikaye_id, mekan_id, sira, rol (ana / geçtiği) — bir hikâye birden çok mekânda, bir mekânda birden çok hikâye |
 | `hikaye_kisi` | hikaye_id, kisi_id, onay (onaylı / öneri / reddedildi) |
 | `mekan_kisi` | mekan_id, kisi_id, iliski, onay — kişinin mekânla doğrudan bağı (burada yaşadı, evi, atölyesi…) |
-| `temalar` | ad, renk, sira |
+| `mekan_gruplari` | ad, renk, sira — dokuz grup (Konut, Dinî yapı, Kamu, Kültür, Yeme-içme, İş yeri, Açık alan, Sanayi, Anıt); haritadaki renk buradan gelir |
+| `mekan_turleri` | ad, grup, sira — `mekanlar.tur` sütununun izinli değerleri (Ev, Apartman, Cami, Tiyatro, Han…) ve grupları |
+| `listeler` | liste, deger, sira — çok seçimli alanların izinli değerleri: `hikaye_konu` (Siyaset, Edebiyat…) ve `meslek` (Yazar, Ressam…) |
 
-**Dört metin birbirinden ayrıdır.** Yeri tanıtan metin (kim yaptırdı, kim yaşadı, ne zaman yıkıldı) mekânın `aciklama` alanındadır; kişinin kim olduğunu anlatan metin (doğumu, mesleği, eserleri) kişinin `kisa_bilgi` alanındadır; o yerde yaşanmış bir olay ya da anlatı `hikayeler` tablosundadır; yalnız fotoğrafı anlatan metin görselin `altyazi` alanındadır. Fotoğrafın konusu da ayrıdır: mekânın fotoğrafı ya da bir an/olay (hikâye). Mekânın "o zaman / bugün" karşılaştırmasında yalnız mekân fotoğrafları kullanılır; hikâyenin fotoğrafları hikâyenin altında, hikâyeye bağlı olmayan anlar ve kişi fotoğrafları mekân sayfasında ayrı bir galeride görünür; fotoğrafta görülen kişiler `kisi_id`'de tutulur ve fotoğraf o kişilerin sayfasında da görünür. Kişinin mekânları `mekan_kisi` bağlarından ve hikâyelerinden bulunur. Haritada genel bilgisi ya da hikâyesi olan mekânlar görünür; rengi mekânın temasından gelir. Kimlikler ve kalıcı adresler (slug) değişmez; karekodu basılan mekânın adresi kilitlenir. Birleştirilen mekânlar silinmez, arşive alınır ve adresleri kalan mekâna yönlendirilir.
+**Kategoriler somut ve tek kavramlıdır.** Bir mekânın tek bir türü vardır (ev, konak, cami, tiyatro, han, çeşme…); renk türün grubundan gelir. Yapının bugün ayakta olup olmadığı yalnız metin bunu söylüyorsa doldurulur. Hikâyenin birden çok konusu, kişinin birden çok mesleği olabilir; değerler sabit listeden seçilir. Mekân–kişi bağının adı (yaşadı, doğdu…) zorunlu değildir. Eski `tema`, `alt_temalar`, `roller` ve mekânın `donem` sütunu silinmedi, ekip içi sütunlara taşındı; sitede kullanılmaz. İlk sınıflama `tools/mekan_tur.txt`, `hikaye_konu.txt`, `kisi_meslek.txt`, `gorsel_tur.txt` dosyalarındadır (her kayıt tek tek okunarak); `python tools/kategori_ekle.py` bunları Excel'e işler.
+
+**Dört metin birbirinden ayrıdır.** Yeri tanıtan metin (kim yaptırdı, kim yaşadı, ne zaman yıkıldı) mekânın `aciklama` alanındadır; kişinin kim olduğunu anlatan metin (doğumu, mesleği, eserleri) kişinin `kisa_bilgi` alanındadır; o yerde yaşanmış bir olay ya da anlatı `hikayeler` tablosundadır; yalnız fotoğrafı anlatan metin görselin `altyazi` alanındadır. Fotoğrafın konusu da ayrıdır: mekânın fotoğrafı ya da bir an/olay (hikâye). Mekânın "o zaman / bugün" karşılaştırmasında yalnız mekân fotoğrafları kullanılır; hikâyenin fotoğrafları hikâyenin altında, hikâyeye bağlı olmayan anlar ve kişi fotoğrafları mekân sayfasında ayrı bir galeride görünür; fotoğrafta görülen kişiler `kisi_id`'de tutulur ve fotoğraf o kişilerin sayfasında da görünür. Kişinin mekânları `mekan_kisi` bağlarından ve hikâyelerinden bulunur. Haritada genel bilgisi ya da hikâyesi olan mekânlar görünür; rengi mekânın türünün grubundan gelir. Kimlikler ve kalıcı adresler (slug) değişmez; karekodu basılan mekânın adresi kilitlenir. Birleştirilen mekânlar silinmez, arşive alınır ve adresleri kalan mekâna yönlendirilir.
 
 ### Eski tablodan taşıma
 

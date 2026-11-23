@@ -1,0 +1,820 @@
+# Mekân türü ve bugünkü durum — her kayıt tek tek okunarak verildi.
+# Biçim: id | tür | bugünkü durum (Ayakta / Yıkıldı / boş = metinde bilgi yok)
+M-0001 | Tiyatro | Yıkıldı
+M-0002 | Tiyatro | 
+M-0003 | Ev | Ayakta
+M-0004 | Resmî bina | Ayakta
+M-0005 | Köşk | Ayakta
+M-0006 | Otel | Ayakta
+M-0007 | Çeşme | Yıkıldı
+M-0008 | Park | 
+M-0009 | Kule | Ayakta
+M-0010 | Ev | 
+M-0011 | Ev | 
+M-0012 | Ev | 
+M-0013 | Cadde | 
+M-0014 | Han | Ayakta
+M-0015 | Han | Ayakta
+M-0016 | Atölye | Ayakta
+M-0017 | Han | Ayakta
+M-0018 | Han | Ayakta
+M-0019 | Stadyum | 
+M-0020 | Resmî bina | Ayakta
+M-0021 | Köşk | Yıkıldı
+M-0022 | Resmî bina | Ayakta
+M-0023 | Ağaç | 
+M-0024 | Tiyatro | Yıkıldı
+M-0025 | Sinema | 
+M-0026 | Meydan | 
+M-0027 | Konak | Ayakta
+M-0028 | Ev | 
+M-0029 | Tiyatro | Yıkıldı
+M-0030 | Sokak | 
+M-0031 | Ev | 
+M-0032 | Stadyum | 
+M-0033 | Konak | Yıkıldı
+M-0034 | Konak | Ayakta
+M-0035 | Köşk | Ayakta
+M-0036 | Ev | 
+M-0037 | Köşk | Yıkıldı
+M-0038 | Sinema | Yıkıldı
+M-0039 | Pastane | 
+M-0040 | Ev | 
+M-0041 | Yalı | Ayakta
+M-0042 | Ev | 
+M-0043 | Konak | Ayakta
+M-0044 | Sokak | Yıkıldı
+M-0045 | Ev | 
+M-0046 | Ev | Ayakta
+M-0047 | Ev | 
+M-0048 | Köşk | 
+M-0049 | Stüdyo | 
+M-0050 | Konak | Ayakta
+M-0051 | Apartman | Ayakta
+M-0052 | Ev | 
+M-0053 | Stüdyo | 
+M-0054 | Köşk | 
+M-0055 | Galeri | 
+M-0056 | Cezaevi | Ayakta
+M-0057 | Cezaevi | Ayakta
+M-0058 | Ev | 
+M-0059 | Konak | Yıkıldı
+M-0060 | Apartman | 
+M-0061 | Meyhane | 
+M-0062 | Kahvehane | 
+M-0063 | Kahvehane | 
+M-0064 | Pastane | 
+M-0065 | Sinema | 
+M-0066 | Tiyatro | Ayakta
+M-0067 | Depo | Yıkıldı
+M-0068 | Yalı | Ayakta
+M-0069 | Apartman | Ayakta
+M-0070 | Stadyum | 
+M-0071 | Han | Ayakta
+M-0072 | Ev | 
+M-0073 | Çeşme | Ayakta
+M-0074 | Ev | 
+M-0075 | Cami | 
+M-0076 | Ev | 
+M-0077 | Mezarlık | 
+M-0078 | Ev | 
+M-0079 | Saray | Ayakta
+M-0080 | Sokak | 
+M-0081 | Sur | Ayakta
+M-0082 | Ev | 
+M-0083 | Sinema | 
+M-0084 | Tiyatro | 
+M-0085 | Ev | 
+M-0086 | Ev | 
+M-0087 | Ofis | 
+M-0088 | Köşk | 
+M-0089 | Ev | 
+M-0090 | Ev | 
+M-0091 | Köşk | 
+M-0092 | Ev | 
+M-0093 | Ev | 
+M-0094 | Ev | 
+M-0095 | Köşk | 
+M-0096 | Köşk | 
+M-0097 | Köşk | 
+M-0098 | Köşk | 
+M-0099 | Ev | 
+M-0100 | Köşk | 
+M-0101 | Apartman | Ayakta
+M-0102 | Köşk | Yıkıldı
+M-0103 | Köşk | 
+M-0104 | Ev | 
+M-0105 | Ev | 
+M-0106 | Konak | 
+M-0107 | Han | Ayakta
+M-0108 | Meydan | 
+M-0109 | Ev | 
+M-0110 | Ev | 
+M-0111 | Ev | 
+M-0112 | Ev | 
+M-0113 | Ev | 
+M-0114 | Ev | 
+M-0115 | Ev | 
+M-0116 | Ev | 
+M-0117 | Ev | 
+M-0118 | Ev | 
+M-0119 | Ev | 
+M-0120 | Ev | 
+M-0121 | Ev | 
+M-0122 | Kışla | Ayakta
+M-0123 | Ev | 
+M-0124 | Köşk | 
+M-0125 | Köşk | Ayakta
+M-0126 | Ev | 
+M-0127 | Ev | 
+M-0128 | Apartman | 
+M-0129 | Ev | 
+M-0130 | Ev | 
+M-0131 | Ev | 
+M-0132 | Ev | 
+M-0133 | Ev | 
+M-0134 | Ev | 
+M-0135 | Konak | 
+M-0136 | Ev | 
+M-0137 | Ev | 
+M-0138 | Üniversite | Yıkıldı
+M-0139 | Sur | Ayakta
+M-0140 | Bahçe | 
+M-0141 | Hastane | Ayakta
+M-0142 | Bar | 
+M-0143 | Atölye | 
+M-0144 | Kahvehane | 
+M-0145 | Kahvehane | 
+M-0146 | Gazete | 
+M-0147 | Ev | 
+M-0148 | Han | Ayakta
+M-0149 | Köşk | Ayakta
+M-0150 | Ev | Ayakta
+M-0151 | Atölye | 
+M-0152 | Ev | 
+M-0153 | Ev | Yıkıldı
+M-0154 | Han | Ayakta
+M-0155 | Köşk | Ayakta
+M-0156 | Köşk | Ayakta
+M-0157 | Lokanta | Ayakta
+M-0158 | Ev | 
+M-0159 | Ofis | 
+M-0160 | Dükkân | Ayakta
+M-0161 | Apartman | Ayakta
+M-0162 | Kahvehane | 
+M-0163 | Kahvehane | 
+M-0164 | Kulüp | 
+M-0165 | Meyhane | 
+M-0166 | Sinema | 
+M-0167 | Kahvehane | Yıkıldı
+M-0168 | Stüdyo | 
+M-0169 | Köşk | Ayakta
+M-0170 | Köşk | Ayakta
+M-0171 | Ev | 
+M-0172 | Ev | 
+M-0173 | Ev | 
+M-0174 | Apartman | Ayakta
+M-0175 | Ev | 
+M-0176 | Fabrika | Yıkıldı
+M-0177 | Resmî bina | Ayakta
+M-0178 | Köşk | 
+M-0179 | Ev | 
+M-0180 | Ev | Yıkıldı
+M-0181 | Ev | 
+M-0182 | Apartman | Ayakta
+M-0183 | Tiyatro | Ayakta
+M-0184 | Gazete | 
+M-0185 | Tiyatro | Yıkıldı
+M-0186 | Ev | 
+M-0187 | Ev | 
+M-0188 | Pasaj | Ayakta
+M-0189 | Tekke | Ayakta
+M-0190 | Ev | 
+M-0191 | Ev | 
+M-0192 | Çeşme | Ayakta
+M-0193 | Ev | 
+M-0194 | Pastane | Ayakta
+M-0195 | Resmî bina | Ayakta
+M-0196 | Ev | Yıkıldı
+M-0197 | Ev | 
+M-0198 | Anıt | Ayakta
+M-0199 | Tiyatro | Yıkıldı
+M-0200 | Apartman | 
+M-0201 | Apartman | Ayakta
+M-0202 | Ev | 
+M-0203 | Hastane | 
+M-0204 | Atölye | 
+M-0205 | Konak | 
+M-0206 | Bahçe | 
+M-0207 | Pastane | Yıkıldı
+M-0208 | Pastane | 
+M-0209 | Cadde | 
+M-0210 | Çeşme | Ayakta
+M-0211 | Okul | Ayakta
+M-0212 | Köşk | Ayakta
+M-0213 | Yalı | Ayakta
+M-0214 | Atölye | 
+M-0215 | Ev | Ayakta
+M-0216 | Yalı | 
+M-0217 | Mescit | Ayakta
+M-0218 | Ev | 
+M-0219 | Matbaa | 
+M-0220 | Ev | 
+M-0221 | Konak | 
+M-0222 | Bar | 
+M-0223 | Resmî bina | Ayakta
+M-0224 | Konak | 
+M-0225 | Ev | 
+M-0226 | Konak | 
+M-0227 | Ev | 
+M-0228 | Ev | 
+M-0229 | Konak | 
+M-0230 | Köşk | Ayakta
+M-0231 | Ev | Yıkıldı
+M-0232 | Köşk | Ayakta
+M-0233 | Atölye | 
+M-0234 | Ev | 
+M-0235 | Yalı | Ayakta
+M-0236 | Ev | 
+M-0237 | Lokanta | 
+M-0238 | Han | Ayakta
+M-0239 | Sinema | Yıkıldı
+M-0240 | Atölye | 
+M-0241 | Ev | 
+M-0242 | Apartman | Ayakta
+M-0243 | Apartman | Ayakta
+M-0244 | Apartman | Ayakta
+M-0245 | Ev | 
+M-0246 | Ev | 
+M-0247 | Hastane | Ayakta
+M-0248 | Ev | 
+M-0249 | Dernek | 
+M-0250 | Ev | 
+M-0251 | Ev | 
+M-0252 | Apartman | Ayakta
+M-0253 | Ev | 
+M-0254 | Ev | 
+M-0255 | Yalı | Ayakta
+M-0256 | Fabrika | Yıkıldı
+M-0257 | Ev | 
+M-0258 | Ev | 
+M-0259 | Ev | 
+M-0260 | Ev | 
+M-0261 | Ev | 
+M-0262 | Köşk | Ayakta
+M-0263 | Köşk | Ayakta
+M-0264 | Yalı | Ayakta
+M-0265 | Sinema | Ayakta
+M-0266 | Sinema | 
+M-0267 | Han | Ayakta
+M-0268 | Köşk | Ayakta
+M-0269 | Köşk | 
+M-0270 | Ev | Ayakta
+M-0271 | Ev | 
+M-0272 | Tekke | Ayakta
+M-0273 | Yurt | 
+M-0274 | Ev | 
+M-0275 | Apartman | Ayakta
+M-0276 | Konak | Ayakta
+M-0277 | Köşk | 
+M-0278 | Resmî bina | Yıkıldı
+M-0279 | Anıt | Ayakta
+M-0280 | Anıt | Ayakta
+M-0281 | Anıt | Ayakta
+M-0282 | Tekke | Ayakta
+M-0283 | Ev | 
+M-0284 | Konak | Ayakta
+M-0285 | Kahvehane | 
+M-0286 | Kahvehane | 
+M-0287 | Kahvehane | 
+M-0288 | Kahvehane | 
+M-0289 | Sokak | 
+M-0290 | Cadde | 
+M-0291 | Apartman | 
+M-0292 | Köşk | Ayakta
+M-0293 | Fabrika | Yıkıldı
+M-0294 | Resmî bina | Ayakta
+M-0295 | Yalı | Ayakta
+M-0296 | Yalı | Ayakta
+M-0297 | Yalı | 
+M-0298 | Fabrika | 
+M-0299 | Gecekondu | 
+M-0300 | Banka | Ayakta
+M-0301 | Kulüp | 
+M-0302 | Yalı | 
+M-0303 | Tiyatro | Ayakta
+M-0304 | Depo | Ayakta
+M-0305 | Otel | 
+M-0306 | Yalı | Ayakta
+M-0307 | Lokanta | 
+M-0308 | Dükkân | 
+M-0309 | Yalı | Ayakta
+M-0310 | Meydan | 
+M-0311 | Yalı | Ayakta
+M-0312 | Saray | 
+M-0313 | Kahvehane | Ayakta
+M-0314 | Cami | Ayakta
+M-0315 | İskele | 
+M-0316 | Köprü | Ayakta
+M-0317 | Ev | Yıkıldı
+M-0318 | Ev | Ayakta
+M-0319 | Ev | 
+M-0320 | Han | Ayakta
+M-0321 | Konak | Ayakta
+M-0322 | Yalı | Ayakta
+M-0323 | Yalı | Ayakta
+M-0324 | Fabrika | Ayakta
+M-0325 | Depo | Ayakta
+M-0326 | Depo | Ayakta
+M-0327 | Ev | 
+M-0328 | Han | 
+M-0329 | Ev | 
+M-0330 | Medrese | Ayakta
+M-0331 | Ev | 
+M-0332 | Apartman | 
+M-0333 | Meyhane | Ayakta
+M-0334 | Ev | 
+M-0335 | Meydan | 
+M-0336 | Resmî bina | Ayakta
+M-0337 | Sinema | Ayakta
+M-0338 | Kahvehane | 
+M-0339 | Kışla | 
+M-0340 | Yalı | 
+M-0341 | Tiyatro | 
+M-0342 | Sinema | 
+M-0343 | Ofis | 
+M-0344 | Kahvehane | 
+M-0345 | Han | Ayakta
+M-0346 | Konak | Yıkıldı
+M-0347 | Ev | Ayakta
+M-0348 | Köşk | Ayakta
+M-0349 | Gar | Ayakta
+M-0350 | Stadyum | 
+M-0351 | Kazı alanı | 
+M-0352 | Cami | 
+M-0353 | Hastane | Ayakta
+M-0354 | Köprü | 
+M-0355 | Ev | 
+M-0356 | Köprü | Ayakta
+M-0357 | Apartman | Ayakta
+M-0358 | Apartman | Ayakta
+M-0359 | Ev | 
+M-0360 | Sokak | 
+M-0361 | Ev | 
+M-0362 | Yalı | 
+M-0363 | Otel | Ayakta
+M-0364 | Apartman | 
+M-0365 | Gar | Ayakta
+M-0366 | Kahvehane | 
+M-0367 | Tiyatro | Ayakta
+M-0368 | Ev | 
+M-0369 | Cami | Ayakta
+M-0370 | Meydan | 
+M-0371 | Park | 
+M-0372 | Otel | 
+M-0373 | Meydan | 
+M-0374 | Yalı | Ayakta
+M-0375 | Yalı | Ayakta
+M-0376 | Apartman | 
+M-0377 | Ev | Ayakta
+M-0378 | Apartman | Ayakta
+M-0379 | Yalı | Ayakta
+M-0380 | Apartman | Ayakta
+M-0381 | Apartman | 
+M-0382 | Resmî bina | Ayakta
+M-0383 | Ev | 
+M-0384 | Apartman | 
+M-0385 | Heykel | Ayakta
+M-0386 | Köşk | Ayakta
+M-0387 | Köprü | 
+M-0388 | Cadde | 
+M-0389 | Saray | Ayakta
+M-0390 | Meydan | 
+M-0391 | Atölye | 
+M-0392 | Apartman | Ayakta
+M-0393 | Apartman | Ayakta
+M-0394 | Apartman | Ayakta
+M-0395 | Apartman | 
+M-0396 | Otel | Ayakta
+M-0397 | Ev | Ayakta
+M-0398 | Matbaa | 
+M-0399 | Köşk | Ayakta
+M-0400 | Ev | 
+M-0401 | Konak | Yıkıldı
+M-0402 | Kitabevi | 
+M-0403 | Konak | 
+M-0404 | Apartman | Yıkıldı
+M-0405 | Ev | Ayakta
+M-0406 | Ev | 
+M-0407 | Yalı | 
+M-0408 | Ev | 
+M-0409 | Deniz | 
+M-0410 | Apartman | Ayakta
+M-0411 | Fabrika | 
+M-0412 | Apartman | 
+M-0413 | Halkevi | 
+M-0414 | Okul | Ayakta
+M-0415 | Üniversite | 
+M-0416 | Ev | 
+M-0417 | Atölye | 
+M-0418 | Apartman | 
+M-0419 | Apartman | 
+M-0420 | Apartman | 
+M-0421 | Apartman | 
+M-0422 | Ofis | 
+M-0423 | Ev | 
+M-0424 | Apartman | 
+M-0425 | Apartman | 
+M-0426 | Ev | 
+M-0427 | Apartman | 
+M-0428 | Apartman | 
+M-0429 | Apartman | 
+M-0430 | Ev | 
+M-0431 | Ev | 
+M-0432 | Atölye | 
+M-0433 | Apartman | 
+M-0434 | Atölye | 
+M-0435 | Ev | 
+M-0436 | Ev | 
+M-0437 | Ev | 
+M-0438 | Apartman | 
+M-0439 | Ofis | 
+M-0440 | Stüdyo | 
+M-0441 | Cadde | 
+M-0442 | Ev | 
+M-0443 | Okul | Ayakta
+M-0444 | Köşk | Yıkıldı
+M-0445 | Köşk | Ayakta
+M-0446 | Apartman | Ayakta
+M-0447 | Köşk | Ayakta
+M-0448 | Ev | 
+M-0449 | Ev | 
+M-0450 | Gazete | 
+M-0451 | Gazete | 
+M-0452 | Gazete | 
+M-0453 | Apartman | 
+M-0454 | Apartman | 
+M-0455 | Hamam | Ayakta
+M-0456 | Deniz | 
+M-0457 | Okul | 
+M-0458 | Ev | 
+M-0459 | Han | Ayakta
+M-0460 | Çarşı | Ayakta
+M-0461 | Okul | 
+M-0462 | Sinema | 
+M-0463 | Okul | Ayakta
+M-0464 | Apartman | 
+M-0465 | Dükkân | 
+M-0466 | Köşk | Ayakta
+M-0467 | Gar | Ayakta
+M-0468 | Ev | 
+M-0469 | Köşk | 
+M-0470 | Apartman | 
+M-0471 | Ev | 
+M-0472 | Apartman | 
+M-0473 | Ofis | 
+M-0474 | Ev | 
+M-0475 | Ev | 
+M-0476 | Ev | 
+M-0477 | Ev | 
+M-0478 | Köşk | 
+M-0479 | Yalı | 
+M-0480 | Ev | Yıkıldı
+M-0481 | Ev | 
+M-0482 | Apartman | Ayakta
+M-0483 | Ev | 
+M-0484 | Ev | 
+M-0485 | Gazino | Yıkıldı
+M-0486 | Sur | Ayakta
+M-0487 | Cadde | 
+M-0488 | Kitabevi | 
+M-0489 | Köşk | Ayakta
+M-0490 | Ev | 
+M-0491 | Köşk | 
+M-0492 | Kulüp | 
+M-0493 | Meyhane | 
+M-0494 | Köşk | Ayakta
+M-0495 | Ev | 
+M-0496 | Ev | 
+M-0497 | Ev | 
+M-0498 | Ev | 
+M-0499 | Apartman | Ayakta
+M-0500 | Konak | Yıkıldı
+M-0501 | Sinema | 
+M-0502 | Apartman | 
+M-0503 | Ev | 
+M-0504 | Han | 
+M-0505 | Köşk | Ayakta
+M-0506 | Sinema | Ayakta
+M-0507 | Ev | 
+M-0508 | Gazino | 
+M-0509 | Dükkân | 
+M-0510 | Ev | 
+M-0511 | Apartman | 
+M-0512 | Ev | 
+M-0513 | Ev | 
+M-0514 | Ev | 
+M-0515 | Ev | 
+M-0516 | Ev | 
+M-0517 | Köşk | Ayakta
+M-0518 | Apartman | 
+M-0519 | Apartman | 
+M-0520 | Ev | 
+M-0521 | Köşk | 
+M-0522 | Ev | 
+M-0523 | Apartman | 
+M-0524 | Ev | 
+M-0525 | Ev | Ayakta
+M-0526 | Köşk | Ayakta
+M-0527 | Ev | Ayakta
+M-0528 | Ev | 
+M-0529 | Tiyatro | 
+M-0530 | Fabrika | Ayakta
+M-0531 | Köşk | 
+M-0532 | Hastane | Ayakta
+M-0533 | Yalı | 
+M-0534 | Tiyatro | 
+M-0535 | Tiyatro | Yıkıldı
+M-0536 | Bar | 
+M-0537 | Stüdyo | 
+M-0538 | Pasaj | 
+M-0539 | Lokanta | 
+M-0540 | Ağaç | 
+M-0541 | Çeşme | Ayakta
+M-0542 | İskele | Ayakta
+M-0543 | Sur | Ayakta
+M-0544 | Park | 
+M-0545 | Apartman | 
+M-0546 | Ev | 
+M-0547 | Apartman | 
+M-0548 | Ev | 
+M-0549 | Sokak | 
+M-0550 | Ofis | 
+M-0551 | Meydan | 
+M-0552 | Cami | Ayakta
+M-0553 | Cami | Ayakta
+M-0554 | Resmî bina | 
+M-0555 | Konak | Ayakta
+M-0556 | Sur | Yıkıldı
+M-0557 | Apartman | 
+M-0558 | Köşk | Yıkıldı
+M-0559 | Apartman | 
+M-0560 | Sur | Ayakta
+M-0561 | Apartman | 
+M-0562 | Apartman | 
+M-0563 | Kahvehane | 
+M-0564 | Cezaevi | Ayakta
+M-0565 | Ev | 
+M-0566 | Konak | Yıkıldı
+M-0567 | Hastane | Yıkıldı
+M-0568 | Sinema | Yıkıldı
+M-0569 | Meydan | 
+M-0570 | Meydan | 
+M-0571 | Ev | 
+M-0572 | Cami | Ayakta
+M-0573 | Hamam | Ayakta
+M-0574 | Meydan | 
+M-0575 | Meydan | 
+M-0576 | Mezar | Ayakta
+M-0577 | Mezar | Yıkıldı
+M-0578 | Fabrika | Ayakta
+M-0579 | Yalı | 
+M-0580 | Resmî bina | Ayakta
+M-0581 | Apartman | Ayakta
+M-0582 | Galeri | 
+M-0583 | Cami | Ayakta
+M-0584 | Yalı | 
+M-0585 | Konak | 
+M-0586 | Köşk | Ayakta
+M-0587 | Yalı | 
+M-0588 | Ev | 
+M-0589 | Apartman | 
+M-0590 | Meydan | 
+M-0591 | Resmî bina | 
+M-0592 | Stüdyo | Yıkıldı
+M-0593 | Park | 
+M-0594 | Tiyatro | 
+M-0595 | Anıt | Ayakta
+M-0596 | Bahçe | Yıkıldı
+M-0597 | Sinema | 
+M-0598 | Halkevi | 
+M-0599 | Heykel | Ayakta
+M-0600 | Ev | 
+M-0601 | Meydan | 
+M-0602 | Yalı | 
+M-0603 | Yalı | Ayakta
+M-0604 | Yalı | Ayakta
+M-0605 | Köşk | 
+M-0606 | Cadde | 
+M-0607 | Sokak | 
+M-0608 | Köşk | Ayakta
+M-0609 | Cami | Ayakta
+M-0610 | Okul | Ayakta
+M-0611 | Tiyatro | Yıkıldı
+M-0612 | Meydan | 
+M-0613 | Meydan | 
+M-0614 | Ev | Ayakta
+M-0615 | Meyhane | Ayakta
+M-0616 | Ev | 
+M-0617 | Ev | 
+M-0618 | Meydan | 
+M-0619 | Park | 
+M-0620 | Tiyatro | Ayakta
+M-0621 | Ev | 
+M-0622 | Köşk | 
+M-0623 | Köşk | Ayakta
+M-0624 | Apartman | 
+M-0625 | Atölye | 
+M-0626 | Dernek | Ayakta
+M-0627 | Ev | 
+M-0628 | Ev | 
+M-0629 | Ofis | 
+M-0630 | Matbaa | 
+M-0631 | Köşk | 
+M-0632 | Ev | Yıkıldı
+M-0633 | Kışla | Yıkıldı
+M-0634 | Kahvehane | 
+M-0635 | Köşk | 
+M-0636 | Otel | 
+M-0637 | Yalı | Yıkıldı
+M-0638 | Ev | 
+M-0639 | Ev | 
+M-0640 | Sokak | 
+M-0641 | Anıt | 
+M-0642 | Tiyatro | 
+M-0643 | Konak | Yıkıldı
+M-0644 | Ev | 
+M-0645 | Ev | 
+M-0646 | Ev | 
+M-0647 | Apartman | 
+M-0648 | Apartman | 
+M-0649 | Dükkân | 
+M-0650 | Konak | 
+M-0651 | Ev | 
+M-0652 | Ev | 
+M-0653 | Ev | 
+M-0654 | Ev | 
+M-0655 | Apartman | Ayakta
+M-0656 | Ev | 
+M-0657 | Ev | 
+M-0658 | Apartman | 
+M-0659 | Apartman | 
+M-0660 | Ev | 
+M-0661 | Tekke | Ayakta
+M-0662 | Apartman | Ayakta
+M-0663 | Halkevi | 
+M-0664 | Ev | 
+M-0665 | Dükkân | 
+M-0666 | Ev | 
+M-0667 | Ev | 
+M-0668 | Ev | 
+M-0669 | Ev | 
+M-0670 | Bar | 
+M-0671 | Meyhane | 
+M-0672 | Ev | 
+M-0673 | Ev | Ayakta
+M-0674 | Ev | 
+M-0675 | Apartman | 
+M-0676 | Ev | 
+M-0677 | Ev | 
+M-0678 | Ev | 
+M-0679 | Kitabevi | 
+M-0680 | Ev | 
+M-0681 | Atölye | 
+M-0682 | Okul | Ayakta
+M-0683 | Ev | 
+M-0684 | Cadde | 
+M-0685 | Tiyatro | 
+M-0686 | Ev | 
+M-0687 | Meydan | 
+M-0688 | Apartman | Ayakta
+M-0689 | Apartman | Ayakta
+M-0690 | Apartman | 
+M-0691 | Apartman | 
+M-0692 | Apartman | 
+M-0693 | Apartman | Yıkıldı
+M-0694 | Ev | 
+M-0695 | Köşk | 
+M-0696 | Konak | 
+M-0697 | Kitabevi | 
+M-0698 | Kitabevi | 
+M-0699 | Kitabevi | 
+M-0700 | Kitabevi | 
+M-0701 | Ev | 
+M-0702 | Apartman | 
+M-0703 | Apartman | 
+M-0704 | Ev | 
+M-0705 | Apartman | 
+M-0706 | Apartman | 
+M-0707 | Ev | 
+M-0708 | Apartman | Ayakta
+M-0709 | Apartman | 
+M-0710 | Konak | Ayakta
+M-0711 | Ev | 
+M-0712 | Köşk | 
+M-0713 | Ev | 
+M-0714 | Konak | 
+M-0715 | Ev | 
+M-0716 | Ev | 
+M-0717 | Ev | 
+M-0718 | Apartman | 
+M-0719 | Apartman | 
+M-0720 | Kahvehane | 
+M-0721 | Ev | 
+M-0722 | Ev | 
+M-0723 | Ev | 
+M-0724 | Ev | 
+M-0725 | Apartman | 
+M-0726 | Kitabevi | 
+M-0727 | Ev | 
+M-0728 | Apartman | 
+M-0729 | Apartman | 
+M-0730 | Apartman | 
+M-0731 | Ev | 
+M-0732 | Apartman | 
+M-0733 | Ev | Ayakta
+M-0734 | Apartman | 
+M-0735 | Apartman | 
+M-0736 | Apartman | 
+M-0737 | Apartman | 
+M-0738 | Apartman | 
+M-0739 | Apartman | Ayakta
+M-0740 | Apartman | Ayakta
+M-0741 | Yalı | Ayakta
+M-0742 | Apartman | Ayakta
+M-0743 | Ev | 
+M-0744 | Ev | 
+M-0745 | Ev | 
+M-0746 | Ev | 
+M-0747 | Apartman | 
+M-0748 | Apartman | 
+M-0749 | Apartman | 
+M-0750 | Ev | 
+M-0751 | Apartman | 
+M-0752 | Apartman | 
+M-0753 | Apartman | 
+M-0754 | Ev | 
+M-0755 | Apartman | 
+M-0756 | Ev | 
+M-0757 | Apartman | Ayakta
+M-0758 | Apartman | 
+M-0759 | Köşk | 
+M-0760 | Apartman | 
+M-0761 | Apartman | Ayakta
+M-0762 | Ev | Ayakta
+M-0763 | Ev | Ayakta
+M-0764 | Galeri | Ayakta
+M-0765 | Ev | Ayakta
+M-0766 | Ev | 
+M-0767 | Apartman | Ayakta
+M-0768 | Apartman | Ayakta
+M-0769 | Apartman | 
+M-0770 | Apartman | 
+M-0771 | Ofis | 
+M-0772 | Apartman | 
+M-0773 | Apartman | 
+M-0774 | Apartman | 
+M-0775 | Apartman | 
+M-0776 | Apartman | 
+M-0777 | Kahvehane | Ayakta
+M-0778 | Sokak | 
+M-0779 | Hamam | Ayakta
+M-0780 | Çeşme | Yıkıldı
+M-0781 | Kulüp | Yıkıldı
+M-0782 | Hastane | Yıkıldı
+M-0783 | Okul | Yıkıldı
+M-0784 | Fabrika | Yıkıldı
+M-0785 | Konak | Yıkıldı
+M-0786 | Çeşme | Yıkıldı
+M-0787 | Han | Yıkıldı
+M-0788 | Köşk | 
+M-0789 | Konak | Yıkıldı
+M-0790 | Cami | 
+M-0791 | Resmî bina | Yıkıldı
+M-0792 | Resmî bina | Yıkıldı
+M-0793 | Resmî bina | 
+M-0794 | Anıt | Yıkıldı
+M-0795 | Tekke | Yıkıldı
+M-0796 | Fabrika | 
+M-0797 | Tekke | Yıkıldı
+M-0798 | Cami | Yıkıldı
+M-0799 | Konak | Yıkıldı
+M-0800 | Konak | 
+M-0801 | Ağaç | Ayakta
+M-0802 | Anıt | Yıkıldı
+M-0803 | Tiyatro | Yıkıldı
+M-0804 | Hastane | Yıkıldı
+M-0805 | Ev | 
+M-0806 | Tiyatro | 
+M-0807 | Ev | 
+M-0808 | Çeşme | Ayakta
+M-0809 | Ev | 
+M-0810 | Otel | Yıkıldı
+M-0811 | Yalı | 
+M-0812 | Çeşme | Ayakta
+M-0813 | Semt | 
+M-0814 | Semt | 
+M-0815 | Semt | 
+M-0816 | Semt | 
+M-0817 | Semt | 
+M-0818 | Semt | 
