@@ -37,18 +37,31 @@
   function resolveStyle(dataPath) {
     if (stylePromise) return stylePromise;
     stylePromise = (async () => {
+      let stilGeldi = false;
       try {
-        const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), 4000);
-        const r = await fetch(POSITRON, { signal: ctl.signal }); clearTimeout(tm);
+        const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), 6000);
+        const r = await fetch(POSITRON, { signal: ctl.signal });
         if (!r.ok) throw new Error(r.status);
-        const st = await r.json();
+        const st = await r.json(); stilGeldi = true;
         (st.layers || []).forEach(l => { if (Array.isArray(l.filter)) l.filter = sayiFiltresi(l.filter); });
+        // Vektör karo kaynağının TileJSON'unu (…/planet) biz çekip stile gömüyoruz. Reklam/izleme engelleyiciler bu
+        // adresi engelleyebiliyor (ERR_BLOCKED_BY_CLIENT); o zaman harita bomboş kalacağına yerel kıyı altlığına düşeriz.
+        for (const src of Object.values(st.sources || {})) {
+          if (src.type !== 'vector' || !src.url) continue;
+          const t = await fetch(src.url, { signal: ctl.signal });
+          if (!t.ok) throw new Error(t.status);
+          const j = await t.json();
+          if (!Array.isArray(j.tiles) || !j.tiles.length) throw new Error('tilejson');
+          ['tiles', 'minzoom', 'maxzoom', 'bounds', 'attribution', 'scheme'].forEach(k => { if (j[k] != null) src[k] = j[k]; });
+          delete src.url;
+        }
+        clearTimeout(tm);
         return { style: st, glyphs: !!st.glyphs, online: true };
       } catch (e) {
         let land = { type: 'FeatureCollection', features: [] };
         try { land = await (await fetch((dataPath || 'data/') + 'onizleme_kara.json')).json(); } catch (_) { }
         return {
-          online: false, glyphs: false,
+          online: false, glyphs: false, engellendi: stilGeldi,
           style: {
             version: 8, sources: { kara: { type: 'geojson', data: land } },
             layers: [
@@ -71,7 +84,7 @@
       attributionControl: s.online ? { compact: true } : false, dragRotate: false, pitchWithRotate: false, transformRequest: istekDonustur,
     }, opts.map || {}));
     map.touchZoomRotate && map.touchZoomRotate.disableRotation();
-    map._hafiza = { glyphs: s.glyphs, online: s.online };
+    map._hafiza = { glyphs: s.glyphs, online: s.online, engellendi: !!s.engellendi };
     await new Promise(res => map.loaded() ? res() : map.once('load', res));
     return map;
   }

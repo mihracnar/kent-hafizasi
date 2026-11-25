@@ -304,7 +304,9 @@
       if (!map._hafiza.online) [['Beyoğlu', 28.977, 41.036], ['Fatih', 28.947, 41.015], ['Üsküdar', 29.03, 41.026], ['Kadıköy', 29.04, 40.99], ['Beşiktaş', 29.005, 41.048], ['Şişli', 28.987, 41.062],
         ['Sarıyer', 29.05, 41.16], ['Bakırköy', 28.875, 40.98], ['Eyüpsultan', 28.93, 41.06], ['Adalar', 29.09, 40.875], ['Haliç', 28.955, 41.03, 1], ['İstanbul Boğazı', 29.06, 41.1, 1], ['Marmara Denizi', 28.95, 40.93, 1]]
         .forEach(([n, x, y, su]) => { const d = document.createElement('div'); d.className = 'semt-etiket' + (su ? ' su' : ''); d.textContent = n; new maplibregl.Marker({ element: d }).setLngLat([x, y]).addTo(map); });
-      if (!map._hafiza.online) $('#harita-gorunum').insertAdjacentHTML('beforeend', '<div class="onizleme-notu">Önizleme: harita altlığı yalnız kıyı çizgisini gösteriyor. Sitede OpenFreeMap Positron altlığı açılır.</div>');
+      if (!map._hafiza.online) $('#harita-gorunum').insertAdjacentHTML('beforeend', (map._hafiza.engellendi
+        ? '<div class="onizleme-notu">Harita altlığı yüklenemedi; tarayıcınızdaki bir eklenti (reklam/izleme engelleyici) tiles.openfreemap.org adresini engelliyor olabilir. Bu site için engelleyiciyi kapatırsanız sokaklar görünür.</div>'
+        : '<div class="onizleme-notu">Önizleme: harita altlığı yalnız kıyı çizgisini gösteriyor. Sitede OpenFreeMap Positron altlığı açılır.</div>'));
       map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
       try { map.addControl(new maplibregl.GeolocateControl({ positionOptions: { enableHighAccuracy: true } }), 'top-right'); } catch (e) { }
       map.addSource('mekanlar', { type: 'geojson', data: this.veri() });
