@@ -1,11 +1,13 @@
-/* MapLibre altlığı: OpenFreeMap Positron. Ulaşılamazsa (ör. Claude önizlemesi gibi dış bağlantıya kapalı ortamlar)
- * yalnız kara/deniz çizen yerel bir altlığa düşer. */
+/* MapLibre altlığı: CARTO Positron (Sinemada İstanbul haritasıyla aynı). Ulaşılamazsa OpenFreeMap Positron denenir;
+ * o da olmazsa (dış bağlantıya kapalı ortam ya da engelleyici eklenti) yalnız kara/deniz çizen yerel bir altlığa düşer. */
 (function () {
   'use strict';
-  const POSITRON = 'https://tiles.openfreemap.org/styles/positron';
+  // Sıra önemli: OpenFreeMap'in karo adresi (…/planet) bazı reklam/izleme engelleyicilerin listesine takılıyor;
+  // CARTO'nunki takılmıyor (sinema haritası bu yüzden engelleyiciyle de açılıyor).
+  const STILLER = ['https://basemaps.cartocdn.com/gl/positron-gl-style/style.json', 'https://tiles.openfreemap.org/styles/positron'];
   const VENDOR = (document.currentScript && document.currentScript.src) ? new URL('../vendor/', document.currentScript.src).href : 'assets/vendor/';
-  // Mekân etiketleri yarı kalın (Noto Sans SemiBold). OpenFreeMap'te bu ağırlık yok; glifleri depodan veriyoruz.
-  // Yalnız bu yazı tipinin istekleri yönlendirilir; depoda olmayan bir aralık istenirse Regular'a düşer.
+  // Mekân etiketleri yarı kalın (Noto Sans SemiBold); glifleri depodan veriyoruz (altlık sunucularında bu yazı tipi yok).
+  // Yalnız bu yazı tipinin istekleri yönlendirilir; depoda olmayan bir aralık istenirse OpenFreeMap'teki Regular'a düşer.
   const GLIF = new URL('../glyphs/noto-sans-semibold/', new URL(VENDOR, location.href)).href;
   const YARIKALIN = /Noto(%20|\s)Sans(%20|\s)SemiBold/;
   const YEREL_ARALIK = new Set(['0-255', '256-511', '512-767', '768-1023', '1024-1279', '7680-7935', '8192-8447', '8448-8703']);
@@ -13,7 +15,7 @@
     if (tur !== 'Glyphs' || !YARIKALIN.test(url)) return undefined;
     const m = url.match(/\/(\d+-\d+)\.pbf/);
     if (m && YEREL_ARALIK.has(m[1])) return { url: GLIF + m[1] + '.pbf' };
-    return { url: url.replace(YARIKALIN, 'Noto$1Sans$2Regular') };
+    return { url: 'https://tiles.openfreemap.org/fonts/Noto%20Sans%20Regular/' + (m ? m[1] : '0-255') + '.pbf' };
   }
   if (window.maplibregl && maplibregl.setWorkerUrl) maplibregl.setWorkerUrl(VENDOR + 'maplibre-gl-csp-worker.js');
 
@@ -38,24 +40,30 @@
     if (stylePromise) return stylePromise;
     stylePromise = (async () => {
       let stilGeldi = false;
-      try {
+      // bir stili ve vektör kaynaklarının TileJSON'unu çekip stile gömer; herhangi biri gelmezse hata atar
+      async function stilYukle(adres) {
         const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), 6000);
-        const r = await fetch(POSITRON, { signal: ctl.signal });
-        if (!r.ok) throw new Error(r.status);
-        const st = await r.json(); stilGeldi = true;
-        (st.layers || []).forEach(l => { if (Array.isArray(l.filter)) l.filter = sayiFiltresi(l.filter); });
-        // Vektör karo kaynağının TileJSON'unu (…/planet) biz çekip stile gömüyoruz. Reklam/izleme engelleyiciler bu
-        // adresi engelleyebiliyor (ERR_BLOCKED_BY_CLIENT); o zaman harita bomboş kalacağına yerel kıyı altlığına düşeriz.
-        for (const src of Object.values(st.sources || {})) {
-          if (src.type !== 'vector' || !src.url) continue;
-          const t = await fetch(src.url, { signal: ctl.signal });
-          if (!t.ok) throw new Error(t.status);
-          const j = await t.json();
-          if (!Array.isArray(j.tiles) || !j.tiles.length) throw new Error('tilejson');
-          ['tiles', 'minzoom', 'maxzoom', 'bounds', 'attribution', 'scheme'].forEach(k => { if (j[k] != null) src[k] = j[k]; });
-          delete src.url;
-        }
-        clearTimeout(tm);
+        try {
+          const r = await fetch(adres, { signal: ctl.signal });
+          if (!r.ok) throw new Error(r.status);
+          const st = await r.json(); stilGeldi = true;
+          (st.layers || []).forEach(l => { if (Array.isArray(l.filter)) l.filter = sayiFiltresi(l.filter); });
+          for (const src of Object.values(st.sources || {})) {
+            if (src.type !== 'vector' || !src.url) continue;
+            const t = await fetch(src.url, { signal: ctl.signal });
+            if (!t.ok) throw new Error(t.status);
+            const j = await t.json();
+            if (!Array.isArray(j.tiles) || !j.tiles.length) throw new Error('tilejson');
+            ['tiles', 'minzoom', 'maxzoom', 'bounds', 'attribution', 'scheme'].forEach(k => { if (j[k] != null) src[k] = j[k]; });
+            delete src.url;
+          }
+          return st;
+        } finally { clearTimeout(tm); }
+      }
+      try {
+        let st = null, sonHata = null;
+        for (const adres of STILLER) { try { st = await stilYukle(adres); break; } catch (h) { sonHata = h; } }
+        if (!st) throw sonHata || new Error('altlık yok');
         return { style: st, glyphs: !!st.glyphs, online: true };
       } catch (e) {
         let land = { type: 'FeatureCollection', features: [] };

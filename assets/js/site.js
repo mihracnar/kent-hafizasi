@@ -305,8 +305,8 @@
         ['Sarıyer', 29.05, 41.16], ['Bakırköy', 28.875, 40.98], ['Eyüpsultan', 28.93, 41.06], ['Adalar', 29.09, 40.875], ['Haliç', 28.955, 41.03, 1], ['İstanbul Boğazı', 29.06, 41.1, 1], ['Marmara Denizi', 28.95, 40.93, 1]]
         .forEach(([n, x, y, su]) => { const d = document.createElement('div'); d.className = 'semt-etiket' + (su ? ' su' : ''); d.textContent = n; new maplibregl.Marker({ element: d }).setLngLat([x, y]).addTo(map); });
       if (!map._hafiza.online) $('#harita-gorunum').insertAdjacentHTML('beforeend', (map._hafiza.engellendi
-        ? '<div class="onizleme-notu">Harita altlığı yüklenemedi; tarayıcınızdaki bir eklenti (reklam/izleme engelleyici) tiles.openfreemap.org adresini engelliyor olabilir. Bu site için engelleyiciyi kapatırsanız sokaklar görünür.</div>'
-        : '<div class="onizleme-notu">Önizleme: harita altlığı yalnız kıyı çizgisini gösteriyor. Sitede OpenFreeMap Positron altlığı açılır.</div>'));
+        ? '<div class="onizleme-notu">Harita altlığı yüklenemedi; tarayıcınızdaki bir eklenti (reklam/izleme engelleyici) harita karolarını engelliyor olabilir. Bu site için engelleyiciyi kapatırsanız sokaklar görünür.</div>'
+        : '<div class="onizleme-notu">Önizleme: harita altlığı yalnız kıyı çizgisini gösteriyor. Sitede CARTO Positron altlığı açılır.</div>'));
       map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
       try { map.addControl(new maplibregl.GeolocateControl({ positionOptions: { enableHighAccuracy: true } }), 'top-right'); } catch (e) { }
       map.addSource('mekanlar', { type: 'geojson', data: this.veri() });
@@ -861,7 +861,7 @@
         <ul class="hk-liste">
           <li><b>Hikâyeler, mekân bilgileri ve arşiv fotoğrafları</b> proje ekibinin derlediği kayıtlardan gelir; her hikâyenin altında kaynağı yazar.</li>
           <li><b>Kişi ve mekân özetlerinin bir kısmı</b> Türkçe Vikipedi'den alınır (${viki} kişi). Her özet, ekip tarafından doğru kişi ya da yer olduğu kontrol edildikten sonra yayımlanır; altında madde bağlantısı ve ${VIKI_LISANS} lisansı yazar.</li>
-          <li><b>Harita altlığı</b> OpenFreeMap'tir; harita verisi © OpenStreetMap katkıcıları.</li>
+          <li><b>Harita altlığı</b> CARTO Positron'dur (ulaşılamazsa OpenFreeMap); harita verisi © OpenStreetMap katkıcıları.</li>
           <li><b>Fotoğrafların</b> kaynak ve kullanım izni bilgileri kayıtlara işlendikçe her fotoğrafın altında gösterilecektir.</li>
         </ul>
         <h2 style="margin-top:28px">Katkıda bulunun</h2>
