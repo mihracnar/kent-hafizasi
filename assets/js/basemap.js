@@ -1,10 +1,14 @@
-/* MapLibre altlığı: CARTO Positron (Sinemada İstanbul haritasıyla aynı). Ulaşılamazsa OpenFreeMap Positron denenir;
- * o da olmazsa (dış bağlantıya kapalı ortam ya da engelleyici eklenti) yalnız kara/deniz çizen yerel bir altlığa düşer. */
+/* MapLibre altlığı: OpenFreeMap Positron (sınırsız, anahtarsız, ticari kullanıma açık). Ulaşılamazsa — örneğin bir
+ * reklam/izleme engelleyici karo adresini engellediğinde — CARTO Positron denenir (Sinemada İstanbul'un altlığı);
+ * o da olmazsa yalnız kara/deniz çizen yerel bir altlığa düşer. */
 (function () {
   'use strict';
-  // Sıra önemli: OpenFreeMap'in karo adresi (…/planet) bazı reklam/izleme engelleyicilerin listesine takılıyor;
-  // CARTO'nunki takılmıyor (sinema haritası bu yüzden engelleyiciyle de açılıyor).
-  const STILLER = ['https://basemaps.cartocdn.com/gl/positron-gl-style/style.json', 'https://tiles.openfreemap.org/styles/positron'];
+  // Sıra: önce OpenFreeMap (kota/anahtar yok). Onun karo adresi (…/planet) bazı engelleyicilerin listesine takılıyor;
+  // o ziyaretçiler için CARTO yedek. CARTO ücretsiz kotalıdır ve anahtar isteyebilir: anahtar alınınca
+  // CARTO_ANAHTAR'a yazılır (carto.com/basemaps/apikey), adres ?key= ile çağrılır.
+  const CARTO_ANAHTAR = '';
+  const STILLER = ['https://tiles.openfreemap.org/styles/positron',
+    'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json' + (CARTO_ANAHTAR ? '?key=' + encodeURIComponent(CARTO_ANAHTAR) : '')];
   const VENDOR = (document.currentScript && document.currentScript.src) ? new URL('../vendor/', document.currentScript.src).href : 'assets/vendor/';
   // Mekân etiketleri yarı kalın (Noto Sans SemiBold); glifleri depodan veriyoruz (altlık sunucularında bu yazı tipi yok).
   // Yalnız bu yazı tipinin istekleri yönlendirilir; depoda olmayan bir aralık istenirse OpenFreeMap'teki Regular'a düşer.

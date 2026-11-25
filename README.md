@@ -108,7 +108,7 @@ Sonra `http://localhost:8000/` (site) ve `http://localhost:8000/panel.html` (pan
 ```
 index.html, panel.html, config.js
 assets/js/store.js      ortak veri katmanı (tablolar, dizinler, Sheets / önizleme arka uçları)
-assets/js/basemap.js    MapLibre altlığı (CARTO Positron; yedek OpenFreeMap)
+assets/js/basemap.js    MapLibre altlığı (OpenFreeMap Positron; yedek CARTO Positron)
 assets/js/site.js       site
 assets/js/panel.js      içerik paneli
 assets/css/             site.css, panel.css
